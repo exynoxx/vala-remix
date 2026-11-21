@@ -29,6 +29,16 @@ using GLib;
  */
 public class Vala.CCodeAssignmentModule : CCodeMemberAccessModule {
 	TargetValue emit_simple_assignment (Assignment assignment) {
+		if (assignment.operator == AssignmentOperator.ADD && assignment.left.value_type.type_symbol == string_type.type_symbol) {
+			// owned string `s += expr`, see Assignment.is_string_append ()
+			var cleft = get_cvalue (assignment.left);
+			var ccall = new CCodeFunctionCall (new CCodeIdentifier (generate_string_append_function ()));
+			ccall.add_argument (cleft);
+			ccall.add_argument (get_cvalue (assignment.right));
+			ccode.add_assignment (cleft, ccall);
+			return assignment.left.target_value;
+		}
+
 		if (requires_destroy (assignment.left.value_type)) {
 			/* unref old value */
 			ccode.add_expression (destroy_value (assignment.left.target_value));

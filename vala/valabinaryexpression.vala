@@ -60,6 +60,12 @@ public class Vala.BinaryExpression : Expression {
 
 	public bool is_chained { get; private set; }
 
+	/**
+	 * Whether this string concatenation is the left operand of another one
+	 * and gets merged into its single g_strconcat call.
+	 */
+	public bool is_concat_chained { get; private set; }
+
 	private Expression _left;
 	private Expression _right;
 
@@ -372,6 +378,16 @@ public class Vala.BinaryExpression : Expression {
 				value_type.value_owned = false;
 			} else {
 				value_type.value_owned = true;
+			}
+
+			// merge `a + b + c` into one concatenation; only when right is pure,
+			// so moving the reads of the left operands after it is invisible
+			unowned BinaryExpression? lbe = left as BinaryExpression;
+			if (lbe != null && lbe.operator == BinaryOperator.PLUS && !lbe.is_constant ()
+			    && lbe.value_type.type_symbol == context.analyzer.string_type.type_symbol
+			    && right.is_pure () && context.profile != Profile.POSIX) {
+				lbe.is_concat_chained = true;
+				lbe.value_type.value_owned = false;
 			}
 
 			value_type.check (context);

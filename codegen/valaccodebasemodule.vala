@@ -5860,6 +5860,11 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 					}
 
 					set_cvalue (expr, new CCodeConstant ("%s %s".printf (left, right)));
+				} else if (expr.is_concat_chained) {
+					// unterminated g_strconcat call, finished by the parent expression
+					var ccall = get_concat_call (expr.left, cleft);
+					ccall.add_argument (get_concat_middle_argument (expr.right, cright));
+					set_cvalue (expr, ccall);
 				} else {
 					var temp_value = create_temp_value (expr.value_type, false, expr);
 					CCodeFunctionCall ccall;
@@ -5885,8 +5890,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccall.add_argument (cright);
 					} else {
 						// convert to g_strconcat (a, b, NULL)
-						ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
-						ccall.add_argument (cleft);
+						ccall = get_concat_call (expr.left, cleft);
 						ccall.add_argument (cright);
 						ccall.add_argument (new CCodeConstant("NULL"));
 					}
@@ -6017,6 +6021,101 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		cfile.add_function (function);
 
 		return array_contains_func;
+	}
+
+	CCodeFunctionCall get_concat_call (Expression left, CCodeExpression cleft) {
+		if (left is BinaryExpression && ((BinaryExpression) left).is_concat_chained) {
+			return (CCodeFunctionCall) cleft;
+		}
+		var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
+		ccall.add_argument (cleft);
+		return ccall;
+	}
+
+	// g_strconcat stops at the first NULL argument while chained `+` skips
+	// NULL operands, so pass "" instead of NULL for non-last arguments
+	CCodeExpression get_concat_middle_argument (Expression expr, CCodeExpression cexpr) {
+		if (expr.is_constant () && !expr.value_type.nullable) {
+			return cexpr;
+		}
+		if (!(cexpr is CCodeIdentifier || cexpr is CCodeMemberAccess)) {
+			// evaluate only once
+			var temp_value = store_temp_value (expr.target_value, expr, false);
+			cexpr = get_cvalue_ (temp_value);
+		}
+		return new CCodeConditionalExpression (cexpr, cexpr, new CCodeConstant ("\"\""));
+	}
+
+	// gchar* _vala_string_append (gchar* self, const gchar* s): `self += s` with
+	// g_strconcat's NULL semantics, but growing self in place via g_realloc
+	protected string generate_string_append_function () {
+		string fname = "_vala_string_append";
+		if (!add_wrapper (fname)) {
+			return fname;
+		}
+		cfile.add_include ("string.h");
+
+		var fun = new CCodeFunction (fname, "gchar*");
+		fun.add_parameter (new CCodeParameter ("self", "gchar*"));
+		fun.add_parameter (new CCodeParameter ("s", "const gchar*"));
+		fun.modifiers = CCodeModifiers.STATIC;
+
+		push_function (fun);
+
+		var self = new CCodeIdentifier ("self");
+		var str = new CCodeIdentifier ("s");
+		var len = new CCodeIdentifier ("len");
+		var slen = new CCodeIdentifier ("slen");
+		ccode.add_declaration ("gsize", new CCodeVariableDeclarator ("len"));
+		ccode.add_declaration ("gsize", new CCodeVariableDeclarator ("slen"));
+
+		// if (self == NULL || s == NULL) return self;
+		ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.OR,
+			new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, self, new CCodeConstant ("NULL")),
+			new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, str, new CCodeConstant ("NULL"))));
+		ccode.add_return (self);
+		ccode.close ();
+
+		var strlen = new CCodeFunctionCall (new CCodeIdentifier ("strlen"));
+		strlen.add_argument (self);
+		ccode.add_assignment (len, strlen);
+		strlen = new CCodeFunctionCall (new CCodeIdentifier ("strlen"));
+		strlen.add_argument (str);
+		ccode.add_assignment (slen, strlen);
+
+		// s may point into self which g_realloc may move:
+		// if (s >= self && s <= self + len) { gchar* r = g_strconcat (self, s, NULL); g_free (self); return r; }
+		ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.AND,
+			new CCodeBinaryExpression (CCodeBinaryOperator.GREATER_THAN_OR_EQUAL, str, self),
+			new CCodeBinaryExpression (CCodeBinaryOperator.LESS_THAN_OR_EQUAL, str, new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, self, len))));
+		var concat = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
+		concat.add_argument (self);
+		concat.add_argument (str);
+		concat.add_argument (new CCodeConstant ("NULL"));
+		ccode.add_declaration ("gchar*", new CCodeVariableDeclarator ("r", concat));
+		var free = new CCodeFunctionCall (new CCodeIdentifier ("g_free"));
+		free.add_argument (self);
+		ccode.add_expression (free);
+		ccode.add_return (new CCodeIdentifier ("r"));
+		ccode.close ();
+
+		// self = g_realloc (self, len + slen + 1); memcpy (self + len, s, slen + 1); return self;
+		var realloc = new CCodeFunctionCall (new CCodeIdentifier ("g_realloc"));
+		realloc.add_argument (self);
+		realloc.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, len, new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, slen, new CCodeConstant ("1"))));
+		ccode.add_assignment (self, realloc);
+		var memcpy = new CCodeFunctionCall (new CCodeIdentifier ("memcpy"));
+		memcpy.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, self, len));
+		memcpy.add_argument (str);
+		memcpy.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, slen, new CCodeConstant ("1")));
+		ccode.add_expression (memcpy);
+		ccode.add_return (self);
+
+		pop_function ();
+
+		cfile.add_function_declaration (fun);
+		cfile.add_function (fun);
+		return fname;
 	}
 
 	string generate_cmp_wrapper (CCodeIdentifier cmpid) {
