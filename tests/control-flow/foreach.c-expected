@@ -52,6 +52,8 @@ VALA_EXTERN void test_garray_unowned (GArray* array);
 VALA_EXTERN void test_foreach_garray (void);
 static void _vala_GValue_free_function_content_of (gpointer data);
 VALA_EXTERN void test_foreach_multidim_array (void);
+static gchar* _vala_string_append (gchar* self,
+                            const gchar* s);
 VALA_EXTERN void test_foreach_const_array (void);
 VALA_EXTERN void test_foreach_slice_array (void);
 VALA_EXTERN void test_foreach_string (void);
@@ -487,6 +489,28 @@ test_foreach_garray (void)
 	G_IS_VALUE (&value) ? (g_value_unset (&value), NULL) : NULL;
 }
 
+static gchar*
+_vala_string_append (gchar* self,
+                     const gchar* s)
+{
+	gsize len;
+	gsize slen;
+	if ((self == NULL) || (s == NULL)) {
+		return self;
+	}
+	len = strlen (self);
+	slen = strlen (s);
+	if ((s >= self) && (s <= (self + len))) {
+		gchar* r;
+		r = g_strconcat (self, s, NULL);
+		g_free (self);
+		return r;
+	}
+	self = g_realloc (self, len + (slen + 1));
+	memcpy (self + len, s, slen + 1);
+	return self;
+}
+
 void
 test_foreach_multidim_array (void)
 {
@@ -499,7 +523,7 @@ test_foreach_multidim_array (void)
 	gint* _tmp2_;
 	gint _tmp2__length1;
 	gint _tmp2__length2;
-	const gchar* _tmp7_;
+	const gchar* _tmp5_;
 	_tmp0_ = g_new0 (gint, 3 * 2);
 	_tmp0_[0] = 1;
 	_tmp0_[1] = 2;
@@ -526,22 +550,17 @@ test_foreach_multidim_array (void)
 			gint i = 0;
 			i = i_collection[i_it];
 			{
-				const gchar* _tmp3_;
+				gchar* _tmp3_;
 				gchar* _tmp4_;
-				gchar* _tmp5_;
-				gchar* _tmp6_;
-				_tmp3_ = _result_;
-				_tmp4_ = g_strdup_printf ("%i", i);
-				_tmp5_ = _tmp4_;
-				_tmp6_ = g_strconcat (_tmp3_, _tmp5_, NULL);
-				_g_free0 (_result_);
-				_result_ = _tmp6_;
-				_g_free0 (_tmp5_);
+				_tmp3_ = g_strdup_printf ("%i", i);
+				_tmp4_ = _tmp3_;
+				_result_ = _vala_string_append (_result_, _tmp4_);
+				_g_free0 (_tmp4_);
 			}
 		}
 	}
-	_tmp7_ = _result_;
-	_vala_assert (g_strcmp0 (_tmp7_, "123456") == 0, "result == \"123456\"");
+	_tmp5_ = _result_;
+	_vala_assert (g_strcmp0 (_tmp5_, "123456") == 0, "result == \"123456\"");
 	_g_free0 (_result_);
 	foo = (g_free (foo), NULL);
 }
@@ -551,10 +570,10 @@ test_foreach_const_array (void)
 {
 	gchar* _result_ = NULL;
 	gchar* _tmp0_;
-	const gchar* _tmp5_;
+	const gchar* _tmp3_;
 	gchar* result2 = NULL;
-	gchar* _tmp6_;
-	const gchar* _tmp11_;
+	gchar* _tmp4_;
+	const gchar* _tmp7_;
 	_tmp0_ = g_strdup ("");
 	_result_ = _tmp0_;
 	{
@@ -568,24 +587,19 @@ test_foreach_const_array (void)
 			gint i = 0;
 			i = i_collection[i_it];
 			{
-				const gchar* _tmp1_;
+				gchar* _tmp1_;
 				gchar* _tmp2_;
-				gchar* _tmp3_;
-				gchar* _tmp4_;
-				_tmp1_ = _result_;
-				_tmp2_ = g_strdup_printf ("%i", i);
-				_tmp3_ = _tmp2_;
-				_tmp4_ = g_strconcat (_tmp1_, _tmp3_, NULL);
-				_g_free0 (_result_);
-				_result_ = _tmp4_;
-				_g_free0 (_tmp3_);
+				_tmp1_ = g_strdup_printf ("%i", i);
+				_tmp2_ = _tmp1_;
+				_result_ = _vala_string_append (_result_, _tmp2_);
+				_g_free0 (_tmp2_);
 			}
 		}
 	}
-	_tmp5_ = _result_;
-	_vala_assert (g_strcmp0 (_tmp5_, "123456") == 0, "result == \"123456\"");
-	_tmp6_ = g_strdup ("");
-	result2 = _tmp6_;
+	_tmp3_ = _result_;
+	_vala_assert (g_strcmp0 (_tmp3_, "123456") == 0, "result == \"123456\"");
+	_tmp4_ = g_strdup ("");
+	result2 = _tmp4_;
 	{
 		gint* i_collection = NULL;
 		gint i_collection_length1 = 0;
@@ -597,22 +611,17 @@ test_foreach_const_array (void)
 			gint i = 0;
 			i = i_collection[i_it];
 			{
-				const gchar* _tmp7_;
-				gchar* _tmp8_;
-				gchar* _tmp9_;
-				gchar* _tmp10_;
-				_tmp7_ = result2;
-				_tmp8_ = g_strdup_printf ("%i", i);
-				_tmp9_ = _tmp8_;
-				_tmp10_ = g_strconcat (_tmp7_, _tmp9_, NULL);
-				_g_free0 (result2);
-				result2 = _tmp10_;
-				_g_free0 (_tmp9_);
+				gchar* _tmp5_;
+				gchar* _tmp6_;
+				_tmp5_ = g_strdup_printf ("%i", i);
+				_tmp6_ = _tmp5_;
+				result2 = _vala_string_append (result2, _tmp6_);
+				_g_free0 (_tmp6_);
 			}
 		}
 	}
-	_tmp11_ = result2;
-	_vala_assert (g_strcmp0 (_tmp11_, "654321") == 0, "result2 == \"654321\"");
+	_tmp7_ = result2;
+	_vala_assert (g_strcmp0 (_tmp7_, "654321") == 0, "result2 == \"654321\"");
 	_g_free0 (result2);
 	_g_free0 (_result_);
 }
@@ -630,7 +639,7 @@ test_foreach_slice_array (void)
 	gint _tmp2__length1;
 	gint* _tmp3_;
 	gint _tmp3__length1;
-	const gchar* _tmp8_;
+	const gchar* _tmp6_;
 	_tmp0_ = g_new0 (gint, 6);
 	_tmp0_[0] = 1;
 	_tmp0_[1] = 2;
@@ -658,22 +667,17 @@ test_foreach_slice_array (void)
 			gint i = 0;
 			i = i_collection[i_it];
 			{
-				const gchar* _tmp4_;
+				gchar* _tmp4_;
 				gchar* _tmp5_;
-				gchar* _tmp6_;
-				gchar* _tmp7_;
-				_tmp4_ = _result_;
-				_tmp5_ = g_strdup_printf ("%i", i);
-				_tmp6_ = _tmp5_;
-				_tmp7_ = g_strconcat (_tmp4_, _tmp6_, NULL);
-				_g_free0 (_result_);
-				_result_ = _tmp7_;
-				_g_free0 (_tmp6_);
+				_tmp4_ = g_strdup_printf ("%i", i);
+				_tmp5_ = _tmp4_;
+				_result_ = _vala_string_append (_result_, _tmp5_);
+				_g_free0 (_tmp5_);
 			}
 		}
 	}
-	_tmp8_ = _result_;
-	_vala_assert (g_strcmp0 (_tmp8_, "2345") == 0, "result == \"2345\"");
+	_tmp6_ = _result_;
+	_vala_assert (g_strcmp0 (_tmp6_, "2345") == 0, "result == \"2345\"");
 	_g_free0 (_result_);
 	foo = (g_free (foo), NULL);
 }

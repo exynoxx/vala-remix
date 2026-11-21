@@ -71,6 +71,7 @@ TESTS = \
 	basic-types/default-gtype.vala \
 	basic-types/strings.vala \
 	basic-types/string-array-append.vala \
+	basic-types/string-concat-chain.vala \
 	basic-types/string-concat-null.test \
 	basic-types/string-relation.vala \
 	basic-types/arrays.vala \
