@@ -46,6 +46,9 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		public Map<string,int> closure_variable_count_map = new HashMap<string,int> (str_hash, str_equal);
 		public Map<LocalVariable,int> closure_variable_clash_map = new HashMap<LocalVariable,int> ();
 		public bool is_in_method_precondition;
+		// coroutine temporaries declared as C locals instead of closure struct fields
+		public bool temps_as_c_locals;
+		public Set<string> c_local_temps = new HashSet<string> (str_hash, str_equal);
 
 		public EmitContext (Symbol? symbol = null) {
 			current_symbol = symbol;
@@ -2458,7 +2461,9 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		foreach (Statement stmt in b.get_statements ()) {
 			push_line (stmt.source_reference);
+			emit_context.temps_as_c_locals = is_in_coroutine () && is_yield_free_simple_statement (stmt);
 			stmt.emit (this);
+			emit_context.temps_as_c_locals = false;
 			pop_line ();
 		}
 
@@ -2517,8 +2522,42 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		stmt.declaration.accept (this);
 	}
 
+	/**
+	 * Whether the temporaries of this statement never live across a
+	 * suspension point, so they need not be kept in the coroutine data.
+	 */
+	static bool is_yield_free_simple_statement (Statement stmt) {
+		Expression? expr = null;
+		if (stmt is ExpressionStatement) {
+			expr = ((ExpressionStatement) stmt).expression;
+		} else if (stmt is DeclarationStatement && ((DeclarationStatement) stmt).declaration is LocalVariable) {
+			expr = ((LocalVariable) ((DeclarationStatement) stmt).declaration).initializer;
+		} else {
+			return false;
+		}
+		if (expr == null) {
+			return true;
+		}
+		var finder = new YieldFinder ();
+		expr.accept (finder);
+		return !finder.found;
+	}
+
+	class YieldFinder : CodeVisitor {
+		public bool found;
+
+		public override void visit_expression (Expression expr) {
+			if (expr is CallableExpression && ((CallableExpression) expr).is_yield_expression) {
+				found = true;
+			}
+			if (!found) {
+				expr.accept_children (this);
+			}
+		}
+	}
+
 	public CCodeExpression get_cexpression (string name) {
-		if (is_in_coroutine ()) {
+		if (is_in_coroutine () && !emit_context.c_local_temps.contains (name)) {
 			return new CCodeMemberAccess.pointer (new CCodeIdentifier ("_data_"), name);
 		} else {
 			return new CCodeIdentifier (name);
@@ -2730,6 +2769,9 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		/* Additional temp variables */
 
+		// companions of user-declared locals stay in the coroutine data as well
+		var temps_as_c_locals = emit_context.temps_as_c_locals;
+		emit_context.temps_as_c_locals = false;
 		if (declared) {
 			if (local.variable_type is ArrayType) {
 				// create variables to store array dimensions
@@ -2763,6 +2805,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				}
 			}
 		}
+		emit_context.temps_as_c_locals = temps_as_c_locals;
 
 		/* Store the initializer */
 
@@ -2941,6 +2984,10 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		var_type.value_owned = value_owned;
 		var local = new LocalVariable (var_type, "_tmp%d_".printf (next_temp_var_id));
 		local.init = init;
+		if (emit_context.temps_as_c_locals) {
+			// callers may build C expressions for it before emit_temp_var
+			emit_context.c_local_temps.add (local.name);
+		}
 
 		if (node_reference != null) {
 			local.source_reference = node_reference.source_reference;
@@ -3991,7 +4038,13 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		var init = (!local.name.has_prefix ("*") && local.init);
 		if (is_in_coroutine ()) {
-			closure_struct.add_field (get_ccode_name (local.variable_type), local.name, 0, get_ccode_declarator_suffix (local.variable_type));
+			if (emit_context.temps_as_c_locals || emit_context.c_local_temps.contains (local.name)) {
+				// not live across a yield, keep it out of the heap-allocated data
+				emit_context.c_local_temps.add (local.name);
+				ccode.add_declaration (get_ccode_name (local.variable_type), new CCodeVariableDeclarator (local.name, null, get_ccode_declarator_suffix (local.variable_type)));
+			} else {
+				closure_struct.add_field (get_ccode_name (local.variable_type), local.name, 0, get_ccode_declarator_suffix (local.variable_type));
+			}
 
 			// even though closure struct is zerod, we need to initialize temporary variables
 			// as they might be used multiple times when declared in a loop
