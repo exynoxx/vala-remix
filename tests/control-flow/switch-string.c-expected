@@ -43,37 +43,34 @@ foo (void)
 	gchar* foo = NULL;
 	gchar* _tmp0_;
 	const gchar* _tmp1_;
-	GQuark _tmp3_ = 0U;
-	static GQuark _tmp2_label0 = 0;
-	static GQuark _tmp2_label1 = 0;
-	static GQuark _tmp2_label2 = 0;
-	static GQuark _tmp2_label3 = 0;
+	gint _tmp2_;
 	gchar* result;
 	_tmp0_ = g_strdup ("foo");
 	foo = _tmp0_;
 	_tmp1_ = foo;
-	_tmp3_ = (NULL == _tmp1_) ? 0 : g_quark_from_string (_tmp1_);
-	if (_tmp3_ == ((0 != _tmp2_label0) ? _tmp2_label0 : (_tmp2_label0 = g_quark_from_static_string (FOO)))) {
-		switch (0) {
-			default:
-			{
-				break;
-			}
+	_tmp2_ = 0;
+	if (g_strcmp0 (_tmp1_, FOO) == 0) {
+		_tmp2_ = 1;
+	} else if ((g_strcmp0 (_tmp1_, BAR) == 0) || (g_strcmp0 (_tmp1_, MANAM) == 0)) {
+		_tmp2_ = 2;
+	} else if (g_strcmp0 (_tmp1_, "minim") == 0) {
+		_tmp2_ = 3;
+	}
+	switch (_tmp2_) {
+		case 1:
+		{
+			break;
 		}
-	} else if ((_tmp3_ == ((0 != _tmp2_label1) ? _tmp2_label1 : (_tmp2_label1 = g_quark_from_static_string (BAR)))) || (_tmp3_ == ((0 != _tmp2_label2) ? _tmp2_label2 : (_tmp2_label2 = g_quark_from_static_string (MANAM))))) {
-		switch (0) {
-			default:
-			{
-				g_assert_not_reached ();
-			}
+		case 2:
+		{
+			g_assert_not_reached ();
 		}
-	} else if (_tmp3_ == ((0 != _tmp2_label3) ? _tmp2_label3 : (_tmp2_label3 = g_quark_from_static_string ("minim")))) {
-		switch (0) {
-			default:
-			{
-				g_assert_not_reached ();
-			}
+		case 3:
+		{
+			g_assert_not_reached ();
 		}
+		default:
+		break;
 	}
 	result = foo;
 	return result;
@@ -94,40 +91,34 @@ bar (void)
 {
 	gchar* _tmp0_;
 	gchar* _tmp1_;
-	GQuark _tmp3_ = 0U;
-	static GQuark _tmp2_label0 = 0;
-	static GQuark _tmp2_label1 = 0;
-	static GQuark _tmp2_label2 = 0;
-	gchar* _tmp4_;
+	gint _tmp2_;
+	gchar* _tmp3_;
 	gchar* result;
 	_tmp0_ = get_bar ();
 	_tmp1_ = _tmp0_;
-	_tmp3_ = (NULL == _tmp1_) ? 0 : g_quark_from_string (_tmp1_);
+	_tmp2_ = 0;
+	if (g_strcmp0 (_tmp1_, BAR) == 0) {
+		_tmp2_ = 1;
+	} else if ((g_strcmp0 (_tmp1_, FOO) == 0) || (g_strcmp0 (_tmp1_, "minim") == 0)) {
+		_tmp2_ = 2;
+	}
 	g_free (_tmp1_);
-	if (_tmp3_ == ((0 != _tmp2_label0) ? _tmp2_label0 : (_tmp2_label0 = g_quark_from_static_string (BAR)))) {
-		switch (0) {
-			default:
-			{
-				break;
-			}
+	switch (_tmp2_) {
+		case 1:
+		{
+			break;
 		}
-	} else if ((_tmp3_ == ((0 != _tmp2_label1) ? _tmp2_label1 : (_tmp2_label1 = g_quark_from_static_string (FOO)))) || (_tmp3_ == ((0 != _tmp2_label2) ? _tmp2_label2 : (_tmp2_label2 = g_quark_from_static_string ("minim"))))) {
-		switch (0) {
-			default:
-			{
-				g_assert_not_reached ();
-			}
+		case 2:
+		{
+			g_assert_not_reached ();
 		}
-	} else {
-		switch (0) {
-			default:
-			{
-				g_assert_not_reached ();
-			}
+		default:
+		{
+			g_assert_not_reached ();
 		}
 	}
-	_tmp4_ = g_strdup (BAR);
-	result = _tmp4_;
+	_tmp3_ = g_strdup (BAR);
+	result = _tmp3_;
 	return result;
 }
 

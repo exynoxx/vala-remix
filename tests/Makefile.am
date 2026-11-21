@@ -332,6 +332,7 @@ TESTS = \
 	control-flow/switch.vala \
 	control-flow/switch-enum.vala \
 	control-flow/switch-string.vala \
+	control-flow/switch-string-nointern.vala \
 	control-flow/switch-try-finally-throw.test \
 	control-flow/sideeffects.vala \
 	control-flow/unassigned-captured-local-variable.test \
@@ -341,6 +342,7 @@ TESTS = \
 	control-flow/unassigned-local-variable-3.test \
 	control-flow/unassigned-local-variable-while.test \
 	control-flow/while-false.vala \
+	control-flow/loop-string-length-hoist.vala \
 	control-flow/bug628336.vala \
 	control-flow/bug639482.vala \
 	control-flow/bug652549.vala \

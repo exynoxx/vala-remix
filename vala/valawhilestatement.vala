@@ -59,6 +59,8 @@ public class Vala.WhileStatement : Loop, Statement {
 
 		// convert to simple loop
 
+		var hoisted = hoist_string_length (context);
+
 		if (condition.is_always_true ()) {
 			// do not generate if block if condition is always true
 		} else if (condition.is_always_false ()) {
@@ -74,10 +76,18 @@ public class Vala.WhileStatement : Loop, Statement {
 
 		var loop = new LoopStatement (body, source_reference);
 
-		unowned Block parent_block = (Block) parent_node;
-		parent_block.replace_statement (this, loop);
+		Statement replacement = loop;
+		if (hoisted != null) {
+			var block = new Block (source_reference);
+			block.add_statement (hoisted);
+			block.add_statement (loop);
+			replacement = block;
+		}
 
-		if (!loop.check (context)) {
+		unowned Block parent_block = (Block) parent_node;
+		parent_block.replace_statement (this, replacement);
+
+		if (!replacement.check (context)) {
 			error = true;
 		}
 

@@ -39,129 +39,74 @@ public abstract class Vala.CCodeControlFlowModule : CCodeMethodModule {
 	}
 
 	void visit_string_switch_statement (SwitchStatement stmt) {
-		// we need a temporary variable to save the property value
+		// match labels with g_strcmp0 (NULL-safe, so `case null` works) instead of
+		// interning the input via g_quark_from_string, which takes a global lock and
+		// leaks every distinct input; record the matching section in an index
+		// so an owned input can be freed before the section bodies run
 		var temp_value = create_temp_value (stmt.expression.value_type, false, stmt);
 		var ctemp = get_cvalue_ (temp_value);
+		ccode.add_assignment (ctemp, get_cvalue (stmt.expression));
 
-		var cinit = new CCodeAssignment (ctemp, get_cvalue (stmt.expression));
-		var czero = new CCodeConstant ("0");
+		var cindex = get_cvalue_ (create_temp_value (int_type, false, stmt));
+		ccode.add_assignment (cindex, new CCodeConstant ("0"));
 
-		var free_call = new CCodeFunctionCall (new CCodeIdentifier ("g_free"));
-		free_call.add_argument (ctemp);
-
-		var cisnull = new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, new CCodeConstant ("NULL"), ctemp);
-		var cquark = new CCodeFunctionCall (new CCodeIdentifier ("g_quark_from_string"));
-		cquark.add_argument (ctemp);
-
-		var ccond = new CCodeConditionalExpression (cisnull, new CCodeConstant ("0"), cquark);
-
-		int label_temp_id = next_temp_var_id++;
-
-		temp_value = create_temp_value (gquark_type, true, stmt);
-
-		int label_count = 0;
-
+		// emit all label expressions up front so their temporaries are not
+		// scoped inside the matching chain
+		var conditions = new ArrayList<CCodeExpression> ();
 		foreach (SwitchSection section in stmt.get_sections ()) {
 			if (section.has_default_label ()) {
 				continue;
 			}
 
+			CCodeExpression cor = null;
 			foreach (SwitchLabel label in section.get_labels ()) {
 				label.expression.emit (this);
-				var cexpr = get_cvalue (label.expression);
-
-				if (is_constant_ccode_expression (cexpr)) {
-					var cname = "_tmp%d_label%d".printf (label_temp_id, label_count++);
-
-					ccode.add_declaration (get_ccode_name (gquark_type), new CCodeVariableDeclarator (cname, czero), CCodeModifiers.STATIC);
-				}
+				var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_strcmp0"));
+				ccall.add_argument (ctemp);
+				ccall.add_argument (get_cvalue (label.expression));
+				var ccmp = new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, ccall, new CCodeConstant ("0"));
+				cor = (cor == null) ? ccmp : new CCodeBinaryExpression (CCodeBinaryOperator.OR, cor, ccmp);
 			}
+			conditions.add (cor);
 		}
 
-		ccode.add_expression (cinit);
-
-		ctemp = get_cvalue_ (temp_value);
-		cinit = new CCodeAssignment (ctemp, ccond);
-
-		ccode.add_expression (cinit);
+		for (int i = 0; i < conditions.size; i++) {
+			if (i > 0) {
+				ccode.else_if (conditions[i]);
+			} else {
+				ccode.open_if (conditions[i]);
+			}
+			ccode.add_assignment (cindex, new CCodeConstant ((i + 1).to_string ()));
+		}
+		if (conditions.size > 0) {
+			ccode.close ();
+		}
 
 		if (stmt.expression.value_type.value_owned) {
 			// free owned string
+			var free_call = new CCodeFunctionCall (new CCodeIdentifier ("g_free"));
+			free_call.add_argument (ctemp);
 			ccode.add_expression (free_call);
 		}
 
-		SwitchSection default_section = null;
-		label_count = 0;
-
+		ccode.open_switch (cindex);
+		bool has_default = false;
 		int n = 0;
-
 		foreach (SwitchSection section in stmt.get_sections ()) {
 			if (section.has_default_label ()) {
-				default_section = section;
-				continue;
-			}
-
-			CCodeBinaryExpression cor = null;
-			foreach (SwitchLabel label in section.get_labels ()) {
-				label.expression.emit (this);
-				var cexpr = get_cvalue (label.expression);
-
-				if (is_constant_ccode_expression (cexpr)) {
-					var cname = new CCodeIdentifier ("_tmp%d_label%d".printf (label_temp_id, label_count++));
-					var ccondition = new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, czero, cname);
-					var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_quark_from_static_string"));
-					cinit = new CCodeAssignment (cname, ccall);
-
-					ccall.add_argument (cexpr);
-
-					cexpr = new CCodeConditionalExpression (ccondition, cname, cinit);
-				} else {
-					var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_quark_from_string"));
-					ccall.add_argument (cexpr);
-					cexpr = ccall;
-				}
-
-				var ccmp = new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, ctemp, cexpr);
-
-				if (cor == null) {
-					cor = ccmp;
-				} else {
-					cor = new CCodeBinaryExpression (CCodeBinaryOperator.OR, cor, ccmp);
-				}
-			}
-
-			if (n > 0) {
-				ccode.else_if (cor);
+				ccode.add_default ();
+				has_default = true;
 			} else {
-				ccode.open_if (cor);
+				ccode.add_case (new CCodeConstant ((++n).to_string ()));
 			}
-
-			ccode.open_switch (new CCodeConstant ("0"));
-			ccode.add_default ();
-
 			section.emit (this);
-
-			ccode.close ();
-
-			n++;
 		}
-
-		if (default_section != null) {
-			if (n > 0) {
-				ccode.add_else ();
-			}
-
-			ccode.open_switch (new CCodeConstant ("0"));
+		if (!has_default) {
+			// silence C compiler
 			ccode.add_default ();
-
-			default_section.emit (this);
-
-			ccode.close ();
+			ccode.add_break ();
 		}
-
-		if (n > 0) {
-			ccode.close ();
-		}
+		ccode.close ();
 	}
 
 	public override void visit_switch_statement (SwitchStatement stmt) {

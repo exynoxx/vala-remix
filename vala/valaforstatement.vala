@@ -136,6 +136,11 @@ public class Vala.ForStatement : Loop, Statement {
 			block.add_statement (new ExpressionStatement (init_expr, init_expr.source_reference));
 		}
 
+		var hoisted = hoist_string_length (context);
+		if (hoisted != null) {
+			block.add_statement (hoisted);
+		}
+
 		// do not generate if block if condition is always true
 		if (condition == null || condition.is_always_true ()) {
 		} else if (condition.is_always_false ()) {
