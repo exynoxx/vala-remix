@@ -261,6 +261,11 @@ public class Vala.LambdaExpression : Expression {
 
 		method.check (context);
 
+		if (method.binding == MemberBinding.INSTANCE && !method.closure) {
+			// self is used as delegate target
+			context.analyzer.mark_this_used ();
+		}
+
 		value_type = new MethodType (method, source_reference);
 		value_type.value_owned = target_type.value_owned;
 

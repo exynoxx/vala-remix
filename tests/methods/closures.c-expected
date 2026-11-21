@@ -61,7 +61,6 @@ struct _FooClass {
 
 struct _Block1Data {
 	int _ref_count_;
-	Foo* self;
 	GObject* o;
 	GMainLoop* loop;
 };
@@ -154,11 +153,8 @@ block1_data_unref (void * _userdata_)
 	Block1Data* _data1_;
 	_data1_ = (Block1Data*) _userdata_;
 	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
-		Foo* self;
-		self = _data1_->self;
 		_g_object_unref0 (_data1_->o);
 		_g_main_loop_unref0 (_data1_->loop);
-		_g_object_unref0 (self);
 		g_slice_free (Block1Data, _data1_);
 	}
 }
@@ -166,9 +162,7 @@ block1_data_unref (void * _userdata_)
 static gboolean
 _vala_lambda0_ (Block1Data* _data1_)
 {
-	Foo* self;
 	gboolean result;
-	self = _data1_->self;
 	_g_object_unref0 (_data1_->o);
 	_data1_->o = NULL;
 	g_main_loop_quit (_data1_->loop);
@@ -201,7 +195,6 @@ foo_bar (Foo* self,
 	g_return_if_fail (loop != NULL);
 	_data1_ = g_slice_new0 (Block1Data);
 	_data1_->_ref_count_ = 1;
-	_data1_->self = g_object_ref (self);
 	_tmp0_ = _g_main_loop_ref0 (loop);
 	_g_main_loop_unref0 (_data1_->loop);
 	_data1_->loop = _tmp0_;

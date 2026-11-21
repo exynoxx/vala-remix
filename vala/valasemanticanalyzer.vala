@@ -1092,6 +1092,27 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 		return null;
 	}
 
+	/**
+	 * Records that `this' is used at the current location. If that is
+	 * within a lambda, all enclosing blocks are marked, so closure blocks
+	 * hold self only if a lambda actually needs it.
+	 */
+	public void mark_this_used () {
+		unowned Symbol? sym = current_symbol;
+		while (sym != null && !(sym is Method) && !(sym is TypeSymbol)) {
+			sym = sym.parent_symbol;
+		}
+		if (!(sym is Method && sym.parent_node is LambdaExpression)) {
+			return;
+		}
+		for (sym = current_symbol; sym != null && !(sym is TypeSymbol); sym = sym.parent_symbol) {
+			unowned Block? block = sym as Block;
+			if (block != null) {
+				block.this_captured = true;
+			}
+		}
+	}
+
 	public static unowned Method? find_parent_method (Symbol sym) {
 		while (sym is Block) {
 			sym = sym.parent_symbol;

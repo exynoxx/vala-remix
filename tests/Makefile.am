@@ -487,6 +487,7 @@ TESTS = \
 	delegates/lambda-mixed-instance-static.vala \
 	delegates/lambda-outer-constant.test \
 	delegates/lambda-shared-closure.vala \
+	delegates/lambda-self-capture.vala \
 	delegates/member-target-destroy.vala \
 	delegates/member-target-destroy-2.vala \
 	delegates/params-array.vala \

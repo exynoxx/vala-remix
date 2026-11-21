@@ -330,6 +330,7 @@ public class Vala.MemberAccess : Expression {
 						inner.value_type = this_parameter.variable_type.copy ();
 						inner.value_type.value_owned = false;
 						inner.symbol_reference = this_parameter;
+						context.analyzer.mark_this_used ();
 
 						symbol_reference = inner.value_type.get_member (member_name);
 					}
@@ -1007,6 +1008,11 @@ public class Vala.MemberAccess : Expression {
 				value_type.value_owned = target_type.value_owned;
 			}
 		} else {
+			if (inner == null && (instance || klass || symbol_reference is Parameter && member_name == "this")) {
+				// explicit or implicit this access
+				context.analyzer.mark_this_used ();
+			}
+
 			// implicit this access
 			if (instance && inner == null) {
 				inner = new MemberAccess (null, "this", source_reference);

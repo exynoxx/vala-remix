@@ -39,6 +39,12 @@ public class Vala.Block : Symbol, Statement {
 
 	public bool captured { get; set; }
 
+	/**
+	 * Specifies whether `this' is used from within a lambda nested in this
+	 * block, so closure block data needs to hold a reference to self.
+	 */
+	public bool this_captured { get; set; }
+
 	private List<Statement> statement_list = new ArrayList<Statement> ();
 	private List<LocalVariable> local_variables = new ArrayList<LocalVariable> ();
 	private List<Constant> local_constants = new ArrayList<Constant> ();

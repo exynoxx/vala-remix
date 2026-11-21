@@ -526,7 +526,7 @@ public abstract class Vala.CCodeMethodModule : CCodeStructModule {
 
 					// add self variable for closures
 					// as closures have block data parameter
-					if (m.binding == MemberBinding.INSTANCE) {
+					if (m.binding == MemberBinding.INSTANCE && closure_captures_self (closure_block)) {
 						var cself = new CCodeMemberAccess.pointer (new CCodeIdentifier ("_data%d_".printf (block_id)), "self");
 						ccode.add_declaration (get_ccode_name (SemanticAnalyzer.get_data_type_for_symbol (current_type_symbol)), new CCodeVariableDeclarator ("self"));
 						ccode.add_assignment (new CCodeIdentifier ("self"), cself);
