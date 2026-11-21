@@ -3072,9 +3072,9 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		    && right_type_as_object_type != null && (!(right_type_as_object_type is Class) || !((Class) right_type_as_object_type).is_compact)) {
 			if (left_type_as_object_type != right_type_as_object_type) {
 				if (left_type_as_object_type.is_subtype_of (right_type_as_object_type)) {
-					cleft = generate_instance_cast (cleft, right_type_as_object_type);
+					cleft = generate_upcast (cleft, right_type_as_object_type);
 				} else if (right_type_as_object_type.is_subtype_of (left_type_as_object_type)) {
-					cright = generate_instance_cast (cright, left_type_as_object_type);
+					cright = generate_upcast (cright, left_type_as_object_type);
 				}
 			}
 		} else if (left_type_as_struct != null && right_type_as_struct != null) {
@@ -4620,7 +4620,8 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 	public override void visit_base_access (BaseAccess expr) {
 		unowned Class? cl = expr.value_type.type_symbol as Class;
 		if (cl != null && !cl.is_compact) {
-			set_cvalue (expr, generate_instance_cast (get_this_cexpression (), cl));
+			// self is always an instance of the current class, so the parent cast cannot fail
+			set_cvalue (expr, generate_upcast (get_this_cexpression (), cl));
 		} else {
 			expr.target_value = load_this_parameter (expr.value_type.type_symbol);
 		}
@@ -6712,6 +6713,11 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		result.add_argument (new CCodeIdentifier (get_ccode_type_id (type)));
 		result.add_argument (new CCodeIdentifier (get_ccode_name (type)));
 		return result;
+	}
+
+	// plain C cast for conversions that are statically known to succeed
+	public CCodeExpression generate_upcast (CCodeExpression expr, TypeSymbol type) {
+		return new CCodeCastExpression (expr, "%s*".printf (get_ccode_name (type)));
 	}
 
 	void generate_struct_destroy_function (Struct st) {

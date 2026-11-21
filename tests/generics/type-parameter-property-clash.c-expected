@@ -231,7 +231,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_FOO_G_TYPE_PROPERTY:
 		g_value_set_gtype (value, foo_get_foo_g_type (self));
@@ -258,7 +258,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_G_TYPE:
 		self->priv->g_type = g_value_get_gtype (value);
@@ -362,7 +362,7 @@ _vala_bar_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_BAR_G_TYPE_PROPERTY:
 		g_value_set_gtype (value, bar_get_bar_g_type (self));
@@ -389,7 +389,7 @@ _vala_bar_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_G_TYPE:
 		self->priv->g_type = g_value_get_gtype (value);

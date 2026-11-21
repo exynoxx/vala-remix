@@ -110,7 +110,7 @@ static void
 module_finalize (GObject * obj)
 {
 	Module * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MODULE, Module);
+	self = (Module*) obj;
 	G_OBJECT_CLASS (module_parent_class)->finalize (obj);
 }
 

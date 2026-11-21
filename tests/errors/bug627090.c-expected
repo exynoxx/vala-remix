@@ -161,7 +161,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		g_value_take_string (value, foo_get_bar (self));

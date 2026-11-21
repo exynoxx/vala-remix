@@ -215,7 +215,7 @@ _vala_main (void)
 	_tmp2_ = _tmp1_;
 	_vala_assert (g_strcmp0 (_tmp2_, "bar") == 0, "bar.foo () == \"bar\"");
 	_g_free0 (_tmp2_);
-	ifoo_foo (G_TYPE_CHECK_INSTANCE_CAST (bar, TYPE_IFOO, IFoo), 42);
+	ifoo_foo ((IFoo*) bar, 42);
 	_g_object_unref0 (bar);
 }
 

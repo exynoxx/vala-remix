@@ -639,7 +639,7 @@ static void
 non_priv_access_finalize (GObject * obj)
 {
 	NonPrivAccess * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_NON_PRIV_ACCESS, NonPrivAccess);
+	self = (NonPrivAccess*) obj;
 	G_OBJECT_CLASS (non_priv_access_parent_class)->finalize (obj);
 }
 
@@ -672,7 +672,7 @@ _vala_non_priv_access_get_property (GObject * object,
                                     GParamSpec * pspec)
 {
 	NonPrivAccess * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_NON_PRIV_ACCESS, NonPrivAccess);
+	self = (NonPrivAccess*) object;
 	switch (property_id) {
 		case NON_PRIV_ACCESS_REAL_STRUCT_PROPERTY:
 		{
@@ -694,7 +694,7 @@ _vala_non_priv_access_set_property (GObject * object,
                                     GParamSpec * pspec)
 {
 	NonPrivAccess * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_NON_PRIV_ACCESS, NonPrivAccess);
+	self = (NonPrivAccess*) object;
 	switch (property_id) {
 		case NON_PRIV_ACCESS_REAL_STRUCT_PROPERTY:
 		non_priv_access_set_real_struct (self, g_value_get_boxed (value));
@@ -1007,7 +1007,7 @@ sample_constructor (GType type,
 	gchar* _tmp1_;
 	parent_class = G_OBJECT_CLASS (sample_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SAMPLE, Sample);
+	self = (Sample*) obj;
 	_tmp0_ = g_strdup ("InitialAutomatic");
 	_g_free0 (self->priv->_automatic);
 	self->priv->_automatic = _tmp0_;
@@ -1046,7 +1046,7 @@ static void
 sample_finalize (GObject * obj)
 {
 	Sample * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SAMPLE, Sample);
+	self = (Sample*) obj;
 	_g_free0 (self->priv->_automatic);
 	_g_free0 (self->priv->_name);
 	_g_free0 (self->priv->_read_only);
@@ -1084,7 +1084,7 @@ _vala_sample_get_property (GObject * object,
                            GParamSpec * pspec)
 {
 	Sample * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_SAMPLE, Sample);
+	self = (Sample*) object;
 	switch (property_id) {
 		case SAMPLE_DELEG_PROPERTY:
 		g_value_set_pointer (value, sample_get_deleg (self));
@@ -1111,7 +1111,7 @@ _vala_sample_set_property (GObject * object,
                            GParamSpec * pspec)
 {
 	Sample * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_SAMPLE, Sample);
+	self = (Sample*) object;
 	switch (property_id) {
 		case SAMPLE_DELEG_PROPERTY:
 		sample_set_deleg (self, g_value_get_pointer (value));
@@ -1209,7 +1209,7 @@ static void
 maman_foo_finalize (GObject * obj)
 {
 	MamanFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_FOO, MamanFoo);
+	self = (MamanFoo*) obj;
 	G_OBJECT_CLASS (maman_foo_parent_class)->finalize (obj);
 }
 
@@ -1242,7 +1242,7 @@ _vala_maman_foo_get_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_FOO, MamanFoo);
+	self = (MamanFoo*) object;
 	switch (property_id) {
 		case MAMAN_FOO_PUBLIC_BASE_PROPERTY_PROPERTY:
 		g_value_set_int (value, maman_foo_get_public_base_property (self));
@@ -1260,7 +1260,7 @@ _vala_maman_foo_set_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_FOO, MamanFoo);
+	self = (MamanFoo*) object;
 	switch (property_id) {
 		case MAMAN_FOO_PUBLIC_BASE_PROPERTY_PROPERTY:
 		maman_foo_set_public_base_property (self, g_value_get_int (value));
@@ -1464,7 +1464,7 @@ static void
 maman_enum_default_finalize (MamanEnumDefault * obj)
 {
 	MamanEnumDefault * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_ENUM_DEFAULT, MamanEnumDefault);
+	self = (MamanEnumDefault*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -1666,7 +1666,7 @@ static void
 maman_bar_finalize (GObject * obj)
 {
 	MamanBar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_BAR, MamanBar);
+	self = (MamanBar*) obj;
 	G_OBJECT_CLASS (maman_bar_parent_class)->finalize (obj);
 }
 
@@ -1699,7 +1699,7 @@ _vala_maman_bar_get_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanBar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_BAR, MamanBar);
+	self = (MamanBar*) object;
 	switch (property_id) {
 		case MAMAN_BAR_PUBLIC_PROPERTY_PROPERTY:
 		g_value_set_int (value, maman_bar_get_public_property (self));
@@ -1720,7 +1720,7 @@ _vala_maman_bar_set_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanBar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_BAR, MamanBar);
+	self = (MamanBar*) object;
 	switch (property_id) {
 		case MAMAN_BAR_PUBLIC_PROPERTY_PROPERTY:
 		maman_bar_set_public_property (self, g_value_get_int (value));
@@ -1866,7 +1866,7 @@ _vala_maman_baz_get_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanBaz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_BAZ, MamanBaz);
+	self = (MamanBaz*) object;
 	switch (property_id) {
 		case MAMAN_BAZ_NUMBER_PROPERTY:
 		g_value_set_int (value, maman_ibaz_get_number (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_IBAZ, MamanIbaz)));
@@ -2025,7 +2025,7 @@ static void
 maman_abiz_finalize (GObject * obj)
 {
 	MamanABiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_ABIZ, MamanABiz);
+	self = (MamanABiz*) obj;
 	G_OBJECT_CLASS (maman_abiz_parent_class)->finalize (obj);
 }
 
@@ -2060,7 +2060,7 @@ _vala_maman_abiz_get_property (GObject * object,
                                GParamSpec * pspec)
 {
 	MamanABiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_ABIZ, MamanABiz);
+	self = (MamanABiz*) object;
 	switch (property_id) {
 		case MAMAN_ABIZ_NUMBER_PROPERTY:
 		g_value_set_int (value, maman_ibiz_get_number (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_IBIZ, MamanIBiz)));
@@ -2078,7 +2078,7 @@ _vala_maman_abiz_set_property (GObject * object,
                                GParamSpec * pspec)
 {
 	MamanABiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_ABIZ, MamanABiz);
+	self = (MamanABiz*) object;
 	switch (property_id) {
 		case MAMAN_ABIZ_NUMBER_PROPERTY:
 		maman_ibiz_set_number (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_IBIZ, MamanIBiz), g_value_get_int (value));
@@ -2158,7 +2158,7 @@ static void
 maman_biz_finalize (GObject * obj)
 {
 	MamanBiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_BIZ, MamanBiz);
+	self = (MamanBiz*) obj;
 	G_OBJECT_CLASS (maman_biz_parent_class)->finalize (obj);
 }
 
@@ -2191,7 +2191,7 @@ _vala_maman_biz_get_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanBiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_BIZ, MamanBiz);
+	self = (MamanBiz*) object;
 	switch (property_id) {
 		case MAMAN_BIZ_NUMBER2_PROPERTY:
 		g_value_set_int (value, maman_abiz_get_number2 (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_ABIZ, MamanABiz)));
@@ -2209,7 +2209,7 @@ _vala_maman_biz_set_property (GObject * object,
                               GParamSpec * pspec)
 {
 	MamanBiz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, MAMAN_TYPE_BIZ, MamanBiz);
+	self = (MamanBiz*) object;
 	switch (property_id) {
 		case MAMAN_BIZ_NUMBER2_PROPERTY:
 		maman_abiz_set_number2 (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_ABIZ, MamanABiz), g_value_get_int (value));

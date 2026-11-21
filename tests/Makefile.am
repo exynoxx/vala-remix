@@ -613,6 +613,8 @@ TESTS = \
 	objects/sealed-class.test \
 	objects/sealed-compact-class.test \
 	objects/signals.vala \
+	objects/signals-cached-emit.vala \
+	objects/upcast-unchecked.vala \
 	objects/signals-default-class-handler.vala \
 	objects/signals-enum-marshal.vala \
 	objects/signals-delegate.vala \

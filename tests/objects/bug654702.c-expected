@@ -190,7 +190,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_T_TYPE:
 		g_value_set_gtype (value, self->priv->t_type);
@@ -214,7 +214,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_T_TYPE:
 		self->priv->t_type = g_value_get_gtype (value);

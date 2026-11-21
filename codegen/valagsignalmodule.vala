@@ -158,6 +158,42 @@ public class Vala.GSignalModule : GObjectModule {
 		return detail_ccall;
 	}
 
+	// file-scope `static ctype name = 0;`, used as `(G_LIKELY (name) ? name : (name = init))`
+	CCodeExpression get_cached_static (string name, string ctype, CCodeExpression init) {
+		if (!cfile.add_declaration (name)) {
+			var decl = new CCodeDeclaration (ctype);
+			decl.add_declarator (new CCodeVariableDeclarator (name, new CCodeConstant ("0")));
+			decl.modifiers = CCodeModifiers.STATIC;
+			cfile.add_type_member_declaration (decl);
+		}
+		var likely = new CCodeFunctionCall (new CCodeIdentifier ("G_LIKELY"));
+		likely.add_argument (new CCodeIdentifier (name));
+		return new CCodeConditionalExpression (likely, new CCodeIdentifier (name), new CCodeAssignment (new CCodeIdentifier (name), init));
+	}
+
+	CCodeExpression get_cached_detail_cexpression (Expression? detail_expr, CodeNode node) {
+		if (detail_expr == null) {
+			return new CCodeConstant ("0");
+		}
+		if (!(detail_expr is StringLiteral)) {
+			return get_detail_cexpression (detail_expr, node);
+		}
+		// escape the detail into a unique C identifier
+		var detail = ((StringLiteral) detail_expr).eval ();
+		var name = new StringBuilder ("_vala_detail_quark_");
+		for (int i = 0; i < detail.length; i++) {
+			char c = detail[i];
+			if (c.isalnum ()) {
+				name.append_c (c);
+			} else {
+				name.append_printf ("_%02x", (uint8) c);
+			}
+		}
+		var quark = new CCodeFunctionCall (new CCodeIdentifier ("g_quark_from_static_string"));
+		quark.add_argument (get_cvalue (detail_expr));
+		return get_cached_static (name.str, "GQuark", quark);
+	}
+
 	public override void visit_signal (Signal sig) {
 		if (signal_enum != null && sig.parent_symbol is TypeSymbol) {
 			signal_enum.add_value (new CCodeEnumValue ("%s_%s_SIGNAL".printf (get_ccode_upper_case_name ((TypeSymbol) sig.parent_symbol), get_ccode_upper_case_name (sig))));
@@ -541,11 +577,7 @@ public class Vala.GSignalModule : GObjectModule {
 			var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_signal_emit"));
 			ccall.add_argument (pub_inst);
 			ccall.add_argument (get_signal_id_cexpression (sig));
-			if (detail_expr == null) {
-				ccall.add_argument (new CCodeConstant ("0"));
-			} else {
-				ccall.add_argument (get_detail_cexpression (detail_expr, expr));
-			}
+			ccall.add_argument (get_cached_detail_cexpression (detail_expr, expr));
 			return ccall;
 		} else if (get_ccode_has_emitter (sig)) {
 			string emitter_func;
@@ -560,6 +592,18 @@ public class Vala.GSignalModule : GObjectModule {
 			}
 			var ccall = new CCodeFunctionCall (new CCodeIdentifier (emitter_func));
 			ccall.add_argument (pub_inst);
+			return ccall;
+		} else if (!(sig is DynamicSignal) && get_ccode_has_type_id ((TypeSymbol) sig.parent_symbol)) {
+			// cross-file or external signal: look the id up once per file instead of on every emit
+			unowned TypeSymbol sym = (TypeSymbol) sig.parent_symbol;
+			generate_type_declaration (SemanticAnalyzer.get_data_type_for_symbol (sym), cfile);
+			var lookup = new CCodeFunctionCall (new CCodeIdentifier ("g_signal_lookup"));
+			lookup.add_argument (get_signal_canonical_constant (sig));
+			lookup.add_argument (new CCodeIdentifier (get_ccode_type_id (sym)));
+			var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_signal_emit"));
+			ccall.add_argument (pub_inst);
+			ccall.add_argument (get_cached_static ("_%s_%s_signal_id".printf (get_ccode_lower_case_name (sym), get_ccode_lower_case_name (sig)), "guint", lookup));
+			ccall.add_argument (get_cached_detail_cexpression (detail_expr, expr));
 			return ccall;
 		} else {
 			var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_signal_emit_by_name"));

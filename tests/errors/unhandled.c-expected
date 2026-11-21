@@ -186,7 +186,7 @@ foo_constructor (GType type,
 	GError* _inner_error0_ = NULL;
 	parent_class = G_OBJECT_CLASS (foo_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_tmp0_ = g_error_new_literal (FOO_ERROR, FOO_ERROR_FAIL, "constructor");
 	_inner_error0_ = _tmp0_;
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error0_->message, g_quark_to_string (_inner_error0_->domain), _inner_error0_->code);
@@ -247,7 +247,7 @@ foo_finalize (GObject * obj)
 	Foo * self;
 	GError* _tmp0_;
 	GError* _inner_error0_ = NULL;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_tmp0_ = g_error_new_literal (FOO_ERROR, FOO_ERROR_FAIL, "destructor");
 	_inner_error0_ = _tmp0_;
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error0_->message, g_quark_to_string (_inner_error0_->domain), _inner_error0_->code);
@@ -283,7 +283,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		g_value_set_string (value, foo_get_bar (self));
@@ -301,7 +301,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		foo_set_bar (self, g_value_get_string (value));

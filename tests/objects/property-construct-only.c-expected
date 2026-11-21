@@ -256,7 +256,7 @@ foo_constructor (GType type,
 	Foo * self;
 	parent_class = G_OBJECT_CLASS (foo_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	foo_set_manam (self, "foo");
 	return obj;
 }
@@ -285,7 +285,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_free0 (self->priv->_manam);
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
@@ -319,7 +319,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_MANAM_PROPERTY:
 		g_value_set_string (value, foo_get_manam (self));
@@ -337,7 +337,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_MANAM_PROPERTY:
 		foo_set_manam (self, g_value_get_string (value));
@@ -372,7 +372,7 @@ bar_constructor (GType type,
 	Bar * self;
 	parent_class = G_OBJECT_CLASS (bar_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	foo_set_manam (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo), "bar");
 	return obj;
 }
@@ -482,7 +482,7 @@ static void
 faz_finalize (GObject * obj)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FAZ, Faz);
+	self = (Faz*) obj;
 	_g_free0 (self->priv->_manam);
 	G_OBJECT_CLASS (faz_parent_class)->finalize (obj);
 }
@@ -516,7 +516,7 @@ _vala_faz_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FAZ, Faz);
+	self = (Faz*) object;
 	switch (property_id) {
 		case FAZ_MANAM_PROPERTY:
 		g_value_set_string (value, faz_get_manam (self));
@@ -534,7 +534,7 @@ _vala_faz_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FAZ, Faz);
+	self = (Faz*) object;
 	switch (property_id) {
 		case FAZ_MANAM_PROPERTY:
 		faz_set_manam (self, g_value_get_string (value));

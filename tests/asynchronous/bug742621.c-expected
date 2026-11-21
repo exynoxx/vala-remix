@@ -163,7 +163,7 @@ static void
 xyzzy_finalize (GObject * obj)
 {
 	Xyzzy * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_XYZZY, Xyzzy);
+	self = (Xyzzy*) obj;
 	G_OBJECT_CLASS (xyzzy_parent_class)->finalize (obj);
 }
 
@@ -196,7 +196,7 @@ _vala_xyzzy_get_property (GObject * object,
                           GParamSpec * pspec)
 {
 	Xyzzy * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_XYZZY, Xyzzy);
+	self = (Xyzzy*) object;
 	switch (property_id) {
 		case XYZZY_B_PROPERTY:
 		g_value_set_boolean (value, xyzzy_get_b (self));
@@ -214,7 +214,7 @@ _vala_xyzzy_set_property (GObject * object,
                           GParamSpec * pspec)
 {
 	Xyzzy * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_XYZZY, Xyzzy);
+	self = (Xyzzy*) object;
 	switch (property_id) {
 		case XYZZY_B_PROPERTY:
 		xyzzy_set_b (self, g_value_get_boolean (value));

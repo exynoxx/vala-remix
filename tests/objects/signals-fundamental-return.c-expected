@@ -356,7 +356,7 @@ static void
 maman_finalize (Maman * obj)
 {
 	Maman * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MAMAN, Maman);
+	self = (Maman*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -714,7 +714,7 @@ static void
 foo_finalize (Foo * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

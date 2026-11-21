@@ -190,7 +190,7 @@ baz_create_array (Baz* self,
 	a_length1 = _tmp0_;
 	_a_size_ = a_length1;
 	_tmp2_ = baz_get_object (self);
-	_vala_array_add1 (&a, &a_length1, &_a_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_BAZ, Baz));
+	_vala_array_add1 (&a, &a_length1, &_a_size_, (Baz*) _tmp2_);
 	_tmp3_ = a;
 	_tmp3__length1 = a_length1;
 	_vala_assert (_tmp3__length1 == 2, "a.length == 2");

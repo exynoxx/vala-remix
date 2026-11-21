@@ -180,7 +180,7 @@ maman_sub_bar_run (MamanSubBar* self)
 	g_return_if_fail (MAMAN_IS_SUB_BAR (self));
 	_tmp0_ = stdout;
 	fprintf (_tmp0_, " 2");
-	MAMAN_BAR_CLASS (maman_sub_bar_parent_class)->do_action (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_TYPE_BAR, MamanBar));
+	MAMAN_BAR_CLASS (maman_sub_bar_parent_class)->do_action ((MamanBar*) self);
 	_tmp1_ = stdout;
 	fprintf (_tmp1_, " 4");
 }

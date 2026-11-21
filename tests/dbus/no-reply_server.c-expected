@@ -298,7 +298,7 @@ static void
 test_finalize (GObject * obj)
 {
 	Test * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST, Test);
+	self = (Test*) obj;
 	self->priv->messages = (_vala_array_free (self->priv->messages, self->priv->messages_length1, (GDestroyNotify) g_free), NULL);
 	G_OBJECT_CLASS (test_parent_class)->finalize (obj);
 }

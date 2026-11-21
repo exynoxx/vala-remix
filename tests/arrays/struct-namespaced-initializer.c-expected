@@ -363,7 +363,7 @@ static void
 manam_baz_finalize (ManamBaz * obj)
 {
 	ManamBaz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MANAM_TYPE_BAZ, ManamBaz);
+	self = (ManamBaz*) obj;
 	g_signal_handlers_destroy (self);
 }
 

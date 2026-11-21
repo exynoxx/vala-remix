@@ -653,9 +653,9 @@ _vala_main (void)
 	Concrete* _tmp10_;
 	_tmp0_ = obj1_new ();
 	obj1 = _tmp0_;
-	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (obj1, TYPE_IFACE1, Iface1));
+	_tmp1_ = _g_object_ref0 ((Iface1*) obj1);
 	iface1 = _tmp1_;
-	_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (obj1, TYPE_IFACE2, Iface2));
+	_tmp2_ = _g_object_ref0 ((Iface2*) obj1);
 	iface2 = _tmp2_;
 	_tmp3_ = iface1;
 	_vala_assert (iface1_foo (_tmp3_) == 1, "iface1.foo () == 1");
@@ -663,10 +663,10 @@ _vala_main (void)
 	_vala_assert (iface2_foo (_tmp4_) == 2, "iface2.foo () == 2");
 	_tmp5_ = obj2_new ();
 	obj2 = _tmp5_;
-	_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (obj2, TYPE_IFACE1, Iface1));
+	_tmp6_ = _g_object_ref0 ((Iface1*) obj2);
 	_g_object_unref0 (iface1);
 	iface1 = _tmp6_;
-	_tmp7_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (obj2, TYPE_IFACE2, Iface2));
+	_tmp7_ = _g_object_ref0 ((Iface2*) obj2);
 	_g_object_unref0 (iface2);
 	iface2 = _tmp7_;
 	_tmp8_ = iface1;
@@ -675,7 +675,7 @@ _vala_main (void)
 	_vala_assert (iface2_foo (_tmp9_) == 2, "iface2.foo () == 2");
 	_tmp10_ = concrete_new ();
 	concrete = _tmp10_;
-	_vala_assert (iface_foo (G_TYPE_CHECK_INSTANCE_CAST (concrete, TYPE_IFACE, Iface)) == 42, "((Iface) concrete).foo () == 42");
+	_vala_assert (iface_foo ((Iface*) concrete) == 42, "((Iface) concrete).foo () == 42");
 	_g_object_unref0 (concrete);
 	_g_object_unref0 (obj2);
 	_g_object_unref0 (iface2);

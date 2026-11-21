@@ -367,7 +367,7 @@ static void
 class_finalize (Class * obj)
 {
 	Class * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_CLASS, Class);
+	self = (Class*) obj;
 	g_signal_handlers_destroy (self);
 }
 

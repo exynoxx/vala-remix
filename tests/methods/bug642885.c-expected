@@ -158,7 +158,7 @@ foo_real_local_command_line (GApplication* base,
 		g_clear_error (&_inner_error0_);
 		return _tmp3_;
 	}
-	_tmp5_ = G_APPLICATION_CLASS (foo_parent_class)->local_command_line (G_TYPE_CHECK_INSTANCE_CAST (self, g_application_get_type (), GApplication), arguments, &_tmp4_);
+	_tmp5_ = G_APPLICATION_CLASS (foo_parent_class)->local_command_line ((GApplication*) self, arguments, &_tmp4_);
 	_vala_exit_status = _tmp4_;
 	result = _tmp5_;
 	_g_option_context_free0 (option_context);
@@ -189,7 +189,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
 

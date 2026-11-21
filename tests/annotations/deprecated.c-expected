@@ -318,7 +318,7 @@ static void
 fooclass_finalize (GObject * obj)
 {
 	FooClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOOCLASS, FooClass);
+	self = (FooClass*) obj;
 	G_OBJECT_CLASS (fooclass_parent_class)->finalize (obj);
 }
 
@@ -351,7 +351,7 @@ _vala_fooclass_get_property (GObject * object,
                              GParamSpec * pspec)
 {
 	FooClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOOCLASS, FooClass);
+	self = (FooClass*) object;
 	switch (property_id) {
 		case FOOCLASS_BAR_PROPERTY:
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -371,7 +371,7 @@ _vala_fooclass_set_property (GObject * object,
                              GParamSpec * pspec)
 {
 	FooClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOOCLASS, FooClass);
+	self = (FooClass*) object;
 	switch (property_id) {
 		case FOOCLASS_BAR_PROPERTY:
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

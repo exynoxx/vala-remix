@@ -491,7 +491,7 @@ static void
 foo_finalize (Foo * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -755,7 +755,7 @@ static void
 faz_finalize (Foo * obj)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FAZ, Faz);
+	self = (Faz*) obj;
 	g_rec_mutex_clear (&self->priv->__lock_public_field);
 	g_rec_mutex_clear (&self->priv->__lock_private_field);
 	FOO_CLASS (faz_parent_class)->finalize (obj);
@@ -818,7 +818,7 @@ static void
 bar_finalize (GObject * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	G_OBJECT_CLASS (bar_parent_class)->finalize (obj);
 }
 
@@ -1062,7 +1062,7 @@ static void
 baz_finalize (GObject * obj)
 {
 	Baz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAZ, Baz);
+	self = (Baz*) obj;
 	g_rec_mutex_clear (&self->priv->__lock_public_field);
 	g_rec_mutex_clear (&self->priv->__lock_private_field);
 	G_OBJECT_CLASS (baz_parent_class)->finalize (obj);
@@ -1273,7 +1273,7 @@ static void
 manam_finalize (Manam * obj)
 {
 	Manam * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MANAM, Manam);
+	self = (Manam*) obj;
 	g_signal_handlers_destroy (self);
 	((self->foo == NULL) || (self->priv->t_destroy_func == NULL)) ? NULL : (self->foo = (self->priv->t_destroy_func (self->foo), NULL));
 }

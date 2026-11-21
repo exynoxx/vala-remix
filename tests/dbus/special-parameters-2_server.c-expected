@@ -327,7 +327,7 @@ static void
 manager_finalize (GObject * obj)
 {
 	Manager * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MANAGER, Manager);
+	self = (Manager*) obj;
 	G_OBJECT_CLASS (manager_parent_class)->finalize (obj);
 }
 
@@ -530,7 +530,7 @@ static void
 unit_finalize (GObject * obj)
 {
 	Unit * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_UNIT, Unit);
+	self = (Unit*) obj;
 	_g_free0 (self->priv->_name);
 	G_OBJECT_CLASS (unit_parent_class)->finalize (obj);
 }
@@ -565,7 +565,7 @@ _vala_unit_get_property (GObject * object,
                          GParamSpec * pspec)
 {
 	Unit * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_UNIT, Unit);
+	self = (Unit*) object;
 	switch (property_id) {
 		case UNIT_NAME_PROPERTY:
 		g_value_set_string (value, unit_get_name (self));
@@ -583,7 +583,7 @@ _vala_unit_set_property (GObject * object,
                          GParamSpec * pspec)
 {
 	Unit * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_UNIT, Unit);
+	self = (Unit*) object;
 	switch (property_id) {
 		case UNIT_NAME_PROPERTY:
 		unit_set_name (self, g_value_get_string (value));

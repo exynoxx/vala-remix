@@ -814,7 +814,7 @@ static void
 simple_gtype_instanceclass_finalize (SimpleGTypeInstanceClass * obj)
 {
 	SimpleGTypeInstanceClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SIMPLE_GTYPE_INSTANCECLASS, SimpleGTypeInstanceClass);
+	self = (SimpleGTypeInstanceClass*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -1075,7 +1075,7 @@ static void
 public_gtype_instanceclass_finalize (PublicGTypeInstanceClass * obj)
 {
 	PublicGTypeInstanceClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PUBLIC_GTYPE_INSTANCECLASS, PublicGTypeInstanceClass);
+	self = (PublicGTypeInstanceClass*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -1291,7 +1291,7 @@ static void
 gtype_instance_class_with_creation_method_finalize (GTypeInstanceClassWithCreationMethod * obj)
 {
 	GTypeInstanceClassWithCreationMethod * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GTYPE_INSTANCE_CLASS_WITH_CREATION_METHOD, GTypeInstanceClassWithCreationMethod);
+	self = (GTypeInstanceClassWithCreationMethod*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -1521,7 +1521,7 @@ static void
 gtype_instance_class_with_named_creation_method_finalize (GTypeInstanceClassWithNamedCreationMethod * obj)
 {
 	GTypeInstanceClassWithNamedCreationMethod * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GTYPE_INSTANCE_CLASS_WITH_NAMED_CREATION_METHOD, GTypeInstanceClassWithNamedCreationMethod);
+	self = (GTypeInstanceClassWithNamedCreationMethod*) obj;
 	g_signal_handlers_destroy (self);
 }
 

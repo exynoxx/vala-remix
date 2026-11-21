@@ -1241,7 +1241,7 @@ maman_base_access_bar_real_virtual_method (MamanBaseAccessFoo* base)
 	MamanBaseAccessBar * self;
 	gint result;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_BASE_ACCESS_TYPE_BAR, MamanBaseAccessBar);
-	result = (MAMAN_BASE_ACCESS_FOO_CLASS (maman_base_access_bar_parent_class)->virtual_method (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_BASE_ACCESS_TYPE_FOO, MamanBaseAccessFoo)) * 10) + 4;
+	result = (MAMAN_BASE_ACCESS_FOO_CLASS (maman_base_access_bar_parent_class)->virtual_method ((MamanBaseAccessFoo*) self) * 10) + 4;
 	return result;
 }
 
@@ -1251,7 +1251,7 @@ maman_base_access_bar_real_virtual_interface_method (MamanBaseAccessFoo* base)
 	MamanBaseAccessBar * self;
 	gint result;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_BASE_ACCESS_TYPE_BAR, MamanBaseAccessBar);
-	result = (MAMAN_BASE_ACCESS_FOO_CLASS (maman_base_access_bar_parent_class)->virtual_interface_method (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_BASE_ACCESS_TYPE_FOO, MamanBaseAccessFoo)) * 10) + 5;
+	result = (MAMAN_BASE_ACCESS_FOO_CLASS (maman_base_access_bar_parent_class)->virtual_interface_method ((MamanBaseAccessFoo*) self) * 10) + 5;
 	return result;
 }
 
@@ -1311,7 +1311,7 @@ maman_base_access_foo_bar_real_interface_method (MamanBaseAccessIFoo* base)
 	MamanBaseAccessFooBar * self;
 	gint result;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_BASE_ACCESS_TYPE_FOO_BAR, MamanBaseAccessFooBar);
-	result = (maman_base_access_foo_bar_maman_base_access_ifoo_parent_iface->interface_method (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, MAMAN_BASE_ACCESS_TYPE_FOO, MamanBaseAccessFoo), MAMAN_BASE_ACCESS_TYPE_IFOO, MamanBaseAccessIFoo)) * 10) + 6;
+	result = (maman_base_access_foo_bar_maman_base_access_ifoo_parent_iface->interface_method (G_TYPE_CHECK_INSTANCE_CAST ((MamanBaseAccessFoo*) self, MAMAN_BASE_ACCESS_TYPE_IFOO, MamanBaseAccessIFoo)) * 10) + 6;
 	return result;
 }
 
@@ -1680,7 +1680,7 @@ static void
 maman_class_test_finalize (MamanClassTest * obj)
 {
 	MamanClassTest * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_CLASS_TEST, MamanClassTest);
+	self = (MamanClassTest*) obj;
 	g_signal_handlers_destroy (self);
 }
 

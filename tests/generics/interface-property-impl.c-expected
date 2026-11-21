@@ -282,7 +282,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_free0 (self->priv->_data);
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
@@ -318,7 +318,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_DATA_PROPERTY:
 		g_value_set_string (value, (gchar*) ifoo_get_data (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IFOO, IFoo)));
@@ -336,7 +336,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_DATA_PROPERTY:
 		ifoo_set_data (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IFOO, IFoo), g_value_get_string (value));
@@ -424,7 +424,7 @@ static void
 bar_finalize (GObject * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	G_OBJECT_CLASS (bar_parent_class)->finalize (obj);
 }
 
@@ -459,7 +459,7 @@ _vala_bar_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_DATA_PROPERTY:
 		g_value_set_int (value, (gint) ((gintptr) ifoo_get_data (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IFOO, IFoo))));
@@ -477,7 +477,7 @@ _vala_bar_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_DATA_PROPERTY:
 		ifoo_set_data (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IFOO, IFoo), (gpointer) ((gintptr) g_value_get_int (value)));

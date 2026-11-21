@@ -251,7 +251,7 @@ static void
 foo_manam_foo_finalize (FooManamFoo * obj)
 {
 	FooManamFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, FOO_MANAM_TYPE_FOO, FooManamFoo);
+	self = (FooManamFoo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

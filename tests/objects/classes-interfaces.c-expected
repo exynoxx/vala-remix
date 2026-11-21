@@ -367,11 +367,11 @@ _vala_main (void)
 	gchar* _tmp2_;
 	_tmp0_ = manam_new ();
 	manam = _tmp0_;
-	_tmp1_ = ifoo_foo (G_TYPE_CHECK_INSTANCE_CAST (manam, TYPE_IFOO, IFoo));
+	_tmp1_ = ifoo_foo ((IFoo*) manam);
 	_tmp2_ = _tmp1_;
 	_vala_assert (g_strcmp0 (_tmp2_, "foo") == 0, "((IFoo) manam).foo () == \"foo\"");
 	_g_free0 (_tmp2_);
-	_vala_assert (ibar_foo (G_TYPE_CHECK_INSTANCE_CAST (manam, TYPE_IBAR, IBar)) == 23, "((IBar) manam).foo () == 23");
+	_vala_assert (ibar_foo ((IBar*) manam) == 23, "((IBar) manam).foo () == 23");
 	_g_object_unref0 (manam);
 }
 

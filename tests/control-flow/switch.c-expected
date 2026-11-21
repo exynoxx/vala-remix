@@ -347,7 +347,7 @@ static void
 maman_foo_finalize (GObject * obj)
 {
 	MamanFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_FOO, MamanFoo);
+	self = (MamanFoo*) obj;
 	G_OBJECT_CLASS (maman_foo_parent_class)->finalize (obj);
 }
 

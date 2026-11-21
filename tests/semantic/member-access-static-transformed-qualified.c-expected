@@ -285,7 +285,7 @@ static void
 manam_manam_finalize (ManamManam * obj)
 {
 	ManamManam * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MANAM_TYPE_MANAM, ManamManam);
+	self = (ManamManam*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -503,7 +503,7 @@ static void
 manam_foo_finalize (ManamFoo * obj)
 {
 	ManamFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MANAM_TYPE_FOO, ManamFoo);
+	self = (ManamFoo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

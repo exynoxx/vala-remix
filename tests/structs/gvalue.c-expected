@@ -788,7 +788,7 @@ static void
 bar_finalize (Bar * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -902,7 +902,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
 
