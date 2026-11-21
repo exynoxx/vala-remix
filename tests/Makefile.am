@@ -815,6 +815,7 @@ TESTS = \
 	asynchronous/out-parameter-invalid.test \
 	asynchronous/params-array-invalid.test \
 	asynchronous/result-pos.vala \
+	asynchronous/temps-local.vala \
 	asynchronous/variadic-invalid.test \
 	asynchronous/variadic-invalid-2.test \
 	asynchronous/yield.vala \
