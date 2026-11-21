@@ -395,7 +395,7 @@ static void
 fooclass_finalize (FooClass * obj)
 {
 	FooClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOOCLASS, FooClass);
+	self = (FooClass*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -759,7 +759,7 @@ static void
 bar_finalize (Bar * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_signal_handlers_destroy (self);
 	_g_free0 (self->f_string);
 	self->f_array = (_vala_array_free (self->f_array, self->f_array_length1, (GDestroyNotify) g_free), NULL);

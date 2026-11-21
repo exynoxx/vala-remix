@@ -316,7 +316,7 @@ static void
 global_testclass_finalize (GlobalTestClass * obj)
 {
 	GlobalTestClass * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GLOBAL_TESTCLASS, GlobalTestClass);
+	self = (GlobalTestClass*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -604,7 +604,7 @@ static void
 foo_sub_class_in_nested_namespace_finalize (FooSubClassInNestedNamespace * obj)
 {
 	FooSubClassInNestedNamespace * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, FOO_SUB_TYPE_CLASS_IN_NESTED_NAMESPACE, FooSubClassInNestedNamespace);
+	self = (FooSubClassInNestedNamespace*) obj;
 	g_signal_handlers_destroy (self);
 }
 

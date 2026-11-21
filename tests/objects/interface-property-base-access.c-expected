@@ -497,7 +497,7 @@ static void
 bar_finalize (Bar * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_signal_handlers_destroy (self);
 	_g_free0 (self->priv->_foo);
 }
@@ -557,8 +557,8 @@ foo_bar (Foo* self,
 	gchar* result;
 	g_return_val_if_fail (IS_FOO (self), NULL);
 	g_return_val_if_fail (s != NULL, NULL);
-	IFOO_GET_INTERFACE (self)->set_foo (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BAR, Bar), TYPE_IFOO, IFoo), s);
-	_tmp0_ = IFOO_GET_INTERFACE (self)->get_foo (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BAR, Bar), TYPE_IFOO, IFoo));
+	IFOO_GET_INTERFACE (self)->set_foo (G_TYPE_CHECK_INSTANCE_CAST ((Bar*) self, TYPE_IFOO, IFoo), s);
+	_tmp0_ = IFOO_GET_INTERFACE (self)->get_foo (G_TYPE_CHECK_INSTANCE_CAST ((Bar*) self, TYPE_IFOO, IFoo));
 	_tmp1_ = g_strdup (_tmp0_);
 	result = _tmp1_;
 	return result;
@@ -575,8 +575,8 @@ foo_baz (Foo* self,
 	g_return_if_fail (IS_FOO (self));
 	g_return_if_fail (m != NULL);
 	_tmp0_ = *m;
-	IFOO_GET_INTERFACE (self)->set_manam (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BAR, Bar), TYPE_IFOO, IFoo), &_tmp0_);
-	IFOO_GET_INTERFACE (self)->get_manam (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BAR, Bar), TYPE_IFOO, IFoo), &_tmp1_);
+	IFOO_GET_INTERFACE (self)->set_manam (G_TYPE_CHECK_INSTANCE_CAST ((Bar*) self, TYPE_IFOO, IFoo), &_tmp0_);
+	IFOO_GET_INTERFACE (self)->get_manam (G_TYPE_CHECK_INSTANCE_CAST ((Bar*) self, TYPE_IFOO, IFoo), &_tmp1_);
 	_tmp2_ = _tmp1_;
 	*result = _tmp2_;
 	return;

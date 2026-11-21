@@ -524,7 +524,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_free0 (self->priv->_p0);
 	_g_free0 (self->f0);
 	_g_free0 (self->priv->_p1);
@@ -567,7 +567,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_P0_PROPERTY:
 		g_value_set_string (value, foo_get_p0 (self));
@@ -591,7 +591,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_P0_PROPERTY:
 		foo_set_p0 (self, g_value_get_string (value));

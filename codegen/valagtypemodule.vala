@@ -1854,7 +1854,7 @@ public class Vala.GTypeModule : GErrorModule {
 
 			CCodeExpression ccast;
 			if (!cl.is_compact) {
-				ccast = generate_instance_cast (new CCodeIdentifier ("obj"), cl);
+				ccast = generate_upcast (new CCodeIdentifier ("obj"), cl);
 			} else {
 				ccast = new CCodeCastExpression (new CCodeIdentifier ("obj"), "%s *".printf (get_ccode_name (cl)));
 			}
@@ -2602,6 +2602,10 @@ public class Vala.GTypeModule : GErrorModule {
 			} else {
 				expr.target_value = cast_value;
 			}
+		} else if (expr.inner.value_type != null && expr.inner.value_type.type_symbol != null
+		           && expr.inner.value_type.type_symbol.is_subtype_of (type_symbol)) {
+			// upcast, cannot fail
+			set_cvalue (expr, generate_upcast (get_cvalue (expr.inner), type_symbol));
 		} else {
 			set_cvalue (expr, generate_instance_cast (get_cvalue (expr.inner), expr.type_reference.type_symbol));
 		}

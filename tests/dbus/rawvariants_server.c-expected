@@ -361,7 +361,7 @@ static void
 test_finalize (GObject * obj)
 {
 	Test * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST, Test);
+	self = (Test*) obj;
 	_g_free0 (self->priv->_test_property);
 	G_OBJECT_CLASS (test_parent_class)->finalize (obj);
 }
@@ -396,7 +396,7 @@ _vala_test_get_property (GObject * object,
                          GParamSpec * pspec)
 {
 	Test * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_TEST, Test);
+	self = (Test*) object;
 	switch (property_id) {
 		case TEST_TEST_PROPERTY_PROPERTY:
 		g_value_take_string (value, test_get_test_property (self));
@@ -414,7 +414,7 @@ _vala_test_set_property (GObject * object,
                          GParamSpec * pspec)
 {
 	Test * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_TEST, Test);
+	self = (Test*) object;
 	switch (property_id) {
 		case TEST_TEST_PROPERTY_PROPERTY:
 		test_set_test_property (self, g_value_get_string (value));
@@ -718,7 +718,7 @@ static void
 test_raw_finalize (GObject * obj)
 {
 	TestRaw * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST_RAW, TestRaw);
+	self = (TestRaw*) obj;
 	_g_variant_unref0 (self->priv->_test_property);
 	G_OBJECT_CLASS (test_raw_parent_class)->finalize (obj);
 }
@@ -753,7 +753,7 @@ _vala_test_raw_get_property (GObject * object,
                              GParamSpec * pspec)
 {
 	TestRaw * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_TEST_RAW, TestRaw);
+	self = (TestRaw*) object;
 	switch (property_id) {
 		case TEST_RAW_TEST_PROPERTY_PROPERTY:
 		g_value_take_variant (value, test_raw_get_test_property (self));
@@ -771,7 +771,7 @@ _vala_test_raw_set_property (GObject * object,
                              GParamSpec * pspec)
 {
 	TestRaw * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_TEST_RAW, TestRaw);
+	self = (TestRaw*) object;
 	switch (property_id) {
 		case TEST_RAW_TEST_PROPERTY_PROPERTY:
 		test_raw_set_test_property (self, g_value_get_variant (value));

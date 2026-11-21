@@ -206,8 +206,8 @@ public class Vala.GObjectModule : GTypeModule {
 
 		push_function (get_prop);
 
-		CCodeFunctionCall ccall = generate_instance_cast (new CCodeIdentifier ("object"), cl);
-		ccode.add_declaration ("%s *".printf (get_ccode_name (cl)), new CCodeVariableDeclarator ("self", ccall));
+		CCodeFunctionCall ccall;
+		ccode.add_declaration ("%s *".printf (get_ccode_name (cl)), new CCodeVariableDeclarator ("self", generate_upcast (new CCodeIdentifier ("object"), cl)));
 
 		ccode.open_switch (new CCodeIdentifier ("property_id"));
 		var props = cl.get_properties ();
@@ -360,8 +360,8 @@ public class Vala.GObjectModule : GTypeModule {
 
 		push_function (set_prop);
 
-		CCodeFunctionCall ccall = generate_instance_cast (new CCodeIdentifier ("object"), cl);
-		ccode.add_declaration ("%s *".printf (get_ccode_name (cl)), new CCodeVariableDeclarator ("self", ccall));
+		CCodeFunctionCall ccall;
+		ccode.add_declaration ("%s *".printf (get_ccode_name (cl)), new CCodeVariableDeclarator ("self", generate_upcast (new CCodeIdentifier ("object"), cl)));
 
 		ccode.open_switch (new CCodeIdentifier ("property_id"));
 		var props = cl.get_properties ();
@@ -564,10 +564,8 @@ public class Vala.GObjectModule : GTypeModule {
 			ccode.add_assignment (new CCodeIdentifier ("obj"), ccall);
 
 
-			ccall = generate_instance_cast (new CCodeIdentifier ("obj"), cl);
-
 			ccode.add_declaration ("%s *".printf (get_ccode_name (cl)), new CCodeVariableDeclarator ("self"));
-			ccode.add_assignment (new CCodeIdentifier ("self"), ccall);
+			ccode.add_assignment (new CCodeIdentifier ("self"), generate_upcast (new CCodeIdentifier ("obj"), cl));
 
 			c.body.emit (this);
 

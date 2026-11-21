@@ -320,7 +320,7 @@ static void
 foo_finalize (Foo * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_signal_handlers_destroy (self);
 	_g_free0 (self->priv->_prop);
 }
@@ -386,11 +386,11 @@ bar_construct (GType object_type)
 	const gchar* _tmp4_;
 	self = (Bar*) foo_construct (object_type);
 	bar_set_prop (self, "bar");
-	_tmp0_ = foo_get_prop (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo));
+	_tmp0_ = foo_get_prop ((Foo*) self);
 	_tmp1_ = _tmp0_;
 	_vala_assert (g_strcmp0 (_tmp1_, "foo") == 0, "base.prop == \"foo\"");
-	foo_set_prop (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo), "manam");
-	_tmp2_ = foo_get_prop (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo));
+	foo_set_prop ((Foo*) self, "manam");
+	_tmp2_ = foo_get_prop ((Foo*) self);
 	_tmp3_ = _tmp2_;
 	_vala_assert (g_strcmp0 (_tmp3_, "manam") == 0, "base.prop == \"manam\"");
 	_tmp4_ = self->priv->_prop;
@@ -446,7 +446,7 @@ static void
 bar_finalize (Foo * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	_g_free0 (self->priv->_prop);
 	FOO_CLASS (bar_parent_class)->finalize (obj);
 }

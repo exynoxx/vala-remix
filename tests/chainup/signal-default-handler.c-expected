@@ -162,7 +162,7 @@ void
 bar_bar (Bar* self)
 {
 	g_return_if_fail (IS_BAR (self));
-	FOO_CLASS (bar_parent_class)->foo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo));
+	FOO_CLASS (bar_parent_class)->foo ((Foo*) self);
 }
 
 Bar*

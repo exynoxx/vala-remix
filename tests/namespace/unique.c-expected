@@ -244,7 +244,7 @@ static void
 g_vala_foo_finalize (GValaFoo * obj)
 {
 	GValaFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, G_TYPE_VALA_FOO, GValaFoo);
+	self = (GValaFoo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

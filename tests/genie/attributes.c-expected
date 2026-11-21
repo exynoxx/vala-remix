@@ -352,7 +352,7 @@ static void
 test1_finalize (Test1 * obj)
 {
 	Test1 * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST1, Test1);
+	self = (Test1*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -604,7 +604,7 @@ static void
 test2_finalize (Test2 * obj)
 {
 	Test2 * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST2, Test2);
+	self = (Test2*) obj;
 	g_signal_handlers_destroy (self);
 }
 

@@ -387,7 +387,7 @@ static void
 bar_finalize (Bar * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_signal_handlers_destroy (self);
 	((self->k == NULL) || (self->priv->k_destroy_func == NULL)) ? NULL : (self->k = (self->priv->k_destroy_func (self->k), NULL));
 	((self->v == NULL) || (self->priv->v_destroy_func == NULL)) ? NULL : (self->v = (self->priv->v_destroy_func (self->v), NULL));
@@ -655,7 +655,7 @@ static void
 foo_finalize (Foo * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

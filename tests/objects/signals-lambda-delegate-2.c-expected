@@ -449,7 +449,7 @@ bar_constructor (GType type,
 	gchar* _tmp11_;
 	parent_class = G_OBJECT_CLASS (bar_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	_tmp0_ = foo_new ();
 	foo = _tmp0_;
 	func = __vala_lambda1__foo_func;
@@ -683,7 +683,7 @@ static void
 faz_finalize (Faz * obj)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FAZ, Faz);
+	self = (Faz*) obj;
 	g_signal_handlers_destroy (self);
 }
 
@@ -1012,7 +1012,7 @@ static void
 boo_finalize (Boo * obj)
 {
 	Boo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BOO, Boo);
+	self = (Boo*) obj;
 	g_signal_handlers_destroy (self);
 }
 

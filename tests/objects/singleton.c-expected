@@ -135,7 +135,7 @@ foo_constructor (GType type,
 	}
 	parent_class = G_OBJECT_CLASS (foo_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_weak_ref_set (&Foo_singleton__ref, obj);
 	g_mutex_unlock (&Foo_singleton__lock);
 	return obj;
@@ -161,7 +161,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
 
@@ -218,7 +218,7 @@ bar_constructor (GType type,
 	}
 	parent_class = G_OBJECT_CLASS (bar_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_weak_ref_set (&Bar_singleton__ref, obj);
 	g_mutex_unlock (&Bar_singleton__lock);
 	return obj;
@@ -244,7 +244,7 @@ static void
 bar_finalize (GObject * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	G_OBJECT_CLASS (bar_parent_class)->finalize (obj);
 }
 

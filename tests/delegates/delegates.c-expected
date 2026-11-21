@@ -568,7 +568,7 @@ static void
 maman_bar_finalize (GObject * obj)
 {
 	MamanBar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, MAMAN_TYPE_BAR, MamanBar);
+	self = (MamanBar*) obj;
 	(self->priv->callback_field_target_destroy_notify == NULL) ? NULL : (self->priv->callback_field_target_destroy_notify (self->priv->callback_field_target), NULL);
 	self->priv->callback_field = NULL;
 	self->priv->callback_field_target = NULL;

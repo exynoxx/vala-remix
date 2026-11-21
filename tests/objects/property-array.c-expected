@@ -814,7 +814,7 @@ static void
 foo_finalize (Foo * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	g_signal_handlers_destroy (self);
 	self->priv->_array = (_vala_array_free (self->priv->_array, self->priv->_array_length1, (GDestroyNotify) manam_free), NULL);
 	self->priv->_array_v = (_vala_array_free (self->priv->_array_v, self->priv->_array_v_length1, (GDestroyNotify) manam_free), NULL);
@@ -1166,7 +1166,7 @@ static void
 bar_finalize (GObject * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	self->priv->_array = (_vala_array_free (self->priv->_array, _vala_array_length (self->priv->_array), (GDestroyNotify) manam_free), NULL);
 	self->priv->_array_v = (_vala_array_free (self->priv->_array_v, _vala_array_length (self->priv->_array_v), (GDestroyNotify) manam_free), NULL);
 	self->priv->_strv = (_vala_array_free (self->priv->_strv, _vala_array_length (self->priv->_strv), (GDestroyNotify) g_free), NULL);
@@ -1203,7 +1203,7 @@ _vala_bar_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_ARRAY_PROPERTY:
 		g_value_set_pointer (value, bar_get_array (self));
@@ -1230,7 +1230,7 @@ _vala_bar_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_ARRAY_PROPERTY:
 		bar_set_array (self, g_value_get_pointer (value));

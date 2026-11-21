@@ -550,7 +550,7 @@ foo_constructor (GType type,
 	gint _tmp6__length1;
 	parent_class = G_OBJECT_CLASS (foo_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_tmp0_ = bar;
 	foo_set_o (self, _tmp0_);
 	_g_free0 (_tmp1_.s);
@@ -600,7 +600,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_object_unref0 (self->priv->_o);
 	manam_destroy (&self->priv->_st);
 	_manam_free0 (self->priv->_stn);
@@ -638,7 +638,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_O_PROPERTY:
 		g_value_take_object (value, foo_get_o (self));
@@ -681,7 +681,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_O_PROPERTY:
 		foo_set_o (self, g_value_get_object (value));

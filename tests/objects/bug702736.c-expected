@@ -230,7 +230,7 @@ _vala_class_a_get_property (GObject * object,
                             GParamSpec * pspec)
 {
 	ClassA * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_CLASS_A, ClassA);
+	self = (ClassA*) object;
 	switch (property_id) {
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -306,7 +306,7 @@ _vala_class_b_get_property (GObject * object,
                             GParamSpec * pspec)
 {
 	ClassB * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_CLASS_B, ClassB);
+	self = (ClassB*) object;
 	switch (property_id) {
 		case CLASS_B_FLAGS_PROPERTY:
 		g_value_set_int (value, class_a_get_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CLASS_A, ClassA)));
@@ -393,7 +393,7 @@ class_d_real_get_flags (ClassA* base)
 	gint old_flags = 0;
 	gint _tmp0_;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CLASS_D, ClassD);
-	_tmp0_ = CLASS_A_CLASS (class_d_parent_class)->get_flags (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CLASS_C, ClassC), TYPE_CLASS_A, ClassA));
+	_tmp0_ = CLASS_A_CLASS (class_d_parent_class)->get_flags (G_TYPE_CHECK_INSTANCE_CAST ((ClassC*) self, TYPE_CLASS_A, ClassA));
 	old_flags = _tmp0_;
 	result = old_flags | 2;
 	return result;
@@ -443,7 +443,7 @@ _vala_class_d_get_property (GObject * object,
                             GParamSpec * pspec)
 {
 	ClassD * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_CLASS_D, ClassD);
+	self = (ClassD*) object;
 	switch (property_id) {
 		case CLASS_D_FLAGS_PROPERTY:
 		g_value_set_int (value, class_a_get_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CLASS_A, ClassA)));

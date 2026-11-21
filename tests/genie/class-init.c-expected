@@ -112,7 +112,7 @@ test_constructor (GType type,
 	Test * self;
 	parent_class = G_OBJECT_CLASS (test_parent_class);
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST, Test);
+	self = (Test*) obj;
 	nothing ();
 	return obj;
 }
@@ -143,7 +143,7 @@ static void
 test_finalize (GObject * obj)
 {
 	Test * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEST, Test);
+	self = (Test*) obj;
 	nothing ();
 	G_OBJECT_CLASS (test_parent_class)->finalize (obj);
 }

@@ -158,7 +158,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_object_unref0 (self->priv->_bar);
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
@@ -192,7 +192,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		g_value_take_object (value, foo_get_bar (self));
@@ -210,7 +210,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		foo_set_bar (self, g_value_get_object (value));

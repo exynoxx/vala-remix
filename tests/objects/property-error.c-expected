@@ -410,7 +410,7 @@ static void
 bar_finalize (Bar * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	g_signal_handlers_destroy (self);
 	_g_error_free0 (self->priv->_bar);
 	_g_error_free0 (self->priv->_foo);
@@ -589,7 +589,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_g_error_free0 (self->priv->_bar);
 	_g_error_free0 (self->priv->_foo);
 	_g_error_free0 (self->priv->_manam);
@@ -625,7 +625,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		g_value_set_boxed (value, foo_get_bar (self));
@@ -649,7 +649,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		foo_set_bar (self, g_value_get_boxed (value));

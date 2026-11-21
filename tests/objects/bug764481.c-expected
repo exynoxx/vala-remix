@@ -377,7 +377,7 @@ static void
 base_foo_finalize (GObject * obj)
 {
 	BaseFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BASE_FOO, BaseFoo);
+	self = (BaseFoo*) obj;
 	G_OBJECT_CLASS (base_foo_parent_class)->finalize (obj);
 }
 
@@ -410,7 +410,7 @@ _vala_base_foo_get_property (GObject * object,
                              GParamSpec * pspec)
 {
 	BaseFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BASE_FOO, BaseFoo);
+	self = (BaseFoo*) object;
 	switch (property_id) {
 		case BASE_FOO_ST_PROPERTY:
 		{
@@ -432,7 +432,7 @@ _vala_base_foo_set_property (GObject * object,
                              GParamSpec * pspec)
 {
 	BaseFoo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BASE_FOO, BaseFoo);
+	self = (BaseFoo*) object;
 	switch (property_id) {
 		case BASE_FOO_ST_PROPERTY:
 		base_foo_set_st (self, g_value_get_boxed (value));
@@ -541,7 +541,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
 
@@ -574,7 +574,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_ST_PROPERTY:
 		{
@@ -596,7 +596,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_ST_PROPERTY:
 		foo_set_st (self, g_value_get_boxed (value));
@@ -629,7 +629,7 @@ bar_real_get_st (Foo* base,
 	Manam _tmp0_;
 	Manam _tmp1_;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BAR, Bar);
-	FOO_CLASS (bar_parent_class)->get_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo), &_tmp0_);
+	FOO_CLASS (bar_parent_class)->get_st ((Foo*) self, &_tmp0_);
 	_tmp1_ = _tmp0_;
 	*result = _tmp1_;
 	return;
@@ -643,7 +643,7 @@ bar_real_set_st (Foo* base,
 	Manam _tmp0_;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BAR, Bar);
 	_tmp0_ = *value;
-	FOO_CLASS (bar_parent_class)->set_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo), &_tmp0_);
+	FOO_CLASS (bar_parent_class)->set_st ((Foo*) self, &_tmp0_);
 	g_object_notify_by_pspec ((GObject *) self, bar_properties[BAR_ST_PROPERTY]);
 }
 
@@ -693,7 +693,7 @@ _vala_bar_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_ST_PROPERTY:
 		{
@@ -715,7 +715,7 @@ _vala_bar_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_ST_PROPERTY:
 		foo_set_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_FOO, Foo), g_value_get_boxed (value));
@@ -748,7 +748,7 @@ baz_real_get_st (BaseFoo* base,
 	Manam _tmp0_;
 	Manam _tmp1_;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BAZ, Baz);
-	BASE_FOO_CLASS (baz_parent_class)->get_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BASE_FOO, BaseFoo), &_tmp0_);
+	BASE_FOO_CLASS (baz_parent_class)->get_st ((BaseFoo*) self, &_tmp0_);
 	_tmp1_ = _tmp0_;
 	*result = _tmp1_;
 	return;
@@ -762,7 +762,7 @@ baz_real_set_st (BaseFoo* base,
 	Manam _tmp0_;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BAZ, Baz);
 	_tmp0_ = *value;
-	BASE_FOO_CLASS (baz_parent_class)->set_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BASE_FOO, BaseFoo), &_tmp0_);
+	BASE_FOO_CLASS (baz_parent_class)->set_st ((BaseFoo*) self, &_tmp0_);
 	g_object_notify_by_pspec ((GObject *) self, baz_properties[BAZ_ST_PROPERTY]);
 }
 
@@ -812,7 +812,7 @@ _vala_baz_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Baz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAZ, Baz);
+	self = (Baz*) object;
 	switch (property_id) {
 		case BAZ_ST_PROPERTY:
 		{
@@ -834,7 +834,7 @@ _vala_baz_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Baz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAZ, Baz);
+	self = (Baz*) object;
 	switch (property_id) {
 		case BAZ_ST_PROPERTY:
 		base_foo_set_st (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_BASE_FOO, BaseFoo), g_value_get_boxed (value));

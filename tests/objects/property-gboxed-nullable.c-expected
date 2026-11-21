@@ -299,7 +299,7 @@ static void
 foo_finalize (GObject * obj)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FOO, Foo);
+	self = (Foo*) obj;
 	_bar_free0 (self->priv->_bar);
 	G_OBJECT_CLASS (foo_parent_class)->finalize (obj);
 }
@@ -333,7 +333,7 @@ _vala_foo_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		{
@@ -355,7 +355,7 @@ _vala_foo_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Foo * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FOO, Foo);
+	self = (Foo*) object;
 	switch (property_id) {
 		case FOO_BAR_PROPERTY:
 		foo_set_bar (self, g_value_get_boxed (value));
@@ -439,7 +439,7 @@ static void
 faz_finalize (GObject * obj)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FAZ, Faz);
+	self = (Faz*) obj;
 	_bar_free0 (self->priv->_baz);
 	G_OBJECT_CLASS (faz_parent_class)->finalize (obj);
 }
@@ -473,7 +473,7 @@ _vala_faz_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FAZ, Faz);
+	self = (Faz*) object;
 	switch (property_id) {
 		case FAZ_BAZ_PROPERTY:
 		{
@@ -496,7 +496,7 @@ _vala_faz_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Faz * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_FAZ, Faz);
+	self = (Faz*) object;
 	switch (property_id) {
 		case FAZ_BAZ_PROPERTY:
 		faz_set_baz (self, g_value_get_boxed (value));

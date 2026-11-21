@@ -400,7 +400,7 @@ static void
 bar_finalize (GObject * obj)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BAR, Bar);
+	self = (Bar*) obj;
 	_g_object_unref0 (self->priv->_foo);
 	_g_object_unref0 (self->priv->_foo_owned);
 	G_OBJECT_CLASS (bar_parent_class)->finalize (obj);
@@ -435,7 +435,7 @@ _vala_bar_get_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_FOO_PROPERTY:
 		g_value_set_object (value, bar_get_foo (self));
@@ -462,7 +462,7 @@ _vala_bar_set_property (GObject * object,
                         GParamSpec * pspec)
 {
 	Bar * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_BAR, Bar);
+	self = (Bar*) object;
 	switch (property_id) {
 		case BAR_FOO_PROPERTY:
 		bar_set_foo (self, g_value_get_object (value));
@@ -742,7 +742,7 @@ static void
 manam_finalize (Manam * obj)
 {
 	Manam * self;
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MANAM, Manam);
+	self = (Manam*) obj;
 	g_signal_handlers_destroy (self);
 	_g_object_unref0 (self->priv->_foo);
 	_g_object_unref0 (self->priv->_foo_owned);
