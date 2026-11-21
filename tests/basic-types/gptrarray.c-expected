@@ -48,7 +48,6 @@ typedef struct _Block2Data Block2Data;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 	gint i;
 };
 

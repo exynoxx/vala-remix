@@ -71,7 +71,6 @@ static GParamSpec* foo_properties[FOO_NUM_PROPERTIES];
 
 struct _FObject {
 	GObject parent_instance;
-	FObjectPrivate * priv;
 };
 
 struct _FObjectClass {
@@ -238,7 +237,7 @@ FStruct*
 fstruct_dup (const FStruct* self)
 {
 	FStruct* dup;
-	dup = g_new0 (FStruct, 1);
+	dup = g_new (FStruct, 1);
 	memcpy (dup, self, sizeof (FStruct));
 	return dup;
 }
@@ -306,7 +305,7 @@ foo_set_s (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_s (self);
+	old_value = self->priv->_s;
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -345,7 +344,8 @@ foo_set_a (Foo* self,
 	gchar** old_value;
 	gint old_value_length;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_a (self, &old_value_length);
+	old_value = self->priv->_a;
+	old_value_length = self->priv->_a_length1;
 	if (old_value != value) {
 		self->priv->_a = value;
 		self->priv->_a_length1 = value_length1;
@@ -369,7 +369,7 @@ foo_set_i (Foo* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_i (self);
+	old_value = self->priv->_i;
 	if (old_value != value) {
 		self->priv->_i = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_I_PROPERTY]);
@@ -399,7 +399,7 @@ foo_set_o (Foo* self,
 {
 	FObject* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_o (self);
+	old_value = self->priv->_o;
 	if (old_value != value) {
 		FObject* _tmp0_;
 		_tmp0_ = _g_object_ref0 (value);
@@ -445,7 +445,7 @@ foo_set_t (Foo* self,
 {
 	FStruct old_value;
 	g_return_if_fail (IS_FOO (self));
-	foo_get_t (self, &old_value);
+	old_value = self->priv->_t;
 	if (_fstruct_equal (value, &old_value) != TRUE) {
 		FStruct _tmp0_;
 		_tmp0_ = *value;
@@ -471,7 +471,7 @@ foo_set_p (Foo* self,
 {
 	void* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_p (self);
+	old_value = self->priv->_p;
 	if (old_value != value) {
 		self->priv->_p = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_P_PROPERTY]);

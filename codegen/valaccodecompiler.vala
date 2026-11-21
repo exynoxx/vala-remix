@@ -61,8 +61,20 @@ public class Vala.CCodeCompiler {
 			cc_command = "cc";
 		}
 		string cmdline = cc_command;
+		// $CFLAGS first so -X options can override it; default to -O2
+		// unless debugging or an optimization level was given explicitly
+		string? cflags = Environment.get_variable ("CFLAGS");
+		bool has_opt = cflags != null && cflags.contains ("-O");
+		foreach (string cc_option in cc_options) {
+			has_opt |= cc_option.has_prefix ("-O");
+		}
+		if (cflags != null && cflags.strip () != "") {
+			cmdline += " " + cflags.strip ();
+		}
 		if (context.debug) {
 			cmdline += " -g";
+		} else if (!has_opt) {
+			cmdline += " -O2";
 		}
 		if (context.compile_only) {
 			cmdline += " -c";

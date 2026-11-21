@@ -43,7 +43,6 @@ typedef struct _BarData BarData;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

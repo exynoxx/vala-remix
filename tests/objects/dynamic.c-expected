@@ -85,7 +85,6 @@ struct _FooPrivate {
 
 struct _Bar {
 	GObject parent_instance;
-	BarPrivate * priv;
 	gboolean success;
 };
 
@@ -204,7 +203,7 @@ foo_set_prop2 (Foo* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop2 (self);
+	old_value = self->priv->_prop2;
 	if (old_value != value) {
 		self->priv->_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP2_PROPERTY]);

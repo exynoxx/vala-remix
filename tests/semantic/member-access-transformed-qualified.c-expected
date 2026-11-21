@@ -42,7 +42,6 @@ typedef struct _FooManamParamSpecFoo FooManamParamSpecFoo;
 struct _FooManamFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooManamFooPrivate * priv;
 };
 
 struct _FooManamFooClass {

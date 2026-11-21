@@ -145,7 +145,6 @@ static GParamSpec* maman_return_bar_properties[MAMAN_RETURN_BAR_NUM_PROPERTIES];
 
 struct _MamanFoo {
 	GObject parent_instance;
-	MamanFooPrivate * priv;
 };
 
 struct _MamanFooClass {
@@ -154,7 +153,6 @@ struct _MamanFooClass {
 
 struct _MamanBar {
 	GObject parent_instance;
-	MamanBarPrivate * priv;
 };
 
 struct _MamanBarClass {
@@ -163,7 +161,6 @@ struct _MamanBarClass {
 
 struct _MamanUserFoo {
 	GObject parent_instance;
-	MamanUserFooPrivate * priv;
 };
 
 struct _MamanUserFooClass {
@@ -172,7 +169,6 @@ struct _MamanUserFooClass {
 
 struct _MamanUserBar {
 	GObject parent_instance;
-	MamanUserBarPrivate * priv;
 };
 
 struct _MamanUserBarClass {
@@ -181,7 +177,6 @@ struct _MamanUserBarClass {
 
 struct _MamanReturnFoo {
 	GObject parent_instance;
-	MamanReturnFooPrivate * priv;
 };
 
 struct _MamanReturnFooClass {
@@ -190,7 +185,6 @@ struct _MamanReturnFooClass {
 
 struct _MamanReturnBar {
 	GObject parent_instance;
-	MamanReturnBarPrivate * priv;
 };
 
 struct _MamanReturnBarClass {

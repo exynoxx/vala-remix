@@ -67,7 +67,6 @@ struct _FooFooData {
 
 struct _Bar {
 	GObject parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {

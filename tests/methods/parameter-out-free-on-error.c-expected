@@ -52,7 +52,6 @@ typedef enum  {
 
 struct _Manam {
 	GObject parent_instance;
-	ManamPrivate * priv;
 };
 
 struct _ManamClass {

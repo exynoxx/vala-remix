@@ -174,7 +174,7 @@ foo_set_foo (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_foo (self);
+	old_value = self->priv->_foo;
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -305,7 +305,7 @@ bar_set_bar (Bar* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_BAR (self));
-	old_value = bar_get_bar (self);
+	old_value = self->priv->_bar;
 	if (old_value != value) {
 		self->priv->_bar = value;
 		g_object_notify_by_pspec ((GObject *) self, bar_properties[BAR_BAR_PROPERTY]);

@@ -57,7 +57,6 @@ static GParamSpec* maman_bar_properties[MAMAN_BAR_NUM_PROPERTIES];
 
 struct _MamanBar {
 	GObject parent_instance;
-	MamanBarPrivate * priv;
 };
 
 struct _MamanBarClass {

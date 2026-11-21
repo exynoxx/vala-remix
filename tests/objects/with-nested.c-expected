@@ -69,7 +69,6 @@ typedef struct _ParamSpecTest ParamSpecTest;
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 	gint field;
 };
 
@@ -85,7 +84,6 @@ struct _ParamSpecFoo {
 struct _Bar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	BarPrivate * priv;
 	gint field;
 };
 
@@ -101,7 +99,6 @@ struct _ParamSpecBar {
 struct _Test {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	TestPrivate * priv;
 	gint field;
 };
 

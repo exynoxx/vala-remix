@@ -74,7 +74,6 @@ struct _ParamSpecFoo {
 
 struct _Bar {
 	Foo parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {

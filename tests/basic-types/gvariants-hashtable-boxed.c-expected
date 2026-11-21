@@ -79,7 +79,7 @@ Foo*
 foo_dup (const Foo* self)
 {
 	Foo* dup;
-	dup = g_new0 (Foo, 1);
+	dup = g_new (Foo, 1);
 	memcpy (dup, self, sizeof (Foo));
 	return dup;
 }
@@ -114,7 +114,7 @@ Bar*
 bar_dup (const Bar* self)
 {
 	Bar* dup;
-	dup = g_new0 (Bar, 1);
+	dup = g_new (Bar, 1);
 	memcpy (dup, self, sizeof (Bar));
 	return dup;
 }
@@ -161,7 +161,7 @@ static guint64*
 _uint64_dup (guint64* self)
 {
 	guint64* dup;
-	dup = g_new0 (guint64, 1);
+	dup = g_new (guint64, 1);
 	memcpy (dup, self, sizeof (guint64));
 	return dup;
 }
@@ -280,7 +280,7 @@ static gboolean*
 _bool_dup (gboolean* self)
 {
 	gboolean* dup;
-	dup = g_new0 (gboolean, 1);
+	dup = g_new (gboolean, 1);
 	memcpy (dup, self, sizeof (gboolean));
 	return dup;
 }
@@ -387,7 +387,7 @@ static gdouble*
 _double_dup (gdouble* self)
 {
 	gdouble* dup;
-	dup = g_new0 (gdouble, 1);
+	dup = g_new (gdouble, 1);
 	memcpy (dup, self, sizeof (gdouble));
 	return dup;
 }

@@ -297,7 +297,7 @@ foo_set_foo (Foo* self,
 {
 	Bar old_value;
 	g_return_if_fail (IS_FOO (self));
-	foo_get_foo (self, &old_value);
+	old_value = self->priv->_foo;
 	if (_bar_equal (value, &old_value) != TRUE) {
 		Bar _tmp0_;
 		Bar _tmp1_;
@@ -362,7 +362,7 @@ foo_set_faz (Foo* self,
 {
 	Baz old_value;
 	g_return_if_fail (IS_FOO (self));
-	foo_get_faz (self, &old_value);
+	old_value = self->priv->_faz;
 	if (_bar_equal (value, &old_value) != TRUE) {
 		Baz _tmp0_;
 		Baz _tmp1_;

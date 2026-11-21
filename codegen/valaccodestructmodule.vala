@@ -232,7 +232,8 @@ public abstract class Vala.CCodeStructModule : CCodeBaseModule {
 		if (context.profile == Profile.GOBJECT) {
 			// g_new0 needs glib.h
 			cfile.add_include ("glib.h");
-			var creation_call = new CCodeFunctionCall (new CCodeIdentifier ("g_new0"));
+			// memcpy overwrites everything, so only zero for field-wise copies
+			var creation_call = new CCodeFunctionCall (new CCodeIdentifier (st.is_disposable () ? "g_new0" : "g_new"));
 			creation_call.add_argument (new CCodeConstant (get_ccode_name (st)));
 			creation_call.add_argument (new CCodeConstant ("1"));
 			ccode.add_assignment (new CCodeIdentifier ("dup"), creation_call);

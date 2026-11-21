@@ -37,13 +37,28 @@ typedef enum  {
 
 VALA_EXTERN GType foo_get_type (void);
 VALA_EXTERN gchar* foo_bar (Foo self);
+static const char* _foo_to_string (Foo value);
 static void _vala_main (void);
+
+static const char*
+_foo_to_string (Foo value)
+{
+	switch (value) {
+		case FOO_BAR:
+		return "FOO_BAR";
+	}
+	return NULL;
+}
 
 gchar*
 foo_bar (Foo self)
 {
+	const gchar* _tmp0_;
+	gchar* _tmp1_;
 	gchar* result;
-	result = g_enum_to_string (TYPE_FOO, self);
+	_tmp0_ = _foo_to_string (self);
+	_tmp1_ = g_strdup (_tmp0_);
+	result = _tmp1_;
 	return result;
 }
 

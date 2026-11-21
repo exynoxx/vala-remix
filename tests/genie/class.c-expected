@@ -46,7 +46,6 @@ typedef struct _ParamSpecTest ParamSpecTest;
 struct _Test {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	TestPrivate * priv;
 	gchar* empty;
 };
 

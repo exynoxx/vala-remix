@@ -196,7 +196,7 @@ FooStruct*
 foo_struct_dup (const FooStruct* self)
 {
 	FooStruct* dup;
-	dup = g_new0 (FooStruct, 1);
+	dup = g_new (FooStruct, 1);
 	memcpy (dup, self, sizeof (FooStruct));
 	return dup;
 }
@@ -231,7 +231,7 @@ BarStruct*
 bar_struct_dup (const BarStruct* self)
 {
 	BarStruct* dup;
-	dup = g_new0 (BarStruct, 1);
+	dup = g_new (BarStruct, 1);
 	memcpy (dup, self, sizeof (BarStruct));
 	return dup;
 }

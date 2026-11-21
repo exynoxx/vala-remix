@@ -76,7 +76,6 @@ struct _FooPrivate {
 
 struct _Bar {
 	Foo parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {

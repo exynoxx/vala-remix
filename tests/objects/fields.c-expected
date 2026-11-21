@@ -109,7 +109,6 @@ struct _CompactFoo {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 	gint public_base_field;
 };
 
@@ -148,7 +147,6 @@ struct _FazClassPrivate {
 
 struct _Bar {
 	GObject parent_instance;
-	BarPrivate * priv;
 	gint public_base_field;
 };
 

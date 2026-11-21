@@ -126,7 +126,6 @@ struct _IFooIface {
 
 struct _Bar {
 	GObject parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -146,7 +145,6 @@ struct _BarFooAsyncData {
 
 struct _SubBar {
 	Bar parent_instance;
-	SubBarPrivate * priv;
 };
 
 struct _SubBarClass {
@@ -163,7 +161,6 @@ struct _SubBarFooAsyncData {
 
 struct _AFoo {
 	GObject parent_instance;
-	AFooPrivate * priv;
 };
 
 struct _AFooClass {
@@ -175,7 +172,6 @@ struct _AFooClass {
 
 struct _Baz {
 	AFoo parent_instance;
-	BazPrivate * priv;
 };
 
 struct _BazClass {
@@ -192,7 +188,6 @@ struct _BazFooAsyncData {
 
 struct _SubBaz {
 	Baz parent_instance;
-	SubBazPrivate * priv;
 };
 
 struct _SubBazClass {

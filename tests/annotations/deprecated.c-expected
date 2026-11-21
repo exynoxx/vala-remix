@@ -102,7 +102,6 @@ struct _FooClassPrivate {
 
 struct _AFoo {
 	GObject parent_instance;
-	AFooPrivate * priv;
 };
 
 struct _AFooClass {
@@ -174,7 +173,7 @@ FooStruct*
 foo_struct_dup (const FooStruct* self)
 {
 	FooStruct* dup;
-	dup = g_new0 (FooStruct, 1);
+	dup = g_new (FooStruct, 1);
 	memcpy (dup, self, sizeof (FooStruct));
 	return dup;
 }
@@ -286,7 +285,7 @@ fooclass_set_bar (FooClass* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOOCLASS (self));
-	old_value = fooclass_get_bar (self);
+	old_value = self->priv->_bar;
 	if (old_value != value) {
 		self->priv->_bar = value;
 		g_object_notify_by_pspec ((GObject *) self, fooclass_properties[FOOCLASS_BAR_PROPERTY]);

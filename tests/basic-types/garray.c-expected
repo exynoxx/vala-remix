@@ -54,7 +54,6 @@ typedef struct _FooStruct FooStruct;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

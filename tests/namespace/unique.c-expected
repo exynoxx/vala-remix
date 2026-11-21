@@ -44,7 +44,6 @@ typedef struct _GParamSpecValaFoo GParamSpecValaFoo;
 struct _GValaFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	GValaFooPrivate * priv;
 };
 
 struct _GValaFooClass {

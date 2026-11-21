@@ -55,7 +55,6 @@ typedef struct _TestTestArrayLifetimeReadyData TestTestArrayLifetimeReadyData;
 
 struct _Test {
 	GObject parent_instance;
-	TestPrivate * priv;
 };
 
 struct _TestClass {

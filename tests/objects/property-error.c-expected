@@ -497,7 +497,7 @@ foo_set_bar (Foo* self,
 {
 	GError* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_bar (self);
+	old_value = self->priv->_bar;
 	if (old_value != value) {
 		GError* _tmp0_;
 		_tmp0_ = _g_error_copy0 (value);
@@ -524,7 +524,7 @@ foo_set_foo (Foo* self,
 {
 	GError* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_foo (self);
+	old_value = self->priv->_foo;
 	if (old_value != value) {
 		GError* _tmp0_;
 		_tmp0_ = _g_error_copy0 (value);

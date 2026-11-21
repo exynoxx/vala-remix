@@ -76,7 +76,6 @@ struct _IFooIface {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -95,7 +94,6 @@ struct _IFooIBarIface {
 struct _IFooBar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	IFooBarPrivate * priv;
 };
 
 struct _IFooBarClass {

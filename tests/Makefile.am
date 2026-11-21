@@ -391,6 +391,7 @@ TESTS = \
 	enums/in-invalid.test \
 	enums/no_gtype_to_string.vala \
 	enums/switch.vala \
+	enums/enum-to-string-switch.vala \
 	enums/unsafe-assignment.vala \
 	enums/bug614424.vala \
 	enums/bug666035.vala \
@@ -585,6 +586,8 @@ TESTS = \
 	objects/property-error.vala \
 	objects/property-notify.vala \
 	objects/property-notify-owned-getter.vala \
+	objects/property-notify-auto-field.vala \
+	objects/class-private-hierarchy.vala \
 	objects/property-owned-simple-type.test \
 	objects/property-ownership.vala \
 	objects/property-read-only-auto.vala \
