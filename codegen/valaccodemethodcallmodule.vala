@@ -367,7 +367,7 @@ public class Vala.CCodeMethodCallModule : CCodeAssignmentModule {
 		} else if (m is CreationMethod && context.profile == Profile.GOBJECT && m.parent_symbol is Class) {
 			ccode.add_assignment (get_this_cexpression (), new CCodeCastExpression (ccall, get_ccode_name (current_class) + "*"));
 
-			if (current_method.body.captured) {
+			if (current_method.body.captured && closure_captures_self (current_method.body)) {
 				// capture self after setting it
 				var ref_call = new CCodeFunctionCall (get_dup_func_expression (new ObjectType (current_class), expr.source_reference));
 				ref_call.add_argument (get_this_cexpression ());

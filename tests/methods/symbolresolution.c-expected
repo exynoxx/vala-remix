@@ -37,9 +37,9 @@ typedef struct _ClassClass ClassClass;
 typedef struct _ClassPrivate ClassPrivate;
 typedef void (*ClassFoo) (gpointer user_data);
 typedef struct _Block1Data Block1Data;
-#define _class_unref0(var) ((var == NULL) ? NULL : (var = (class_unref (var), NULL)))
 #define _g_free0(var) (var = (g_free (var), NULL))
 typedef struct _ParamSpecClass ParamSpecClass;
+#define _class_unref0(var) ((var == NULL) ? NULL : (var = (class_unref (var), NULL)))
 
 struct _Class {
 	GTypeInstance parent_instance;
@@ -53,7 +53,6 @@ struct _ClassClass {
 
 struct _Block1Data {
 	int _ref_count_;
-	Class* self;
 	ClassFoo foo;
 	gpointer foo_target;
 };
@@ -121,9 +120,6 @@ block1_data_unref (void * _userdata_)
 	Block1Data* _data1_;
 	_data1_ = (Block1Data*) _userdata_;
 	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
-		Class* self;
-		self = _data1_->self;
-		_class_unref0 (self);
 		g_slice_free (Block1Data, _data1_);
 	}
 }
@@ -131,8 +127,6 @@ block1_data_unref (void * _userdata_)
 static void
 _vala_lambda0_ (Block1Data* _data1_)
 {
-	Class* self;
-	self = _data1_->self;
 	_data1_->foo (_data1_->foo_target);
 }
 
@@ -154,7 +148,6 @@ class_test (Class* self,
 	g_return_if_fail (IS_CLASS (self));
 	_data1_ = g_slice_new0 (Block1Data);
 	_data1_->_ref_count_ = 1;
-	_data1_->self = class_ref (self);
 	_data1_->foo = foo;
 	_data1_->foo_target = foo_target;
 	func = __vala_lambda0__class_foo;

@@ -2180,7 +2180,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				data.add_field ("Block%dData *".printf (parent_block_id), "_data%d_".printf (parent_block_id));
 			} else {
 				unowned DataType? this_type = get_this_type ();
-				if (this_type != null) {
+				if (closure_captures_self (b)) {
 					data.add_field (get_ccode_name (this_type), "self");
 				}
 
@@ -2244,7 +2244,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				bool in_creation_method_with_chainup = (current_method is CreationMethod && current_class != null && current_class.base_class != null);
 
 				unowned DataType? this_type = get_this_type ();
-				if (this_type != null && (!in_creation_method_with_chainup || current_method.body != b)) {
+				if (closure_captures_self (b) && (!in_creation_method_with_chainup || current_method.body != b)) {
 					CCodeExpression instance;
 					if (is_in_destructor ()) {
 						// never increase reference count for self in finalizers to avoid infinite recursion on following unref
@@ -2352,7 +2352,8 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 			}
 
 			var this_type = get_this_type ();
-			if (this_type != null) {
+			bool captures_self = closure_captures_self (b);
+			if (captures_self) {
 				// assign "self" for type parameters
 				ccode.add_declaration(get_ccode_name (this_type), new CCodeVariableDeclarator ("self"));
 				ccode.add_assignment (new CCodeIdentifier ("self"), new CCodeMemberAccess.pointer (outer_block, "self"));
@@ -2444,8 +2445,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				ccode.add_expression (unref_call);
 				ccode.add_assignment (new CCodeMemberAccess.pointer (new CCodeIdentifier ("_data%d_".printf (block_id)), "_data%d_".printf (parent_block_id)), new CCodeConstant ("NULL"));
 			} else {
-				this_type = get_this_type ();
-				if (this_type != null) {
+				if (captures_self) {
 					this_type = this_type.copy ();
 					this_type.value_owned = true;
 					if (this_type.is_disposable () && !is_in_destructor ()) {
@@ -6820,6 +6820,22 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 			return current_destructor.this_parameter.variable_type;
 		}
 		return null;
+	}
+
+	/**
+	 * Whether the data of the given top-level closure block needs to hold
+	 * self, i.e. a nested lambda uses `this' (see SemanticAnalyzer.mark_this_used).
+	 * Generic types always capture self as type parameters are read via self->priv.
+	 */
+	public bool closure_captures_self (Block block) {
+		unowned DataType? this_type = get_this_type ();
+		if (this_type == null) {
+			return false;
+		}
+		unowned TypeSymbol? type = this_type.type_symbol;
+		return block.this_captured
+		       || (type is ObjectTypeSymbol && ((ObjectTypeSymbol) type).has_type_parameters ())
+		       || (type is Struct && ((Struct) type).has_type_parameters ());
 	}
 
 	public CCodeFunctionCall generate_instance_cast (CCodeExpression expr, TypeSymbol type) {

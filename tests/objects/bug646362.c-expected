@@ -54,7 +54,6 @@ struct _FooPrivate {
 
 struct _Block1Data {
 	int _ref_count_;
-	Foo* self;
 	gint baz;
 };
 
@@ -92,8 +91,6 @@ block1_data_unref (void * _userdata_)
 	Block1Data* _data1_;
 	_data1_ = (Block1Data*) _userdata_;
 	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
-		Foo* self;
-		self = _data1_->self;
 		g_slice_free (Block1Data, _data1_);
 	}
 }
@@ -101,9 +98,7 @@ block1_data_unref (void * _userdata_)
 static gboolean
 _vala_lambda0_ (Block1Data* _data1_)
 {
-	Foo* self;
 	gboolean result;
-	self = _data1_->self;
 	result = _data1_->baz == 2;
 	return result;
 }
@@ -157,7 +152,6 @@ foo_finalize (GObject * obj)
 	self = (Foo*) obj;
 	_data1_ = g_slice_new0 (Block1Data);
 	_data1_->_ref_count_ = 1;
-	_data1_->self = self;
 	_data1_->baz = self->priv->bar;
 	f = __vala_lambda0__gsource_func;
 	f_target = block1_data_ref (_data1_);

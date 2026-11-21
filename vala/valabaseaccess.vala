@@ -56,6 +56,8 @@ public class Vala.BaseAccess : Expression {
 
 		checked = true;
 
+		context.analyzer.mark_this_used ();
+
 		if (!context.analyzer.is_in_instance_method ()) {
 			error = true;
 			Report.error (source_reference, "Base access invalid outside of instance methods");
