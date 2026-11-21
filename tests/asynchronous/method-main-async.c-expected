@@ -30,10 +30,7 @@ struct _ValaMainAsyncData {
 	gchar** args;
 	gint args_length1;
 	gint result;
-	const gchar* _tmp0_;
 	gchar* foo;
-	const gchar* _tmp1_;
-	gchar* _tmp2_;
 };
 
 static gint _vala_main_async_result;
@@ -94,6 +91,9 @@ __vala_main_async_co_gsource_func (gpointer self)
 static gboolean
 _vala_main_async_co (ValaMainAsyncData* _data_)
 {
+	const gchar* _tmp0_;
+	const gchar* _tmp1_;
+	gchar* _tmp2_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -104,11 +104,11 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 	}
 	_state_0:
 	_vala_assert (_data_->args_length1 >= 1, "args.length >= 1");
-	_data_->_tmp0_ = _data_->args[0];
-	_vala_assert (_data_->_tmp0_ != NULL, "args[0] != null");
-	_data_->_tmp1_ = _data_->args[0];
-	_data_->_tmp2_ = g_strdup (_data_->_tmp1_);
-	_data_->foo = _data_->_tmp2_;
+	_tmp0_ = _data_->args[0];
+	_vala_assert (_tmp0_ != NULL, "args[0] != null");
+	_tmp1_ = _data_->args[0];
+	_tmp2_ = g_strdup (_tmp1_);
+	_data_->foo = _tmp2_;
 	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, __vala_main_async_co_gsource_func, _data_, NULL);
 	_data_->_state_ = 1;
 	return FALSE;

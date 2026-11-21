@@ -47,10 +47,8 @@ struct _FooData {
 	GTask* _async_result;
 	GError* _tmp0_;
 	GError* e;
-	const gchar* _tmp1_;
 	GError* _tmp2_;
 	GError* _vala1_e;
-	const gchar* _tmp3_;
 	GError* _inner_error0_;
 };
 
@@ -150,11 +148,12 @@ foo_co (FooData* _data_)
 	goto __finally0;
 	__catch0_g_error:
 	{
+		const gchar* _tmp1_;
 		_data_->e = _data_->_inner_error0_;
 		_data_->_inner_error0_ = NULL;
 		_vala_assert (_data_->e->domain == FOO_ERROR, "e is FooError");
-		_data_->_tmp1_ = _data_->e->message;
-		_vala_assert (g_strcmp0 (_data_->_tmp1_, "Foo") == 0, "e.message == \"Foo\"");
+		_tmp1_ = _data_->e->message;
+		_vala_assert (g_strcmp0 (_tmp1_, "Foo") == 0, "e.message == \"Foo\"");
 		_g_error_free0 (_data_->e);
 	}
 	__finally0:
@@ -172,11 +171,12 @@ foo_co (FooData* _data_)
 	goto __finally1;
 	__catch1_g_error:
 	{
+		const gchar* _tmp3_;
 		_data_->_vala1_e = _data_->_inner_error0_;
 		_data_->_inner_error0_ = NULL;
 		_vala_assert (_data_->_vala1_e->domain == FOO_ERROR, "e is FooError");
-		_data_->_tmp3_ = _data_->_vala1_e->message;
-		_vala_assert (g_strcmp0 (_data_->_tmp3_, "Bar") == 0, "e.message == \"Bar\"");
+		_tmp3_ = _data_->_vala1_e->message;
+		_vala_assert (g_strcmp0 (_tmp3_, "Bar") == 0, "e.message == \"Bar\"");
 		_g_error_free0 (_data_->_vala1_e);
 	}
 	__finally1:

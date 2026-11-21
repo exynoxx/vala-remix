@@ -123,7 +123,6 @@ struct _IntGeneratorGenerateData {
 	IntGenerator* self;
 	gint i;
 	gboolean _tmp0_;
-	gint _tmp1_;
 };
 
 static gint Generator_private_offset;
@@ -717,8 +716,9 @@ int_generator_real_generate_co (IntGeneratorGenerateData* _data_)
 			_data_->_tmp0_ = TRUE;
 			while (TRUE) {
 				if (!_data_->_tmp0_) {
-					_data_->_tmp1_ = _data_->i;
-					_data_->i = _data_->_tmp1_ + 1;
+					gint _tmp1_;
+					_tmp1_ = _data_->i;
+					_data_->i = _tmp1_ + 1;
 				}
 				_data_->_tmp0_ = FALSE;
 				if (!(_data_->i < 10)) {

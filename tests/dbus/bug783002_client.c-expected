@@ -75,8 +75,6 @@ struct _RunData {
 	gint _tmp6__length1;
 	gchar* _tmp7_;
 	gchar* _tmp8_;
-	const gchar* _tmp9_;
-	GMainLoop* _tmp10_;
 	GError* _inner_error0_;
 };
 
@@ -513,6 +511,8 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
+	const gchar* _tmp9_;
+	GMainLoop* _tmp10_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -561,10 +561,10 @@ run_co (RunData* _data_)
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_data_->_tmp9_ = _data_->_result_;
-	_vala_assert (g_strcmp0 (_data_->_tmp9_, "BadgerSnakeMushroom") == 0, "result == \"BadgerSnakeMushroom\"");
-	_data_->_tmp10_ = main_loop;
-	g_main_loop_quit (_data_->_tmp10_);
+	_tmp9_ = _data_->_result_;
+	_vala_assert (g_strcmp0 (_tmp9_, "BadgerSnakeMushroom") == 0, "result == \"BadgerSnakeMushroom\"");
+	_tmp10_ = main_loop;
+	g_main_loop_quit (_tmp10_);
 	_g_free0 (_data_->_result_);
 	_g_object_unref0 (_data_->test);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);

@@ -89,7 +89,6 @@ typedef struct _Block1Data Block1Data;
 
 struct _Monitor {
 	GFileMonitor parent_instance;
-	MonitorPrivate * priv;
 };
 
 struct _MonitorClass {
@@ -98,7 +97,6 @@ struct _MonitorClass {
 
 struct _Obj {
 	GObject parent_instance;
-	ObjPrivate * priv;
 };
 
 struct _ObjClass {
@@ -107,7 +105,6 @@ struct _ObjClass {
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

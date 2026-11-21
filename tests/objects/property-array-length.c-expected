@@ -50,14 +50,6 @@ struct _BarData {
 	GAsyncResult* _res_;
 	GTask* _async_result;
 	Foo* f;
-	Foo* _tmp0_;
-	guint8* _tmp1_;
-	gint _tmp1__length1;
-	gint _tmp2_;
-	guint8* _tmp3_;
-	gint _tmp3__length1;
-	guint8* _tmp4_;
-	gint _tmp4__length1;
 };
 
 VALA_EXTERN void foo_free (Foo * self);
@@ -205,6 +197,14 @@ bar_finish (GAsyncResult* _res_)
 static gboolean
 bar_co (BarData* _data_)
 {
+	Foo* _tmp0_;
+	guint8* _tmp1_;
+	gint _tmp1__length1;
+	gint _tmp2_;
+	guint8* _tmp3_;
+	gint _tmp3__length1;
+	guint8* _tmp4_;
+	gint _tmp4__length1;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -212,17 +212,17 @@ bar_co (BarData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	_data_->_tmp0_ = foo_new ();
-	_data_->f = _data_->_tmp0_;
-	_data_->_tmp2_ = 0;
-	_data_->_tmp1_ = foo_get_data (_data_->f, &_data_->_tmp2_);
-	_data_->_tmp1__length1 = _data_->_tmp2_;
-	_data_->_tmp3_ = _data_->_tmp1_;
-	_data_->_tmp3__length1 = _data_->_tmp1__length1;
-	_data_->_tmp4_ = _data_->_tmp3_;
-	_data_->_tmp4__length1 = _data_->_tmp3__length1;
-	foo (_data_->_tmp4_, (gint) _data_->_tmp3__length1, NULL, NULL);
-	_data_->_tmp4_ = (g_free (_data_->_tmp4_), NULL);
+	_tmp0_ = foo_new ();
+	_data_->f = _tmp0_;
+	_tmp2_ = 0;
+	_tmp1_ = foo_get_data (_data_->f, &_tmp2_);
+	_tmp1__length1 = _tmp2_;
+	_tmp3_ = _tmp1_;
+	_tmp3__length1 = _tmp1__length1;
+	_tmp4_ = _tmp3_;
+	_tmp4__length1 = _tmp3__length1;
+	foo (_tmp4_, (gint) _tmp3__length1, NULL, NULL);
+	_tmp4_ = (g_free (_tmp4_), NULL);
 	_foo_free0 (_data_->f);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {

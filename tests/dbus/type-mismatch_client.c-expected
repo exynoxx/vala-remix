@@ -90,15 +90,8 @@ struct _ValaMainAsyncData {
 	GAsyncResult* _res_;
 	GTask* _async_result;
 	Test* test;
-	Test* _tmp0_;
 	gchar* s;
-	Test* _tmp1_;
-	gchar* _tmp2_;
-	gchar* _tmp3_;
-	const gchar* _tmp4_;
-	Test* _tmp5_;
 	GHashTable* b;
-	GHashTable* _tmp6_;
 	GVariant* c;
 	gboolean caught_error;
 	gchar* _tmp7_;
@@ -106,18 +99,15 @@ struct _ValaMainAsyncData {
 	GHashTable* _tmp9_;
 	GVariant* _tmp10_;
 	gchar* _tmp11_;
-	gchar* _tmp12_;
 	gchar* _tmp13_;
 	Test* _tmp14_;
 	GHashTable* _tmp15_;
 	GVariant* _tmp16_;
 	gchar* _tmp17_;
-	gchar* _tmp18_;
 	Test* _tmp19_;
 	GHashTable* _tmp20_;
 	GVariant* _tmp21_;
 	gchar* _tmp22_;
-	const gchar* _tmp23_;
 	GError* _inner_error0_;
 };
 
@@ -1139,6 +1129,14 @@ _vala_main_async_ready (GObject* source_object,
 static gboolean
 _vala_main_async_co (ValaMainAsyncData* _data_)
 {
+	Test* _tmp0_;
+	Test* _tmp1_;
+	gchar* _tmp2_;
+	gchar* _tmp3_;
+	const gchar* _tmp4_;
+	Test* _tmp5_;
+	GHashTable* _tmp6_;
+	const gchar* _tmp23_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -1153,26 +1151,27 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 	}
 	_state_0:
 	g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
-	_data_->_tmp0_ = (Test*) g_initable_new (TYPE_TEST_PROXY, NULL, &_data_->_inner_error0_, "g-flags", G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, "g-name", "org.example.Test", "g-bus-type", G_BUS_TYPE_SESSION, "g-object-path", "/org/example/test", "g-interface-name", "org.example.Test", NULL);
-	_data_->test = (Test*) _data_->_tmp0_;
+	_tmp0_ = (Test*) g_initable_new (TYPE_TEST_PROXY, NULL, &_data_->_inner_error0_, "g-flags", G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, "g-name", "org.example.Test", "g-bus-type", G_BUS_TYPE_SESSION, "g-object-path", "/org/example/test", "g-interface-name", "org.example.Test", NULL);
+	_data_->test = (Test*) _tmp0_;
 	if (G_UNLIKELY (_data_->_inner_error0_ != NULL)) {
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _data_->_inner_error0_->message, g_quark_to_string (_data_->_inner_error0_->domain), _data_->_inner_error0_->code);
 		g_clear_error (&_data_->_inner_error0_);
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_data_->_tmp1_ = _data_->test;
-	_data_->_tmp2_ = test_get_test_property (_data_->_tmp1_);
-	_data_->_tmp3_ = _data_->_tmp2_;
-	_data_->s = _data_->_tmp3_;
-	_data_->_tmp4_ = _data_->s;
-	_vala_assert (_data_->_tmp4_ == NULL, "s == null");
-	_data_->_tmp5_ = _data_->test;
-	g_signal_connect (_data_->_tmp5_, "test-signal", (GCallback) __vala_lambda0__test_test_signal, NULL);
-	_data_->_tmp6_ = g_hash_table_new_full (NULL, NULL, _g_free0_, NULL);
-	_data_->b = _data_->_tmp6_;
+	_tmp1_ = _data_->test;
+	_tmp2_ = test_get_test_property (_tmp1_);
+	_tmp3_ = _tmp2_;
+	_data_->s = _tmp3_;
+	_tmp4_ = _data_->s;
+	_vala_assert (_tmp4_ == NULL, "s == null");
+	_tmp5_ = _data_->test;
+	g_signal_connect (_tmp5_, "test-signal", (GCallback) __vala_lambda0__test_test_signal, NULL);
+	_tmp6_ = g_hash_table_new_full (NULL, NULL, _g_free0_, NULL);
+	_data_->b = _tmp6_;
 	_data_->caught_error = FALSE;
 	{
+		gchar* _tmp12_;
 		_data_->_tmp8_ = _data_->test;
 		_data_->_tmp9_ = _data_->b;
 		_data_->_tmp10_ = NULL;
@@ -1190,10 +1189,10 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 			}
 			goto __finally0;
 		}
-		_data_->_tmp12_ = _data_->_tmp7_;
+		_tmp12_ = _data_->_tmp7_;
 		_data_->_tmp7_ = NULL;
 		_g_free0 (_data_->s);
-		_data_->s = _data_->_tmp12_;
+		_data_->s = _tmp12_;
 		_g_free0 (_data_->_tmp7_);
 	}
 	goto __finally0;
@@ -1216,6 +1215,7 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 	_vala_assert (_data_->caught_error, "caught_error");
 	_data_->caught_error = FALSE;
 	{
+		gchar* _tmp18_;
 		_data_->_tmp14_ = _data_->test;
 		_data_->_tmp15_ = _data_->b;
 		_data_->_tmp16_ = NULL;
@@ -1233,10 +1233,10 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 			}
 			goto __finally1;
 		}
-		_data_->_tmp18_ = _data_->_tmp13_;
+		_tmp18_ = _data_->_tmp13_;
 		_data_->_tmp13_ = NULL;
 		_g_free0 (_data_->s);
-		_data_->s = _data_->_tmp18_;
+		_data_->s = _tmp18_;
 		_g_free0 (_data_->_tmp13_);
 	}
 	goto __finally1;
@@ -1269,8 +1269,8 @@ _vala_main_async_co (ValaMainAsyncData* _data_)
 	_data_->c = _data_->_tmp21_;
 	_g_free0 (_data_->s);
 	_data_->s = _data_->_tmp22_;
-	_data_->_tmp23_ = _data_->s;
-	_vala_assert (_data_->_tmp23_ == NULL, "s == null");
+	_tmp23_ = _data_->s;
+	_vala_assert (_tmp23_ == NULL, "s == null");
 	_g_variant_unref0 (_data_->c);
 	_g_hash_table_unref0 (_data_->b);
 	_g_free0 (_data_->s);

@@ -35,8 +35,6 @@ struct _RunData {
 	GAsyncResult* _res_;
 	GTask* _async_result;
 	gchar* foo;
-	gchar* _tmp0_;
-	gint _tmp1_;
 };
 
 struct _Block1Data {
@@ -99,11 +97,13 @@ run_co (RunData* _data_)
 	_state_0:
 	while (TRUE) {
 		if (i == 0) {
-			_data_->_tmp0_ = g_strdup ("foo");
+			gchar* _tmp0_;
+			gint _tmp1_;
+			_tmp0_ = g_strdup ("foo");
 			_g_free0 (_data_->foo);
-			_data_->foo = _data_->_tmp0_;
-			_data_->_tmp1_ = i;
-			i = _data_->_tmp1_ + 1;
+			_data_->foo = _tmp0_;
+			_tmp1_ = i;
+			i = _tmp1_ + 1;
 		} else {
 			_g_free0 (_data_->foo);
 			break;

@@ -86,7 +86,6 @@ struct _Test2NewData {
 	GTask* _async_result;
 	GType object_type;
 	Test2* self;
-	gchar* _tmp0_;
 };
 
 struct _ParamSpecTest2 {
@@ -405,6 +404,7 @@ static gboolean
 test2_construct_co (Test2NewData* _data_)
 {
 	Test2* self = NULL;
+	gchar* _tmp0_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -413,9 +413,9 @@ test2_construct_co (Test2NewData* _data_)
 	}
 	_state_0:
 	_data_->self = (Test2*) g_type_create_instance (_data_->object_type);
-	_data_->_tmp0_ = g_strdup ("b");
+	_tmp0_ = g_strdup ("b");
 	_g_free0 (_data_->self->b);
-	_data_->self->b = _data_->_tmp0_;
+	_data_->self->b = _tmp0_;
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
 		while (!g_task_get_completed (_data_->_async_result)) {

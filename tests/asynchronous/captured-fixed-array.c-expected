@@ -36,9 +36,6 @@ struct _FooData {
 	GTask* _async_result;
 	gint array_param[3];
 	gint array[2];
-	gint _tmp0_[2];
-	gint _tmp1_;
-	gint _tmp2_;
 };
 
 static void foo_data_free (gpointer _data);
@@ -83,6 +80,9 @@ foo_finish (GAsyncResult* _res_)
 static gboolean
 foo_co (FooData* _data_)
 {
+	gint _tmp0_[2];
+	gint _tmp1_;
+	gint _tmp2_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -90,16 +90,16 @@ foo_co (FooData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	memset (&_data_->_tmp0_, 0, 2 * sizeof (gint));
-	_data_->_tmp0_[0] = 23;
-	_data_->_tmp0_[1] = 42;
-	memcpy (_data_->array, _data_->_tmp0_, 2 * sizeof (gint));
+	memset (&_tmp0_, 0, 2 * sizeof (gint));
+	_tmp0_[0] = 23;
+	_tmp0_[1] = 42;
+	memcpy (_data_->array, _tmp0_, 2 * sizeof (gint));
 	_vala_assert (2 == 2, "array.length == 2");
-	_data_->_tmp1_ = _data_->array[1];
-	_vala_assert (_data_->_tmp1_ == 42, "array[1] == 42");
+	_tmp1_ = _data_->array[1];
+	_vala_assert (_tmp1_ == 42, "array[1] == 42");
 	_vala_assert (3 == 3, "array_param.length == 3");
-	_data_->_tmp2_ = _data_->array_param[2];
-	_vala_assert (_data_->_tmp2_ == 4711, "array_param[2] == 4711");
+	_tmp2_ = _data_->array_param[2];
+	_vala_assert (_tmp2_ == 4711, "array_param[2] == 4711");
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
 		while (!g_task_get_completed (_data_->_async_result)) {
