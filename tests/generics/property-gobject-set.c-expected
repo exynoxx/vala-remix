@@ -141,7 +141,7 @@ foo_set_g_data (Foo* self,
 {
 	gpointer old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_g_data (self);
+	old_value = self->priv->_g_data;
 	if (old_value != value) {
 		gpointer _tmp0_;
 		_tmp0_ = ((value != NULL) && (self->priv->g_dup_func != NULL)) ? self->priv->g_dup_func ((gpointer) value) : ((gpointer) value);

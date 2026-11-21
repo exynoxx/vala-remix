@@ -55,7 +55,6 @@ typedef struct _TestTestInReadyData TestTestInReadyData;
 
 struct _Test {
 	GObject parent_instance;
-	TestPrivate * priv;
 };
 
 struct _TestClass {

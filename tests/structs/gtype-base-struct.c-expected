@@ -184,7 +184,7 @@ foo_set_prop_int (Foo* self,
 {
 	foo_int old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_int (self);
+	old_value = self->priv->_prop_int;
 	if (old_value != value) {
 		self->priv->_prop_int = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_INT_PROPERTY]);
@@ -206,7 +206,7 @@ foo_set_prop_uint (Foo* self,
 {
 	foo_uint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_uint (self);
+	old_value = self->priv->_prop_uint;
 	if (old_value != value) {
 		self->priv->_prop_uint = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_UINT_PROPERTY]);
@@ -228,7 +228,7 @@ foo_set_prop_int64 (Foo* self,
 {
 	foo_int64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_int64 (self);
+	old_value = self->priv->_prop_int64;
 	if (old_value != value) {
 		self->priv->_prop_int64 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_INT64_PROPERTY]);
@@ -250,7 +250,7 @@ foo_set_prop_uint64 (Foo* self,
 {
 	foo_uint64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_uint64 (self);
+	old_value = self->priv->_prop_uint64;
 	if (old_value != value) {
 		self->priv->_prop_uint64 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_UINT64_PROPERTY]);
@@ -272,7 +272,7 @@ foo_set_prop_long (Foo* self,
 {
 	foo_long old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_long (self);
+	old_value = self->priv->_prop_long;
 	if (old_value != value) {
 		self->priv->_prop_long = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_LONG_PROPERTY]);
@@ -294,7 +294,7 @@ foo_set_prop_ulong (Foo* self,
 {
 	foo_ulong old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_ulong (self);
+	old_value = self->priv->_prop_ulong;
 	if (old_value != value) {
 		self->priv->_prop_ulong = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_ULONG_PROPERTY]);
@@ -316,7 +316,7 @@ foo_set_prop_bool (Foo* self,
 {
 	foo_bool old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_bool (self);
+	old_value = self->priv->_prop_bool;
 	if (old_value != value) {
 		self->priv->_prop_bool = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_BOOL_PROPERTY]);
@@ -338,7 +338,7 @@ foo_set_prop_char (Foo* self,
 {
 	foo_char old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_char (self);
+	old_value = self->priv->_prop_char;
 	if (old_value != value) {
 		self->priv->_prop_char = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_CHAR_PROPERTY]);
@@ -360,7 +360,7 @@ foo_set_prop_uchar (Foo* self,
 {
 	foo_uchar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_uchar (self);
+	old_value = self->priv->_prop_uchar;
 	if (old_value != value) {
 		self->priv->_prop_uchar = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_UCHAR_PROPERTY]);
@@ -382,7 +382,7 @@ foo_set_prop_float (Foo* self,
 {
 	foo_float old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_float (self);
+	old_value = self->priv->_prop_float;
 	if (old_value != value) {
 		self->priv->_prop_float = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_FLOAT_PROPERTY]);
@@ -404,7 +404,7 @@ foo_set_prop_double (Foo* self,
 {
 	foo_double old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_double (self);
+	old_value = self->priv->_prop_double;
 	if (old_value != value) {
 		self->priv->_prop_double = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_DOUBLE_PROPERTY]);
@@ -426,7 +426,7 @@ foo_set_prop_gtype (Foo* self,
 {
 	foo_gtype old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_prop_gtype (self);
+	old_value = self->priv->_prop_gtype;
 	if (old_value != value) {
 		self->priv->_prop_gtype = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_PROP_GTYPE_PROPERTY]);

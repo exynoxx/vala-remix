@@ -53,7 +53,6 @@ typedef struct _CallbackData CallbackData;
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

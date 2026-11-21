@@ -68,7 +68,6 @@ typedef struct _FooSubParamSpecClassInNestedNamespace FooSubParamSpecClassInNest
 struct _GlobalTestClass {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	GlobalTestClassPrivate * priv;
 };
 
 struct _GlobalTestClassClass {
@@ -82,7 +81,6 @@ struct _ParamSpecGlobalTestClass {
 
 struct _MamanBar {
 	GObject parent_instance;
-	MamanBarPrivate * priv;
 };
 
 struct _MamanBarClass {
@@ -92,7 +90,6 @@ struct _MamanBarClass {
 struct _FooSubClassInNestedNamespace {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooSubClassInNestedNamespacePrivate * priv;
 };
 
 struct _FooSubClassInNestedNamespaceClass {

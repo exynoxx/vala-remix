@@ -96,7 +96,6 @@ static GParamSpec* class_d_properties[CLASS_D_NUM_PROPERTIES];
 
 struct _ClassA {
 	GObject parent_instance;
-	ClassAPrivate * priv;
 };
 
 struct _ClassAClass {
@@ -106,7 +105,6 @@ struct _ClassAClass {
 
 struct _ClassB {
 	ClassA parent_instance;
-	ClassBPrivate * priv;
 };
 
 struct _ClassBClass {
@@ -115,7 +113,6 @@ struct _ClassBClass {
 
 struct _ClassC {
 	ClassB parent_instance;
-	ClassCPrivate * priv;
 };
 
 struct _ClassCClass {
@@ -124,7 +121,6 @@ struct _ClassCClass {
 
 struct _ClassD {
 	ClassC parent_instance;
-	ClassDPrivate * priv;
 };
 
 struct _ClassDClass {

@@ -47,7 +47,6 @@ static GParamSpec* foo_properties[FOO_NUM_PROPERTIES];
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 	GObject* baz;
 };
 

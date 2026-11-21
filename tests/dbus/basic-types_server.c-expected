@@ -384,7 +384,7 @@ test_set_test_int_property (Test* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_TEST (self));
-	old_value = test_get_test_int_property (self);
+	old_value = self->priv->_test_int_property;
 	if (old_value != value) {
 		self->priv->_test_int_property = value;
 		g_object_notify_by_pspec ((GObject *) self, test_properties[TEST_TEST_INT_PROPERTY_PROPERTY]);

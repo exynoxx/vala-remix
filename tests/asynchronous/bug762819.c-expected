@@ -67,7 +67,6 @@ typedef struct _Block1Data Block1Data;
 
 struct _Bar {
 	GObject parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -78,7 +77,6 @@ struct _BarClass {
 
 struct _Foo {
 	Bar parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

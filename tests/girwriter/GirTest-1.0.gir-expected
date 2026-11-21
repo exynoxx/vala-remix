@@ -110,9 +110,6 @@
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GirTest.TypeTest" c:type="GirTestTypeTest"/>
 		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="SubTypeTestPrivate" c:type="GirTestSubTypeTestPrivate*"/>
-		</field>
 		<field name="array_field" writable="1">
 			<array c:type="gchar**">
 				<type name="utf8" c:type="gchar*"/>
@@ -1318,9 +1315,6 @@
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
 		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="AbstractObjectTestPrivate" c:type="GirTestAbstractObjectTestPrivate*"/>
-		</field>
 		<method name="method_int8_in" c:identifier="gir_test_abstract_object_test_method_int8_in">
 			<return-value transfer-ownership="full">
 				<type name="none" c:type="void"/>
@@ -1845,9 +1839,6 @@
 		<field name="parent_instance" readable="0" private="1">
 			<type name="GObject.Object" c:type="GObject"/>
 		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="SealedObjectTestPrivate" c:type="GirTestSealedObjectTestPrivate*"/>
-		</field>
 		<constructor name="new" c:identifier="gir_test_sealed_object_test_new">
 			<return-value transfer-ownership="full">
 				<type name="GirTest.SealedObjectTest" c:type="GirTestSealedObjectTest*"/>
@@ -1900,9 +1891,6 @@
 		<field name="ref_count">
 			<type name="gint" c:type="volatile int"/>
 		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="SkippedClassPrivate" c:type="GirTestSkippedClassPrivate*"/>
-		</field>
 		<constructor name="new" c:identifier="gir_test_skippedclass_new">
 			<return-value transfer-ownership="full">
 				<type name="GirTest.SkippedClass" c:type="GirTestSkippedClass*"/>
@@ -1922,9 +1910,6 @@
 		<field name="ref_count">
 			<type name="gint" c:type="volatile int"/>
 		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="DeprecatedClassTestPrivate" c:type="GirTestDeprecatedClassTestPrivate*"/>
-		</field>
 		<constructor name="new" c:identifier="gir_test_deprecated_class_test_new" deprecated="1">
 			<return-value transfer-ownership="full">
 				<type name="GirTest.DeprecatedClassTest" c:type="GirTestDeprecatedClassTest*"/>
@@ -1943,9 +1928,6 @@
 		</field>
 		<field name="ref_count">
 			<type name="gint" c:type="volatile int"/>
-		</field>
-		<field name="priv" readable="0" private="1">
-			<type name="RenamedClassPrivate" c:type="GirTestNamedClassPrivate*"/>
 		</field>
 		<constructor name="new" c:identifier="gir_test_namedclass_new">
 			<return-value transfer-ownership="full">

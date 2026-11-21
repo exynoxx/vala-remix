@@ -73,7 +73,6 @@ struct _Manam {
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -153,7 +152,7 @@ Manam*
 manam_dup (const Manam* self)
 {
 	Manam* dup;
-	dup = g_new0 (Manam, 1);
+	dup = g_new (Manam, 1);
 	memcpy (dup, self, sizeof (Manam));
 	return dup;
 }
@@ -415,7 +414,7 @@ static Bar*
 _bar_dup (Bar* self)
 {
 	Bar* dup;
-	dup = g_new0 (Bar, 1);
+	dup = g_new (Bar, 1);
 	memcpy (dup, self, sizeof (Bar));
 	return dup;
 }

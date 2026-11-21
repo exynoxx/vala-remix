@@ -56,7 +56,6 @@ struct _Block1Data {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 	FooFunc func;
 	gpointer func_target;
 	GDestroyNotify func_target_destroy_notify;

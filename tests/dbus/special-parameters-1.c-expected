@@ -60,7 +60,6 @@ typedef struct _ProxyAsyncMethodReadyData ProxyAsyncMethodReadyData;
 
 struct _Server {
 	GObject parent_instance;
-	ServerPrivate * priv;
 };
 
 struct _ServerClass {

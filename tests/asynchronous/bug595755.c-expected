@@ -48,7 +48,6 @@ static guint foo_signals[FOO_NUM_SIGNALS] = {0};
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

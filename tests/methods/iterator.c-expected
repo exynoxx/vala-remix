@@ -149,7 +149,6 @@ typedef struct _ParamSpecFooCollection4 ParamSpecFooCollection4;
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -183,7 +182,6 @@ struct _ParamSpecFooIterator {
 struct _FooCollection {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooCollectionPrivate * priv;
 };
 
 struct _FooCollectionClass {
@@ -217,7 +215,6 @@ struct _ParamSpecFooIterator2 {
 struct _FooCollection2 {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooCollection2Private * priv;
 };
 
 struct _FooCollection2Class {
@@ -232,7 +229,6 @@ struct _ParamSpecFooCollection2 {
 struct _FooCollection3 {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	FooCollection3Private * priv;
 };
 
 struct _FooCollection3Class {

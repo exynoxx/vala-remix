@@ -223,7 +223,6 @@ typedef struct _MamanParamSpecClassTest MamanParamSpecClassTest;
 
 struct _MamanBar {
 	GObject parent_instance;
-	MamanBarPrivate * priv;
 };
 
 struct _MamanBarClass {
@@ -233,7 +232,6 @@ struct _MamanBarClass {
 
 struct _MamanSubBar {
 	MamanBar parent_instance;
-	MamanSubBarPrivate * priv;
 };
 
 struct _MamanSubBarClass {
@@ -246,7 +244,6 @@ struct _MamanFooIface {
 
 struct _MamanFooBar {
 	GObject parent_instance;
-	MamanFooBarPrivate * priv;
 };
 
 struct _MamanFooBarClass {
@@ -255,7 +252,6 @@ struct _MamanFooBarClass {
 
 struct _MamanSubFooBar {
 	MamanFooBar parent_instance;
-	MamanSubFooBarPrivate * priv;
 };
 
 struct _MamanSubFooBarClass {
@@ -264,7 +260,6 @@ struct _MamanSubFooBarClass {
 
 struct _MamanAbstractBase {
 	GObject parent_instance;
-	MamanAbstractBasePrivate * priv;
 };
 
 struct _MamanAbstractBaseClass {
@@ -274,7 +269,6 @@ struct _MamanAbstractBaseClass {
 
 struct _MamanAbstractDerived {
 	MamanAbstractBase parent_instance;
-	MamanAbstractDerivedPrivate * priv;
 };
 
 struct _MamanAbstractDerivedClass {
@@ -283,7 +277,6 @@ struct _MamanAbstractDerivedClass {
 
 struct _MamanDeepDerived {
 	MamanAbstractDerived parent_instance;
-	MamanDeepDerivedPrivate * priv;
 };
 
 struct _MamanDeepDerivedClass {
@@ -298,7 +291,6 @@ struct _MamanBaseAccessIFooIface {
 
 struct _MamanBaseAccessFoo {
 	GObject parent_instance;
-	MamanBaseAccessFooPrivate * priv;
 };
 
 struct _MamanBaseAccessFooClass {
@@ -309,7 +301,6 @@ struct _MamanBaseAccessFooClass {
 
 struct _MamanBaseAccessBar {
 	MamanBaseAccessFoo parent_instance;
-	MamanBaseAccessBarPrivate * priv;
 };
 
 struct _MamanBaseAccessBarClass {
@@ -318,7 +309,6 @@ struct _MamanBaseAccessBarClass {
 
 struct _MamanBaseAccessFooBar {
 	MamanBaseAccessFoo parent_instance;
-	MamanBaseAccessFooBarPrivate * priv;
 };
 
 struct _MamanBaseAccessFooBarClass {
@@ -328,7 +318,6 @@ struct _MamanBaseAccessFooBarClass {
 struct _MamanClassTest {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	MamanClassTestPrivate * priv;
 };
 
 struct _MamanClassTestClass {

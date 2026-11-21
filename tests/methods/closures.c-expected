@@ -52,7 +52,6 @@ typedef struct _Block3Data Block3Data;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

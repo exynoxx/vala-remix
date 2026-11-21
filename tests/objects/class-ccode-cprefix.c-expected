@@ -52,7 +52,6 @@ typedef struct _ParamSpecManam ParamSpecManam;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -62,7 +61,6 @@ struct _FooClass {
 struct _Manam {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	ManamPrivate * priv;
 };
 
 struct _ManamClass {

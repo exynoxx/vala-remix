@@ -44,7 +44,6 @@ static GParamSpec* foo_output_stream_properties[FOO_OUTPUT_STREAM_NUM_PROPERTIES
 
 struct _FooOutputStream {
 	GOutputStream parent_instance;
-	FooOutputStreamPrivate * priv;
 };
 
 struct _FooOutputStreamClass {

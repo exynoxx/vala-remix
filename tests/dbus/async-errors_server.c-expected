@@ -59,7 +59,6 @@ typedef struct _TestTestCancellableReadyData TestTestCancellableReadyData;
 
 struct _Test {
 	GObject parent_instance;
-	TestPrivate * priv;
 };
 
 struct _TestClass {

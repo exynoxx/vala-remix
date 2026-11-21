@@ -1992,15 +1992,26 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 					var get_call = new CCodeFunctionCall (new CCodeIdentifier (get_ccode_real_name (get_accessor)));
 					get_call.add_argument (new CCodeIdentifier (is_virtual ? "base" : "self"));
 
+					// read the backing field directly instead of calling the getter
+					TargetValue? old_field = null;
+					if (prop.field != null && !get_accessor.value_type.is_disposable ()) {
+						old_field = get_field_cvalue (prop.field, new GLibValue (this_type, new CCodeIdentifier ("self"), true));
+					}
+
 					if (property_type is ArrayType && get_ccode_array_length (prop)) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
 						ccode.add_declaration (get_ccode_array_length_type (prop), new CCodeVariableDeclarator ("old_value_length"));
-						get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value_length")));
-						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
+						if (old_field != null) {
+							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_cvalue_ (old_field));
+							ccode.add_assignment (new CCodeIdentifier ("old_value_length"), get_array_length_cvalue (old_field, 1));
+						} else {
+							get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value_length")));
+							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
+						}
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, new CCodeIdentifier ("old_value"), new CCodeIdentifier ("value")));
 					} else if (property_type.compatible (string_type)) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
+						ccode.add_assignment (new CCodeIdentifier ("old_value"), old_field != null ? get_cvalue_ (old_field) : get_call);
 						CCodeFunctionCall ccall;
 						if (context.profile == Profile.POSIX) {
 							cfile.add_include ("string.h");
@@ -2013,7 +2024,9 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, ccall, new CCodeConstant ("0")));
 					} else if (property_type is StructValueType) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						if (property_type.nullable) {
+						if (old_field != null) {
+							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_cvalue_ (old_field));
+						} else if (property_type.nullable) {
 							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
 						} else {
 							get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value")));
@@ -2030,7 +2043,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, ccall, new CCodeConstant ("TRUE")));
 					} else {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
+						ccode.add_assignment (new CCodeIdentifier ("old_value"), old_field != null ? get_cvalue_ (old_field) : get_call);
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, new CCodeIdentifier ("old_value"), new CCodeIdentifier ("value")));
 					}
 
@@ -3319,7 +3332,10 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				creation_call.add_argument (csizeof);
 			} else {
 				cfile.add_include ("glib.h");
-				creation_call = new CCodeFunctionCall (new CCodeIdentifier ("g_new0"));
+				// no need to zero memory that memcpy overwrites completely
+				unowned Struct? vst = value_type.type_symbol as Struct;
+				bool full_copy = vst == null || !vst.is_disposable ();
+				creation_call = new CCodeFunctionCall (new CCodeIdentifier (full_copy ? "g_new" : "g_new0"));
 				creation_call.add_argument (new CCodeIdentifier (get_ccode_name (value_type.type_symbol)));
 				creation_call.add_argument (new CCodeConstant ("1"));
 			}

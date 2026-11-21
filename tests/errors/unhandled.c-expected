@@ -50,7 +50,6 @@ typedef enum  {
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

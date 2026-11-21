@@ -50,7 +50,6 @@ typedef struct _ManamParamSpecFoo ManamParamSpecFoo;
 struct _ManamManam {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	ManamManamPrivate * priv;
 };
 
 struct _ManamManamClass {
@@ -65,7 +64,6 @@ struct _ManamParamSpecManam {
 struct _ManamFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	ManamFooPrivate * priv;
 };
 
 struct _ManamFooClass {

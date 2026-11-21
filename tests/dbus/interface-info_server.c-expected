@@ -55,7 +55,6 @@ static guint test_signals[TEST_NUM_SIGNALS] = {0};
 
 struct _Test {
 	GObject parent_instance;
-	TestPrivate * priv;
 };
 
 struct _TestClass {

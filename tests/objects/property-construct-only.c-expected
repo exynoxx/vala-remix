@@ -111,7 +111,6 @@ struct _FooPrivate {
 
 struct _Bar {
 	Foo parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -133,7 +132,6 @@ struct _FazPrivate {
 
 struct _Baz {
 	Faz parent_instance;
-	BazPrivate * priv;
 };
 
 struct _BazClass {
@@ -236,7 +234,7 @@ foo_set_manam (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = foo_get_manam (self);
+	old_value = self->priv->_manam;
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -449,7 +447,7 @@ faz_set_manam (Faz* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FAZ (self));
-	old_value = faz_get_manam (self);
+	old_value = self->priv->_manam;
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);

@@ -80,7 +80,6 @@ static GParamSpec* manam_properties[MANAM_NUM_PROPERTIES];
 
 struct _Base {
 	GObject parent_instance;
-	BasePrivate * priv;
 };
 
 struct _BaseClass {
@@ -99,7 +98,6 @@ struct _IBarIface {
 
 struct _Manam {
 	Base parent_instance;
-	ManamPrivate * priv;
 };
 
 struct _ManamClass {

@@ -69,7 +69,6 @@ typedef struct _BazMethod2Data BazMethod2Data;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -102,7 +101,6 @@ struct _BarMethod2Data {
 
 struct _Baz {
 	Foo parent_instance;
-	BazPrivate * priv;
 };
 
 struct _BazClass {

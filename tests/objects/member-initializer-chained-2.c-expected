@@ -59,7 +59,6 @@ typedef struct _ParamSpecBar ParamSpecBar;
 
 struct _Foo {
 	GObject parent_instance;
-	FooPrivate * priv;
 };
 
 struct _FooClass {

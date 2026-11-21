@@ -103,7 +103,6 @@ struct _ParamSpecFoo {
 
 struct _Bar {
 	Foo parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -113,7 +112,6 @@ struct _BarClass {
 struct _TestFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	TestFooPrivate * priv;
 	gint instance_field;
 };
 
@@ -129,7 +127,6 @@ struct _ParamSpecTestFoo {
 struct _TestBar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	TestBarPrivate * priv;
 	gint instance_field;
 };
 

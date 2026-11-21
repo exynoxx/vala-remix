@@ -60,7 +60,6 @@ typedef enum  {
 
 struct _Test {
 	GObject parent_instance;
-	TestPrivate * priv;
 };
 
 struct _TestClass {

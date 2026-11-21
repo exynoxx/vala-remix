@@ -44,7 +44,6 @@ typedef struct _ParamSpecClass ParamSpecClass;
 struct _Class {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	ClassPrivate * priv;
 };
 
 struct _ClassClass {

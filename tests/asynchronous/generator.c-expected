@@ -109,7 +109,6 @@ struct _ParamSpecGenerator {
 
 struct _IntGenerator {
 	Generator parent_instance;
-	IntGeneratorPrivate * priv;
 };
 
 struct _IntGeneratorClass {

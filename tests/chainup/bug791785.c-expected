@@ -62,7 +62,6 @@ struct _Foo {
 struct _AbstractBar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	AbstractBarPrivate * priv;
 	Foo foo;
 };
 
@@ -77,7 +76,6 @@ struct _ParamSpecAbstractBar {
 
 struct _Bar {
 	AbstractBar parent_instance;
-	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -120,7 +118,7 @@ Foo*
 foo_dup (const Foo* self)
 {
 	Foo* dup;
-	dup = g_new0 (Foo, 1);
+	dup = g_new (Foo, 1);
 	memcpy (dup, self, sizeof (Foo));
 	return dup;
 }
