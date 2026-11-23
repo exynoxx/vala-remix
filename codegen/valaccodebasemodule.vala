@@ -6297,9 +6297,59 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		}
 	}
 
+	// int64/uint64/double are stored unboxed in a gpointer; that only works when
+	// pointers are 64-bit. valac doesn't know the C target, so make 32-bit
+	// targets fail at C compile time instead of silently truncating.
+	void require_64bit_generic_pointer (DataType actual_type) {
+		unowned Struct? st = actual_type.type_symbol as Struct;
+		if (st == null || actual_type.nullable || !(st.is_subtype_of (int64_type.type_symbol) || st.is_subtype_of (uint64_type.type_symbol) || st.is_subtype_of (double_type.type_symbol))) {
+			return;
+		}
+		if (add_wrapper ("_vala_generic_pointer_64bit_assert")) {
+			var assert_call = new CCodeFunctionCall (new CCodeIdentifier ("G_STATIC_ASSERT"));
+			assert_call.add_argument (new CCodeIdentifier ("sizeof (gpointer) >= 8"));
+			cfile.add_type_declaration (new CCodeExpressionStatement (assert_call));
+		}
+	}
+
+	// static inline gpointer _vala_double_to_pointer (gdouble v) / gdouble _vala_pointer_to_double (gpointer p):
+	// bit-cast through a union (no aliasing UB) and an integer of the same width,
+	// so equal values give equal pointers (no garbage in unused bits)
+	string generate_floating_pointer_function (DataType actual_type, bool to_pointer) {
+		unowned Struct st = (Struct) actual_type.type_symbol;
+		bool is_double = st.is_subtype_of (double_type.type_symbol);
+		string ftype = is_double ? "gdouble" : "gfloat";
+		string utype = is_double ? "guint64" : "guint32";
+		string fname = to_pointer ? "_vala_%s_to_pointer".printf (is_double ? "double" : "float") : "_vala_pointer_to_%s".printf (is_double ? "double" : "float");
+		if (!add_wrapper (fname)) {
+			return fname;
+		}
+
+		var fun = new CCodeFunction (fname, to_pointer ? "gpointer" : ftype);
+		fun.add_parameter (new CCodeParameter ("v", to_pointer ? ftype : "gconstpointer"));
+		fun.modifiers = CCodeModifiers.STATIC | CCodeModifiers.INLINE;
+
+		push_function (fun);
+		var c = new CCodeIdentifier ("c");
+		ccode.add_declaration ("union { %s f; %s u; }".printf (ftype, utype), new CCodeVariableDeclarator ("c"));
+		if (to_pointer) {
+			ccode.add_assignment (new CCodeMemberAccess (c, "f"), new CCodeIdentifier ("v"));
+			ccode.add_return (new CCodeCastExpression (new CCodeCastExpression (new CCodeMemberAccess (c, "u"), "guintptr"), "gpointer"));
+		} else {
+			ccode.add_assignment (new CCodeMemberAccess (c, "u"), new CCodeCastExpression (new CCodeCastExpression (new CCodeIdentifier ("v"), "guintptr"), utype));
+			ccode.add_return (new CCodeMemberAccess (c, "f"));
+		}
+		pop_function ();
+
+		cfile.add_function_declaration (fun);
+		cfile.add_function (fun);
+		return fname;
+	}
+
 	public CCodeExpression convert_from_generic_pointer (CCodeExpression cexpr, DataType actual_type) {
 		unowned SemanticAnalyzer analyzer = context.analyzer;
 		var result = cexpr;
+		require_64bit_generic_pointer (actual_type);
 		if (analyzer.is_reference_type_argument (actual_type) || analyzer.is_nullable_value_type_argument (actual_type)) {
 			generate_type_declaration (actual_type, cfile);
 			result = new CCodeCastExpression (cexpr, get_ccode_name (actual_type));
@@ -6315,6 +6365,10 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				cexpr = ((CCodeCastExpression) cexpr).inner;
 			}
 			result = new CCodeCastExpression (new CCodeCastExpression (cexpr, "guintptr"), get_ccode_name (actual_type));
+		} else if (analyzer.is_floating_type_argument (actual_type)) {
+			var ccall = new CCodeFunctionCall (new CCodeIdentifier (generate_floating_pointer_function (actual_type, false)));
+			ccall.add_argument (cexpr);
+			result = new CCodeCastExpression (ccall, get_ccode_name (actual_type));
 		}
 		return result;
 	}
@@ -6322,6 +6376,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 	public CCodeExpression convert_to_generic_pointer (CCodeExpression cexpr, DataType actual_type) {
 		unowned SemanticAnalyzer analyzer = context.analyzer;
 		var result = cexpr;
+		require_64bit_generic_pointer (actual_type);
 		if (analyzer.is_signed_integer_type_argument (actual_type)) {
 			// FIXME this should not happen
 			while (cexpr is CCodeCastExpression) {
@@ -6334,6 +6389,10 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				cexpr = ((CCodeCastExpression) cexpr).inner;
 			}
 			result = new CCodeCastExpression (new CCodeCastExpression (cexpr, "guintptr"), get_ccode_name (pointer_type));
+		} else if (analyzer.is_floating_type_argument (actual_type)) {
+			var ccall = new CCodeFunctionCall (new CCodeIdentifier (generate_floating_pointer_function (actual_type, true)));
+			ccall.add_argument (cexpr);
+			result = ccall;
 		}
 		return result;
 	}

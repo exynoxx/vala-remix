@@ -148,6 +148,9 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 	public DataType uint16_type;
 	public DataType int32_type;
 	public DataType uint32_type;
+	public DataType int64_type;
+	public DataType uint64_type;
+	public DataType float_type;
 	public DataType size_t_type;
 	public DataType ssize_t_type;
 	public DataType unichar_type;
@@ -207,6 +210,9 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 		uint16_type = new IntegerType ((Struct) root_symbol.scope.lookup ("uint16"));
 		int32_type = new IntegerType ((Struct) root_symbol.scope.lookup ("int32"));
 		uint32_type = new IntegerType ((Struct) root_symbol.scope.lookup ("uint32"));
+		int64_type = new IntegerType ((Struct) root_symbol.scope.lookup ("int64"));
+		uint64_type = new IntegerType ((Struct) root_symbol.scope.lookup ("uint64"));
+		float_type = new FloatingType ((Struct) root_symbol.scope.lookup ("float"));
 		size_t_type = new IntegerType ((Struct) root_symbol.scope.lookup ("size_t"));
 		ssize_t_type = new IntegerType ((Struct) root_symbol.scope.lookup ("ssize_t"));
 		double_type = new FloatingType ((Struct) root_symbol.scope.lookup ("double"));
@@ -1276,6 +1282,9 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 			return true;
 		} else if (st.is_subtype_of (int32_type.type_symbol)) {
 			return true;
+		} else if (st.is_subtype_of (int64_type.type_symbol)) {
+			// requires sizeof (gpointer) >= 8, enforced by a static assert in the generated C
+			return true;
 		} else if (st.is_subtype_of (type_type.type_symbol)) {
 			return true;
 		} else {
@@ -1303,9 +1312,21 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 			return true;
 		} else if (st.is_subtype_of (uint32_type.type_symbol)) {
 			return true;
+		} else if (st.is_subtype_of (uint64_type.type_symbol)) {
+			// requires sizeof (gpointer) >= 8, enforced by a static assert in the generated C
+			return true;
 		} else {
 			return false;
 		}
+	}
+
+	// float/double stored bit-cast in a gpointer; double requires sizeof (gpointer) >= 8
+	public bool is_floating_type_argument (DataType type_arg) {
+		unowned Struct? st = type_arg.type_symbol as Struct;
+		if (st == null || type_arg.nullable) {
+			return false;
+		}
+		return st.is_subtype_of (double_type.type_symbol) || st.is_subtype_of (float_type.type_symbol);
 	}
 
 	public void check_type (DataType type) {
@@ -1336,7 +1357,8 @@ public class Vala.SemanticAnalyzer : CodeVisitor {
 		    || is_reference_type_argument (type_arg)
 		    || is_nullable_value_type_argument (type_arg)
 		    || is_signed_integer_type_argument (type_arg)
-		    || is_unsigned_integer_type_argument (type_arg)) {
+		    || is_unsigned_integer_type_argument (type_arg)
+		    || is_floating_type_argument (type_arg)) {
 			// no error
 		} else if (type_arg is DelegateType) {
 			var delegate_type = (DelegateType) type_arg;
