@@ -70,6 +70,7 @@ struct _IFooIface {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -87,6 +88,7 @@ struct _ParamSpecFoo {
 
 struct _Bar {
 	Foo parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {

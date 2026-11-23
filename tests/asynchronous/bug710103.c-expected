@@ -59,6 +59,7 @@ struct _Block1Data {
 
 struct _Foo {
 	GObject parent_instance;
+	FooPrivate * priv;
 	gint manam;
 };
 

@@ -165,7 +165,7 @@ static gint64*
 _int64_dup (gint64* self)
 {
 	gint64* dup;
-	dup = g_new (gint64, 1);
+	dup = g_new0 (gint64, 1);
 	memcpy (dup, self, sizeof (gint64));
 	return dup;
 }
@@ -180,7 +180,7 @@ static guint64*
 _uint64_dup (guint64* self)
 {
 	guint64* dup;
-	dup = g_new (guint64, 1);
+	dup = g_new0 (guint64, 1);
 	memcpy (dup, self, sizeof (guint64));
 	return dup;
 }
@@ -195,7 +195,7 @@ static gint*
 _int_dup (gint* self)
 {
 	gint* dup;
-	dup = g_new (gint, 1);
+	dup = g_new0 (gint, 1);
 	memcpy (dup, self, sizeof (gint));
 	return dup;
 }
@@ -210,7 +210,7 @@ static guint*
 _uint_dup (guint* self)
 {
 	guint* dup;
-	dup = g_new (guint, 1);
+	dup = g_new0 (guint, 1);
 	memcpy (dup, self, sizeof (guint));
 	return dup;
 }

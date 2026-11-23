@@ -31,6 +31,7 @@ static GParamSpec* bar_properties[BAR_NUM_PROPERTIES];
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -45,6 +46,7 @@ struct _ParamSpecFoo {
 
 struct _Bar {
 	GObject parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {

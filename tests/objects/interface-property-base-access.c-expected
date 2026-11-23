@@ -99,6 +99,7 @@ struct _ParamSpecBar {
 
 struct _Foo {
 	Bar parent_instance;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -158,7 +159,7 @@ Manam*
 manam_dup (const Manam* self)
 {
 	Manam* dup;
-	dup = g_new (Manam, 1);
+	dup = g_new0 (Manam, 1);
 	memcpy (dup, self, sizeof (Manam));
 	return dup;
 }

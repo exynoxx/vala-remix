@@ -43,6 +43,7 @@ static GParamSpec* test_properties[TEST_NUM_PROPERTIES];
 
 struct _Test {
 	GObject parent_instance;
+	TestPrivate * priv;
 };
 
 struct _TestClass {

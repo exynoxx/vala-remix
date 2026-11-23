@@ -118,6 +118,7 @@ struct _IBarIface {
 
 struct _Bar {
 	GObject parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -126,6 +127,7 @@ struct _BarClass {
 
 struct _Baz {
 	GObject parent_instance;
+	BazPrivate * priv;
 };
 
 struct _BazClass {
@@ -134,6 +136,7 @@ struct _BazClass {
 
 struct _Foo {
 	Bar parent_instance;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -142,6 +145,7 @@ struct _FooClass {
 
 struct _Faz {
 	Baz parent_instance;
+	FazPrivate * priv;
 };
 
 struct _FazClass {

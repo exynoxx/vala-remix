@@ -74,6 +74,7 @@ struct _IFooIface {
 
 struct _Foo {
 	GObject parent_instance;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -82,6 +83,7 @@ struct _FooClass {
 
 struct _Bar {
 	GObject parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {

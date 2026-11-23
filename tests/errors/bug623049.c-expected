@@ -64,6 +64,7 @@ typedef enum  {
 
 struct _ClsA {
 	GObject parent_instance;
+	ClsAPrivate * priv;
 };
 
 struct _ClsAClass {
@@ -72,6 +73,7 @@ struct _ClsAClass {
 
 struct _ClsB {
 	ClsA parent_instance;
+	ClsBPrivate * priv;
 };
 
 struct _ClsBClass {

@@ -50,6 +50,7 @@ static guint foo_signals[FOO_NUM_SIGNALS] = {0};
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {

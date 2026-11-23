@@ -166,7 +166,7 @@ MamanDelegateStruct*
 maman_delegate_struct_dup (const MamanDelegateStruct* self)
 {
 	MamanDelegateStruct* dup;
-	dup = g_new (MamanDelegateStruct, 1);
+	dup = g_new0 (MamanDelegateStruct, 1);
 	memcpy (dup, self, sizeof (MamanDelegateStruct));
 	return dup;
 }

@@ -45,6 +45,7 @@ static GParamSpec* baz_properties[BAZ_NUM_PROPERTIES];
 
 struct _Baz {
 	GObject parent_instance;
+	BazPrivate * priv;
 };
 
 struct _BazClass {

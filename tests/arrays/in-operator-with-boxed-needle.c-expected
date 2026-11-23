@@ -43,7 +43,7 @@ static gint*
 _int_dup (gint* self)
 {
 	gint* dup;
-	dup = g_new (gint, 1);
+	dup = g_new0 (gint, 1);
 	memcpy (dup, self, sizeof (gint));
 	return dup;
 }

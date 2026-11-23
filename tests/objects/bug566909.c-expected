@@ -54,6 +54,7 @@ typedef struct _Block1Data Block1Data;
 
 struct _MamanFoo {
 	GObject parent_instance;
+	MamanFooPrivate * priv;
 };
 
 struct _MamanFooClass {

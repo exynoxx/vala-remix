@@ -127,6 +127,7 @@ struct _Iface2Iface {
 
 struct _Obj1 {
 	GObject parent_instance;
+	Obj1Private * priv;
 };
 
 struct _Obj1Class {
@@ -135,6 +136,7 @@ struct _Obj1Class {
 
 struct _Obj2 {
 	GObject parent_instance;
+	Obj2Private * priv;
 };
 
 struct _Obj2Class {
@@ -143,6 +145,7 @@ struct _Obj2Class {
 
 struct _Base {
 	GObject parent_instance;
+	BasePrivate * priv;
 };
 
 struct _BaseClass {
@@ -156,6 +159,7 @@ struct _IfaceIface {
 
 struct _Concrete {
 	Base parent_instance;
+	ConcretePrivate * priv;
 };
 
 struct _ConcreteClass {

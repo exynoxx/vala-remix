@@ -45,6 +45,7 @@ typedef enum  {
 } Bar;
 
 #define TYPE_BAR (bar_get_type ())
+#define _g_free0(var) (var = (g_free (var), NULL))
 #define _g_type_class_unref0(var) ((var == NULL) ? NULL : (var = (g_type_class_unref (var), NULL)))
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
@@ -87,7 +88,6 @@ static void _vala_foo_set_property (GObject * object,
                              GParamSpec * pspec);
 VALA_EXTERN GType bar_get_type (void);
 static void _vala_main (void);
-static const char* _bar_to_string (Bar value);
 
 static inline gpointer
 foo_get_instance_private (Foo* self)
@@ -124,7 +124,7 @@ foo_set_foo (Foo* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_foo;
+	old_value = foo_get_foo (self);
 	if (old_value != value) {
 		self->priv->_foo = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_FOO_PROPERTY]);
@@ -237,16 +237,6 @@ bar_get_type (void)
 	return bar_type_id__once;
 }
 
-static const char*
-_bar_to_string (Bar value)
-{
-	switch (value) {
-		case BAR_FOO:
-		return "BAR_FOO";
-	}
-	return NULL;
-}
-
 static void
 _vala_main (void)
 {
@@ -263,7 +253,7 @@ _vala_main (void)
 	gint _tmp5__length1;
 	GTypeClass* _tmp12_;
 	GEnumClass* _tmp13_;
-	const gchar* _tmp14_;
+	gchar* _tmp14_;
 	const gchar* _tmp15_;
 	_tmp0_ = foo_new ();
 	foo = _tmp0_;
@@ -306,9 +296,10 @@ _vala_main (void)
 	}
 	_tmp12_ = g_type_class_ref (TYPE_BAR);
 	_tmp13_ = (GEnumClass*) _tmp12_;
-	_tmp14_ = _bar_to_string (BAR_FOO);
+	_tmp14_ = g_enum_to_string (TYPE_BAR, BAR_FOO);
 	_tmp15_ = (*g_enum_get_value_by_name (_tmp13_, _tmp14_)).value_nick;
 	_vala_assert (g_strcmp0 (_tmp15_, "foo's nick") == 0, "((EnumClass) typeof (Bar).class_ref ()).get_value_by_name (Bar.FOO.to_string ()).value_nick == \"foo's nick\"");
+	_g_free0 (_tmp14_);
 	_g_type_class_unref0 (_tmp13_);
 	properties = (g_free (properties), NULL);
 	_g_object_unref0 (foo);

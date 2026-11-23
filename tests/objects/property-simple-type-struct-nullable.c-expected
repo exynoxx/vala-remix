@@ -100,7 +100,7 @@ static gboolean*
 _bool_dup (gboolean* self)
 {
 	gboolean* dup;
-	dup = g_new (gboolean, 1);
+	dup = g_new0 (gboolean, 1);
 	memcpy (dup, self, sizeof (gboolean));
 	return dup;
 }

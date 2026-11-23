@@ -66,6 +66,7 @@ struct _Bar {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -177,7 +178,7 @@ Bar*
 bar_dup (const Bar* self)
 {
 	Bar* dup;
-	dup = g_new (Bar, 1);
+	dup = g_new0 (Bar, 1);
 	memcpy (dup, self, sizeof (Bar));
 	return dup;
 }

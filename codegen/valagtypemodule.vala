@@ -289,7 +289,7 @@ public class Vala.GTypeModule : GErrorModule {
 		if (is_gtypeinstance) {
 			decl_space.add_type_declaration (new CCodeTypeDefinition ("struct %sPrivate".printf (instance_struct.name), new CCodeVariableDeclarator ("%sPrivate".printf (get_ccode_name (cl)))));
 
-			if (!context.abi_stability && class_has_instance_private (context, cl)) {
+			if (!context.abi_stability) {
 				instance_struct.add_field ("%sPrivate *".printf (get_ccode_name (cl)), "priv");
 			}
 			if (is_fundamental) {
@@ -369,27 +369,6 @@ public class Vala.GTypeModule : GErrorModule {
 			}
 			decl_space.add_type_definition (type_struct);
 		}
-	}
-
-	// Whether instances need a priv pointer. Without --abi-stability it is
-	// omitted for classes without private data, unless fast vapis are used
-	// (they hide private members, so other units could not tell).
-	public static bool class_has_instance_private (CodeContext context, Class cl) {
-		if (cl.has_private_fields || cl.has_type_parameters () || context.use_fast_vapi) {
-			return true;
-		}
-		// lock members get a mutex in the private struct
-		foreach (Field f in cl.get_fields ()) {
-			if (f.binding == MemberBinding.INSTANCE && f.lock_used) {
-				return true;
-			}
-		}
-		foreach (Property prop in cl.get_properties ()) {
-			if (prop.binding == MemberBinding.INSTANCE && prop.lock_used) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	bool compact_class_has_instance_struct_member (Class cl) {
@@ -2447,14 +2426,7 @@ public class Vala.GTypeModule : GErrorModule {
 		}
 		// to_string() on a gtype enum
 
-		unowned Enum en = (Enum) ((EnumValueType) ma.inner.value_type).type_symbol;
-		bool is_flags = en.is_flags;
-		if (!is_flags && enum_values_are_distinct (en)) {
-			// static switch helper, returns unowned name without allocating;
-			// unlike g_enum_to_string, out-of-range values yield null
-			base.visit_method_call (expr);
-			return;
-		}
+		bool is_flags = ((Enum) ((EnumValueType) ma.inner.value_type).type_symbol).is_flags;
 
 		push_line (expr.source_reference);
 		var to_string = new CCodeFunctionCall (new CCodeIdentifier ((is_flags ? "g_flags_to_string" : "g_enum_to_string")));
@@ -2463,30 +2435,6 @@ public class Vala.GTypeModule : GErrorModule {
 		expr.value_type.value_owned = true;
 		set_cvalue (expr, to_string);
 		pop_line ();
-	}
-
-	// Whether a C switch over the enum values compiles, i.e. values are known
-	// integer literals or implicit and contain no aliases.
-	static bool enum_values_are_distinct (Enum en) {
-		if (en.external_package) {
-			return false;
-		}
-		var seen = new HashSet<string> (str_hash, str_equal);
-		int64 next = 0;
-		foreach (var ev in en.get_values ()) {
-			int64 v = next;
-			if (ev.value != null) {
-				unowned IntegerLiteral? lit = ev.value as IntegerLiteral;
-				if (lit == null || !int64.try_parse (lit.value, out v)) {
-					return false;
-				}
-			}
-			if (!seen.add (v.to_string ())) {
-				return false;
-			}
-			next = v + 1;
-		}
-		return true;
 	}
 
 	public override void visit_property (Property prop) {

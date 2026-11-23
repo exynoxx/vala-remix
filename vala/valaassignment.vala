@@ -272,13 +272,6 @@ public class Vala.Assignment : Expression {
 			transform_assignment = !array_type.element_type.is_non_null_simple_type ();
 		}
 
-		if (is_string_append (context)) {
-			// appended in place, see CCodeAssignmentModule
-			right.target_type = left.value_type.copy ();
-			right.target_type.value_owned = false;
-			transform_assignment = false;
-		}
-
 		if ((operator != AssignmentOperator.SIMPLE) && transform_assignment) {
 			// transform into simple assignment
 			// FIXME: only do this if the backend doesn't support
@@ -459,22 +452,6 @@ public class Vala.Assignment : Expression {
 		}
 
 		return !error;
-	}
-
-	// `s += expr` for an owned string variable or field
-	bool is_string_append (CodeContext context) {
-		unowned MemberAccess? ma = left as MemberAccess;
-		if (operator != AssignmentOperator.ADD || ma == null || context.profile == Profile.POSIX
-		    || !(ma.symbol_reference is LocalVariable || ma.symbol_reference is Field)
-		    || (ma.inner != null && !ma.inner.is_pure ())) {
-			return false;
-		}
-		unowned MemberAccess? right_ma = right as MemberAccess;
-		return left.value_type != null && left.value_type.value_owned
-		    && left.value_type.type_symbol == context.analyzer.string_type.type_symbol
-		    && right.value_type != null && right.value_type.compatible (context.analyzer.string_type)
-		    && !(right is NullLiteral)
-		    && (right_ma == null || right_ma.symbol_reference != ma.symbol_reference);
 	}
 
 	bool is_array_add () {

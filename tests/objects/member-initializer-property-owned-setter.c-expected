@@ -65,6 +65,7 @@ static GParamSpec* foo_properties[FOO_NUM_PROPERTIES];
 
 struct _Bar {
 	GObject parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -225,8 +226,7 @@ foo_set_faz (Foo* self,
 	gchar** old_value;
 	gint old_value_length;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_faz;
-	old_value_length = self->priv->_faz_length1;
+	old_value = foo_get_faz (self, &old_value_length);
 	if (old_value != value) {
 		gchar** _tmp0_;
 		gint _tmp0__length1;
@@ -260,7 +260,7 @@ foo_set_bar (Foo* self,
 {
 	Bar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_bar;
+	old_value = foo_get_bar (self);
 	if (old_value != value) {
 		Bar* _tmp0_;
 		_tmp0_ = value;

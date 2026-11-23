@@ -66,6 +66,7 @@ static GParamSpec* bar_properties[BAR_NUM_PROPERTIES];
 
 struct _Foo {
 	GObject parent_instance;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -75,6 +76,7 @@ struct _FooClass {
 
 struct _Bar {
 	Foo parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {

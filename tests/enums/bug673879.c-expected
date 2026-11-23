@@ -63,7 +63,7 @@ static Test*
 _test_dup (Test* self)
 {
 	Test* dup;
-	dup = g_new (Test, 1);
+	dup = g_new0 (Test, 1);
 	memcpy (dup, self, sizeof (Test));
 	return dup;
 }

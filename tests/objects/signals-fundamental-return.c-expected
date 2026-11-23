@@ -81,6 +81,7 @@ static guint foo_signals[FOO_NUM_SIGNALS] = {0};
 struct _Maman {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	MamanPrivate * priv;
 };
 
 struct _MamanClass {
@@ -98,6 +99,7 @@ struct _IBarIface {
 
 struct _Bar {
 	Maman parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -107,6 +109,7 @@ struct _BarClass {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {

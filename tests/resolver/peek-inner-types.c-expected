@@ -100,6 +100,7 @@ typedef struct _ManamPrivate ManamPrivate;
 struct _BazFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BazFooPrivate * priv;
 };
 
 struct _BazFooClass {
@@ -110,6 +111,7 @@ struct _BazFooClass {
 struct _BazFooBar1 {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BazFooBar1Private * priv;
 };
 
 struct _BazFooBar1Class {
@@ -136,6 +138,7 @@ struct _BazIFooIface {
 struct _BazIFooBar2 {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BazIFooBar2Private * priv;
 };
 
 struct _BazIFooBar2Class {
@@ -153,6 +156,7 @@ struct _BazIFooIBar2Iface {
 
 struct _Manam {
 	BazFoo parent_instance;
+	ManamPrivate * priv;
 };
 
 struct _ManamClass {

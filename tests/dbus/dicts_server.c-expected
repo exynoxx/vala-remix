@@ -80,6 +80,7 @@ static GParamSpec* test_interface_foo_properties[TEST_INTERFACE_FOO_NUM_PROPERTI
 
 struct _Test {
 	GObject parent_instance;
+	TestPrivate * priv;
 };
 
 struct _TestClass {
@@ -93,6 +94,7 @@ struct _TestInterfaceBarIface {
 
 struct _TestInterfaceFoo {
 	GDBusProxy parent_instance;
+	TestInterfaceFooPrivate * priv;
 };
 
 struct _TestInterfaceFooClass {

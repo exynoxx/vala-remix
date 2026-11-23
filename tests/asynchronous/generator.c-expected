@@ -109,6 +109,7 @@ struct _ParamSpecGenerator {
 
 struct _IntGenerator {
 	Generator parent_instance;
+	IntGeneratorPrivate * priv;
 };
 
 struct _IntGeneratorClass {
@@ -190,8 +191,6 @@ VALA_EXTERN IntGenerator* int_generator_new (void);
 VALA_EXTERN IntGenerator* int_generator_construct (GType object_type);
 static GType int_generator_get_type_once (void);
 static void _vala_main (void);
-static gchar* _vala_string_append (gchar* self,
-                            const gchar* s);
 
 static inline gpointer
 generator_get_instance_private (Generator* self)
@@ -794,28 +793,6 @@ int_generator_get_type (void)
 	return int_generator_type_id__once;
 }
 
-static gchar*
-_vala_string_append (gchar* self,
-                     const gchar* s)
-{
-	gsize len;
-	gsize slen;
-	if ((self == NULL) || (s == NULL)) {
-		return self;
-	}
-	len = strlen (self);
-	slen = strlen (s);
-	if ((s >= self) && (s <= (self + len))) {
-		gchar* r;
-		r = g_strconcat (self, s, NULL);
-		g_free (self);
-		return r;
-	}
-	self = g_realloc (self, len + (slen + 1));
-	memcpy (self + len, s, slen + 1);
-	return self;
-}
-
 static void
 _vala_main (void)
 {
@@ -823,7 +800,7 @@ _vala_main (void)
 	IntGenerator* _tmp0_;
 	gchar* _result_ = NULL;
 	gchar* _tmp1_;
-	const gchar* _tmp9_;
+	const gchar* _tmp11_;
 	_tmp0_ = int_generator_new ();
 	gen = _tmp0_;
 	_tmp1_ = g_strdup ("");
@@ -840,8 +817,10 @@ _vala_main (void)
 			gint item = 0;
 			Generator* _tmp5_;
 			gpointer _tmp6_;
-			gchar* _tmp7_;
+			const gchar* _tmp7_;
 			gchar* _tmp8_;
+			gchar* _tmp9_;
+			gchar* _tmp10_;
 			_tmp4_ = _item_it;
 			if (!generator_next (_tmp4_)) {
 				break;
@@ -849,15 +828,18 @@ _vala_main (void)
 			_tmp5_ = _item_it;
 			_tmp6_ = generator_get (_tmp5_);
 			item = (gint) ((gintptr) _tmp6_);
-			_tmp7_ = g_strdup_printf ("%i ", item);
-			_tmp8_ = _tmp7_;
-			_result_ = _vala_string_append (_result_, _tmp8_);
-			_g_free0 (_tmp8_);
+			_tmp7_ = _result_;
+			_tmp8_ = g_strdup_printf ("%i ", item);
+			_tmp9_ = _tmp8_;
+			_tmp10_ = g_strconcat (_tmp7_, _tmp9_, NULL);
+			_g_free0 (_result_);
+			_result_ = _tmp10_;
+			_g_free0 (_tmp9_);
 		}
 		_generator_unref0 (_item_it);
 	}
-	_tmp9_ = _result_;
-	_vala_assert (g_strcmp0 (_tmp9_, "0 2 4 6 8 ") == 0, "result == \"0 2 4 6 8 \"");
+	_tmp11_ = _result_;
+	_vala_assert (g_strcmp0 (_tmp11_, "0 2 4 6 8 ") == 0, "result == \"0 2 4 6 8 \"");
 	_g_free0 (_result_);
 	_generator_unref0 (gen);
 }

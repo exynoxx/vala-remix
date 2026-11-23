@@ -312,7 +312,7 @@ manam_real_set_faz (Manam* base,
 	Manam* self;
 	Foo old_value;
 	self = base;
-	old_value = self->priv->_faz;
+	manam_real_get_faz (base, &old_value);
 	if (_foo_equal (value, &old_value) != TRUE) {
 		Foo _tmp0_;
 		Foo _tmp1_;
@@ -551,7 +551,7 @@ bar_set_foo (Bar* self,
 {
 	Foo old_value;
 	g_return_if_fail (IS_BAR (self));
-	old_value = self->priv->_foo;
+	bar_get_foo (self, &old_value);
 	if (_foo_equal (value, &old_value) != TRUE) {
 		Foo _tmp0_;
 		Foo _tmp1_;

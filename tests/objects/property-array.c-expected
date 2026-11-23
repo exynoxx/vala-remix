@@ -231,7 +231,7 @@ Manam*
 manam_dup (const Manam* self)
 {
 	Manam* dup;
-	dup = g_new (Manam, 1);
+	dup = g_new0 (Manam, 1);
 	memcpy (dup, self, sizeof (Manam));
 	return dup;
 }
@@ -925,7 +925,7 @@ bar_set_array (Bar* self,
 {
 	Manam** old_value;
 	g_return_if_fail (IS_BAR (self));
-	old_value = self->priv->_array;
+	old_value = bar_get_array (self);
 	if (old_value != value) {
 		Manam** _tmp0_;
 		gint _tmp0__length1;
@@ -1000,7 +1000,7 @@ bar_real_set_array_v (Bar* base,
 	Bar* self;
 	Manam** old_value;
 	self = base;
-	old_value = self->priv->_array_v;
+	old_value = bar_real_get_array_v (base);
 	if (old_value != value) {
 		Manam** _tmp0_;
 		gint _tmp0__length1;
@@ -1049,7 +1049,7 @@ bar_set_strv (Bar* self,
 {
 	gchar** old_value;
 	g_return_if_fail (IS_BAR (self));
-	old_value = self->priv->_strv;
+	old_value = bar_get_strv (self);
 	if (old_value != value) {
 		gchar** _tmp0_;
 		gint _tmp0__length1;
@@ -1124,7 +1124,7 @@ bar_real_set_strv_v (Bar* base,
 	Bar* self;
 	gchar** old_value;
 	self = base;
-	old_value = self->priv->_strv_v;
+	old_value = bar_real_get_strv_v (base);
 	if (old_value != value) {
 		gchar** _tmp0_;
 		gint _tmp0__length1;

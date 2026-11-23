@@ -72,6 +72,7 @@ struct _MamanIbazIface {
 
 struct _MamanBaz {
 	GObject parent_instance;
+	MamanBazPrivate * priv;
 };
 
 struct _MamanBazClass {
@@ -81,6 +82,7 @@ struct _MamanBazClass {
 
 struct _MamanSubBaz {
 	MamanBaz parent_instance;
+	MamanSubBazPrivate * priv;
 };
 
 struct _MamanSubBazClass {

@@ -71,7 +71,6 @@ TESTS = \
 	basic-types/default-gtype.vala \
 	basic-types/strings.vala \
 	basic-types/string-array-append.vala \
-	basic-types/string-concat-chain.vala \
 	basic-types/string-concat-null.test \
 	basic-types/string-relation.vala \
 	basic-types/arrays.vala \
@@ -394,7 +393,6 @@ TESTS = \
 	enums/in-invalid.test \
 	enums/no_gtype_to_string.vala \
 	enums/switch.vala \
-	enums/enum-to-string-switch.vala \
 	enums/unsafe-assignment.vala \
 	enums/bug614424.vala \
 	enums/bug666035.vala \
@@ -590,8 +588,6 @@ TESTS = \
 	objects/property-error.vala \
 	objects/property-notify.vala \
 	objects/property-notify-owned-getter.vala \
-	objects/property-notify-auto-field.vala \
-	objects/class-private-hierarchy.vala \
 	objects/property-owned-simple-type.test \
 	objects/property-ownership.vala \
 	objects/property-read-only-auto.vala \
@@ -815,7 +811,6 @@ TESTS = \
 	asynchronous/out-parameter-invalid.test \
 	asynchronous/params-array-invalid.test \
 	asynchronous/result-pos.vala \
-	asynchronous/temps-local.vala \
 	asynchronous/variadic-invalid.test \
 	asynchronous/variadic-invalid-2.test \
 	asynchronous/yield.vala \

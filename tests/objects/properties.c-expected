@@ -256,6 +256,7 @@ struct _MamanFooPrivate {
 struct _MamanEnumDefault {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	MamanEnumDefaultPrivate * priv;
 };
 
 struct _MamanEnumDefaultClass {
@@ -284,6 +285,7 @@ struct _MamanBarPrivate {
 
 struct _MamanBaz {
 	GObject parent_instance;
+	MamanBazPrivate * priv;
 };
 
 struct _MamanBazClass {
@@ -518,7 +520,7 @@ RealStruct*
 real_struct_dup (const RealStruct* self)
 {
 	RealStruct* dup;
-	dup = g_new (RealStruct, 1);
+	dup = g_new0 (RealStruct, 1);
 	memcpy (dup, self, sizeof (RealStruct));
 	return dup;
 }
@@ -605,7 +607,7 @@ non_priv_access_set_real_struct (NonPrivAccess* self,
 {
 	RealStruct old_value;
 	g_return_if_fail (IS_NON_PRIV_ACCESS (self));
-	old_value = self->priv->_real_struct;
+	non_priv_access_get_real_struct (self, &old_value);
 	if (_real_struct_equal (value, &old_value) != TRUE) {
 		RealStruct _tmp0_;
 		_tmp0_ = *value;
@@ -910,7 +912,7 @@ sample_set_deleg (Sample* self,
 {
 	Delegate old_value;
 	g_return_if_fail (IS_SAMPLE (self));
-	old_value = self->priv->_deleg;
+	old_value = sample_get_deleg (self);
 	if (old_value != value) {
 		Delegate _tmp0_;
 		_tmp0_ = value;
@@ -969,7 +971,7 @@ sample_set_public_prop (Sample* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_SAMPLE (self));
-	old_value = self->priv->_public_prop;
+	old_value = sample_get_public_prop (self);
 	if (old_value != value) {
 		self->priv->_public_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, sample_properties[SAMPLE_PUBLIC_PROP_PROPERTY]);
@@ -1606,7 +1608,7 @@ maman_bar_set_public_property (MamanBar* self,
 {
 	gint old_value;
 	g_return_if_fail (MAMAN_IS_BAR (self));
-	old_value = self->priv->_public_property;
+	old_value = maman_bar_get_public_property (self);
 	if (old_value != value) {
 		self->priv->_public_property = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_bar_properties[MAMAN_BAR_PUBLIC_PROPERTY_PROPERTY]);
@@ -1630,7 +1632,7 @@ maman_bar_real_set_abstract_base_property (MamanFoo* base,
 	MamanBar* self;
 	gint old_value;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_TYPE_BAR, MamanBar);
-	old_value = self->priv->_abstract_base_property;
+	old_value = maman_bar_real_get_abstract_base_property (base);
 	if (old_value != value) {
 		self->priv->_abstract_base_property = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_bar_properties[MAMAN_BAR_ABSTRACT_BASE_PROPERTY_PROPERTY]);
@@ -1959,7 +1961,7 @@ maman_abiz_real_set_number (MamanIBiz* base,
 	MamanABiz* self;
 	gint old_value;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_TYPE_ABIZ, MamanABiz);
-	old_value = self->priv->_number;
+	old_value = maman_abiz_real_get_number (base);
 	if (old_value != value) {
 		self->priv->_number = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_abiz_properties[MAMAN_ABIZ_NUMBER_PROPERTY]);
@@ -2124,7 +2126,7 @@ maman_biz_real_set_number2 (MamanABiz* base,
 	MamanBiz* self;
 	gint old_value;
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, MAMAN_TYPE_BIZ, MamanBiz);
-	old_value = self->priv->_number2;
+	old_value = maman_biz_real_get_number2 (base);
 	if (old_value != value) {
 		self->priv->_number2 = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_biz_properties[MAMAN_BIZ_NUMBER2_PROPERTY]);

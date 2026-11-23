@@ -395,7 +395,7 @@ foo_set_p0 (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_p0;
+	old_value = foo_get_p0 (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -422,7 +422,7 @@ foo_set_p1 (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_p1;
+	old_value = foo_get_p1 (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -449,7 +449,7 @@ foo_set_p2 (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_p2;
+	old_value = foo_get_p2 (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);

@@ -135,6 +135,7 @@ struct _FooPrivate {
 
 struct _Bar {
 	Foo parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -143,6 +144,7 @@ struct _BarClass {
 
 struct _Baz {
 	BaseFoo parent_instance;
+	BazPrivate * priv;
 };
 
 struct _BazClass {
@@ -229,7 +231,7 @@ Manam*
 manam_dup (const Manam* self)
 {
 	Manam* dup;
-	dup = g_new (Manam, 1);
+	dup = g_new0 (Manam, 1);
 	memcpy (dup, self, sizeof (Manam));
 	return dup;
 }
@@ -343,7 +345,7 @@ base_foo_real_set_st (BaseFoo* base,
 	BaseFoo* self;
 	Manam old_value;
 	self = base;
-	old_value = self->priv->_st;
+	base_foo_real_get_st (base, &old_value);
 	if (_manam_equal (value, &old_value) != TRUE) {
 		Manam _tmp0_;
 		_tmp0_ = *value;
@@ -507,7 +509,7 @@ foo_real_set_st (Foo* base,
 	Foo* self;
 	Manam old_value;
 	self = base;
-	old_value = self->priv->_st;
+	foo_real_get_st (base, &old_value);
 	if (_manam_equal (value, &old_value) != TRUE) {
 		Manam _tmp0_;
 		_tmp0_ = *value;

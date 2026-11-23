@@ -107,7 +107,7 @@ SimpleStruct*
 simple_struct_dup (const SimpleStruct* self)
 {
 	SimpleStruct* dup;
-	dup = g_new (SimpleStruct, 1);
+	dup = g_new0 (SimpleStruct, 1);
 	memcpy (dup, self, sizeof (SimpleStruct));
 	return dup;
 }
@@ -142,7 +142,7 @@ PublicStruct*
 public_struct_dup (const PublicStruct* self)
 {
 	PublicStruct* dup;
-	dup = g_new (PublicStruct, 1);
+	dup = g_new0 (PublicStruct, 1);
 	memcpy (dup, self, sizeof (PublicStruct));
 	return dup;
 }
@@ -186,7 +186,7 @@ StructWithCreationMethod*
 struct_with_creation_method_dup (const StructWithCreationMethod* self)
 {
 	StructWithCreationMethod* dup;
-	dup = g_new (StructWithCreationMethod, 1);
+	dup = g_new0 (StructWithCreationMethod, 1);
 	memcpy (dup, self, sizeof (StructWithCreationMethod));
 	return dup;
 }
@@ -230,7 +230,7 @@ StructWithNamedCreationMethod*
 struct_with_named_creation_method_dup (const StructWithNamedCreationMethod* self)
 {
 	StructWithNamedCreationMethod* dup;
-	dup = g_new (StructWithNamedCreationMethod, 1);
+	dup = g_new0 (StructWithNamedCreationMethod, 1);
 	memcpy (dup, self, sizeof (StructWithNamedCreationMethod));
 	return dup;
 }

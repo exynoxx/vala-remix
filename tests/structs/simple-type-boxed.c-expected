@@ -32,7 +32,7 @@ static Foo*
 _foo_dup (Foo* self)
 {
 	Foo* dup;
-	dup = g_new (Foo, 1);
+	dup = g_new0 (Foo, 1);
 	memcpy (dup, self, sizeof (Foo));
 	return dup;
 }

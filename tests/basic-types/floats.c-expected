@@ -123,7 +123,7 @@ static gdouble*
 _double_dup (gdouble* self)
 {
 	gdouble* dup;
-	dup = g_new (gdouble, 1);
+	dup = g_new0 (gdouble, 1);
 	memcpy (dup, self, sizeof (gdouble));
 	return dup;
 }
@@ -279,7 +279,7 @@ static gfloat*
 _float_dup (gfloat* self)
 {
 	gfloat* dup;
-	dup = g_new (gfloat, 1);
+	dup = g_new0 (gfloat, 1);
 	memcpy (dup, self, sizeof (gfloat));
 	return dup;
 }

@@ -266,7 +266,7 @@ foo_set_bar (Foo* self,
 {
 	Bar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_bar;
+	old_value = foo_get_bar (self);
 	if (_bar_equal (value, old_value) != TRUE) {
 		Bar* _tmp0_;
 		_tmp0_ = _bar_dup0 (value);

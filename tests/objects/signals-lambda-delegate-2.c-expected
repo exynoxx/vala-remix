@@ -103,6 +103,7 @@ typedef struct _ParamSpecBoo ParamSpecBoo;
 
 struct _Foo {
 	GObject parent_instance;
+	FooPrivate * priv;
 };
 
 struct _FooClass {
@@ -111,6 +112,7 @@ struct _FooClass {
 
 struct _Bar {
 	GObject parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -120,6 +122,7 @@ struct _BarClass {
 struct _Faz {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FazPrivate * priv;
 };
 
 struct _FazClass {
@@ -134,6 +137,7 @@ struct _ParamSpecFaz {
 struct _Boo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BooPrivate * priv;
 };
 
 struct _BooClass {

@@ -72,6 +72,7 @@ struct _ParamSpecFoo {
 struct _Bar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BarPrivate * priv;
 	gint other_variable;
 };
 

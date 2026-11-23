@@ -60,6 +60,7 @@ static guint manam_signals[MANAM_NUM_SIGNALS] = {0};
 
 struct _Manam {
 	GObject parent_instance;
+	ManamPrivate * priv;
 };
 
 struct _ManamClass {

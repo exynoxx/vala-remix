@@ -55,6 +55,7 @@ typedef enum  {
 struct _Bar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BarPrivate * priv;
 };
 
 struct _BarClass {

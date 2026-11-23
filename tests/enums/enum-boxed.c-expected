@@ -97,7 +97,7 @@ static Foo*
 _foo_dup (Foo* self)
 {
 	Foo* dup;
-	dup = g_new (Foo, 1);
+	dup = g_new0 (Foo, 1);
 	memcpy (dup, self, sizeof (Foo));
 	return dup;
 }
@@ -128,7 +128,7 @@ static Bar*
 _bar_dup (Bar* self)
 {
 	Bar* dup;
-	dup = g_new (Bar, 1);
+	dup = g_new0 (Bar, 1);
 	memcpy (dup, self, sizeof (Bar));
 	return dup;
 }

@@ -163,7 +163,7 @@ maman_foo_set_p1 (MamanFoo* self,
 {
 	gint old_value;
 	g_return_if_fail (MAMAN_IS_FOO (self));
-	old_value = self->priv->_p1;
+	old_value = maman_foo_get_p1 (self);
 	if (old_value != value) {
 		self->priv->_p1 = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_foo_properties[MAMAN_FOO_P1_PROPERTY]);
@@ -185,7 +185,7 @@ maman_foo_set_p2 (MamanFoo* self,
 {
 	gint old_value;
 	g_return_if_fail (MAMAN_IS_FOO (self));
-	old_value = self->priv->_p2;
+	old_value = maman_foo_get_p2 (self);
 	if (old_value != value) {
 		self->priv->_p2 = value;
 		g_object_notify_by_pspec ((GObject *) self, maman_foo_properties[MAMAN_FOO_P2_PROPERTY]);

@@ -373,7 +373,7 @@ FooStruct*
 foo_struct_dup (const FooStruct* self)
 {
 	FooStruct* dup;
-	dup = g_new (FooStruct, 1);
+	dup = g_new0 (FooStruct, 1);
 	memcpy (dup, self, sizeof (FooStruct));
 	return dup;
 }
@@ -439,7 +439,7 @@ foo_set_bool_prop (Foo* self,
 {
 	gboolean old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_bool_prop;
+	old_value = foo_get_bool_prop (self);
 	if (old_value != value) {
 		self->priv->_bool_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_BOOL_PROP_PROPERTY]);
@@ -461,7 +461,7 @@ foo_set_bool_prop2 (Foo* self,
 {
 	gboolean old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_bool_prop2;
+	old_value = foo_get_bool_prop2 (self);
 	if (old_value != value) {
 		self->priv->_bool_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_BOOL_PROP2_PROPERTY]);
@@ -483,7 +483,7 @@ foo_set_char_prop (Foo* self,
 {
 	gchar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_char_prop;
+	old_value = foo_get_char_prop (self);
 	if (old_value != value) {
 		self->priv->_char_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_CHAR_PROP_PROPERTY]);
@@ -505,7 +505,7 @@ foo_set_char_prop2 (Foo* self,
 {
 	gchar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_char_prop2;
+	old_value = foo_get_char_prop2 (self);
 	if (old_value != value) {
 		self->priv->_char_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_CHAR_PROP2_PROPERTY]);
@@ -527,7 +527,7 @@ foo_set_double_prop (Foo* self,
 {
 	gdouble old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_double_prop;
+	old_value = foo_get_double_prop (self);
 	if (old_value != value) {
 		self->priv->_double_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_DOUBLE_PROP_PROPERTY]);
@@ -549,7 +549,7 @@ foo_set_double_prop2 (Foo* self,
 {
 	gdouble old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_double_prop2;
+	old_value = foo_get_double_prop2 (self);
 	if (old_value != value) {
 		self->priv->_double_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_DOUBLE_PROP2_PROPERTY]);
@@ -571,7 +571,7 @@ foo_set_enum_prop (Foo* self,
 {
 	FooEnum old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_enum_prop;
+	old_value = foo_get_enum_prop (self);
 	if (old_value != value) {
 		self->priv->_enum_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_ENUM_PROP_PROPERTY]);
@@ -593,7 +593,7 @@ foo_set_enum_prop2 (Foo* self,
 {
 	FooEnum old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_enum_prop2;
+	old_value = foo_get_enum_prop2 (self);
 	if (old_value != value) {
 		self->priv->_enum_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_ENUM_PROP2_PROPERTY]);
@@ -615,7 +615,7 @@ foo_set_flag_prop (Foo* self,
 {
 	FooFlag old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_flag_prop;
+	old_value = foo_get_flag_prop (self);
 	if (old_value != value) {
 		self->priv->_flag_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_FLAG_PROP_PROPERTY]);
@@ -637,7 +637,7 @@ foo_set_flag_prop2 (Foo* self,
 {
 	FooFlag old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_flag_prop2;
+	old_value = foo_get_flag_prop2 (self);
 	if (old_value != value) {
 		self->priv->_flag_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_FLAG_PROP2_PROPERTY]);
@@ -659,7 +659,7 @@ foo_set_float_prop (Foo* self,
 {
 	gfloat old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_float_prop;
+	old_value = foo_get_float_prop (self);
 	if (old_value != value) {
 		self->priv->_float_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_FLOAT_PROP_PROPERTY]);
@@ -681,7 +681,7 @@ foo_set_float_prop2 (Foo* self,
 {
 	gfloat old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_float_prop2;
+	old_value = foo_get_float_prop2 (self);
 	if (old_value != value) {
 		self->priv->_float_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_FLOAT_PROP2_PROPERTY]);
@@ -703,7 +703,7 @@ foo_set_int_prop (Foo* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_int_prop;
+	old_value = foo_get_int_prop (self);
 	if (old_value != value) {
 		self->priv->_int_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_INT_PROP_PROPERTY]);
@@ -725,7 +725,7 @@ foo_set_int_prop2 (Foo* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_int_prop2;
+	old_value = foo_get_int_prop2 (self);
 	if (old_value != value) {
 		self->priv->_int_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_INT_PROP2_PROPERTY]);
@@ -747,7 +747,7 @@ foo_set_int64_prop (Foo* self,
 {
 	gint64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_int64_prop;
+	old_value = foo_get_int64_prop (self);
 	if (old_value != value) {
 		self->priv->_int64_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_INT64_PROP_PROPERTY]);
@@ -769,7 +769,7 @@ foo_set_int64_prop2 (Foo* self,
 {
 	gint64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_int64_prop2;
+	old_value = foo_get_int64_prop2 (self);
 	if (old_value != value) {
 		self->priv->_int64_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_INT64_PROP2_PROPERTY]);
@@ -791,7 +791,7 @@ foo_set_long_prop (Foo* self,
 {
 	glong old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_long_prop;
+	old_value = foo_get_long_prop (self);
 	if (old_value != value) {
 		self->priv->_long_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_LONG_PROP_PROPERTY]);
@@ -813,7 +813,7 @@ foo_set_long_prop2 (Foo* self,
 {
 	glong old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_long_prop2;
+	old_value = foo_get_long_prop2 (self);
 	if (old_value != value) {
 		self->priv->_long_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_LONG_PROP2_PROPERTY]);
@@ -843,7 +843,7 @@ foo_set_object_prop (Foo* self,
 {
 	GObject* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_object_prop;
+	old_value = foo_get_object_prop (self);
 	if (old_value != value) {
 		GObject* _tmp0_;
 		_tmp0_ = _g_object_ref0 (value);
@@ -876,7 +876,7 @@ foo_set_param_prop (Foo* self,
 {
 	GParamSpec* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_param_prop;
+	old_value = foo_get_param_prop (self);
 	if (old_value != value) {
 		GParamSpec* _tmp0_;
 		_tmp0_ = _g_param_spec_ref0 (value);
@@ -903,7 +903,7 @@ foo_set_pointer_prop (Foo* self,
 {
 	void* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_pointer_prop;
+	old_value = foo_get_pointer_prop (self);
 	if (old_value != value) {
 		self->priv->_pointer_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_POINTER_PROP_PROPERTY]);
@@ -927,7 +927,7 @@ foo_set_string_prop (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_string_prop;
+	old_value = foo_get_string_prop (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -954,7 +954,7 @@ foo_set_string_prop2 (Foo* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_string_prop2;
+	old_value = foo_get_string_prop2 (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -979,7 +979,7 @@ foo_set_uchar_prop (Foo* self,
 {
 	guchar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uchar_prop;
+	old_value = foo_get_uchar_prop (self);
 	if (old_value != value) {
 		self->priv->_uchar_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UCHAR_PROP_PROPERTY]);
@@ -1001,7 +1001,7 @@ foo_set_uchar_prop2 (Foo* self,
 {
 	guchar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uchar_prop2;
+	old_value = foo_get_uchar_prop2 (self);
 	if (old_value != value) {
 		self->priv->_uchar_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UCHAR_PROP2_PROPERTY]);
@@ -1023,7 +1023,7 @@ foo_set_uint_prop (Foo* self,
 {
 	guint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uint_prop;
+	old_value = foo_get_uint_prop (self);
 	if (old_value != value) {
 		self->priv->_uint_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UINT_PROP_PROPERTY]);
@@ -1045,7 +1045,7 @@ foo_set_uint_prop2 (Foo* self,
 {
 	guint old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uint_prop2;
+	old_value = foo_get_uint_prop2 (self);
 	if (old_value != value) {
 		self->priv->_uint_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UINT_PROP2_PROPERTY]);
@@ -1067,7 +1067,7 @@ foo_set_uint64_prop (Foo* self,
 {
 	guint64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uint64_prop;
+	old_value = foo_get_uint64_prop (self);
 	if (old_value != value) {
 		self->priv->_uint64_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UINT64_PROP_PROPERTY]);
@@ -1089,7 +1089,7 @@ foo_set_uint64_prop2 (Foo* self,
 {
 	guint64 old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_uint64_prop2;
+	old_value = foo_get_uint64_prop2 (self);
 	if (old_value != value) {
 		self->priv->_uint64_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UINT64_PROP2_PROPERTY]);
@@ -1111,7 +1111,7 @@ foo_set_ulong_prop (Foo* self,
 {
 	gulong old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_ulong_prop;
+	old_value = foo_get_ulong_prop (self);
 	if (old_value != value) {
 		self->priv->_ulong_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_ULONG_PROP_PROPERTY]);
@@ -1133,7 +1133,7 @@ foo_set_ulong_prop2 (Foo* self,
 {
 	gulong old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_ulong_prop2;
+	old_value = foo_get_ulong_prop2 (self);
 	if (old_value != value) {
 		self->priv->_ulong_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_ULONG_PROP2_PROPERTY]);
@@ -1155,7 +1155,7 @@ foo_set_unichar_prop (Foo* self,
 {
 	gunichar old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_unichar_prop;
+	old_value = foo_get_unichar_prop (self);
 	if (old_value != value) {
 		self->priv->_unichar_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_UNICHAR_PROP_PROPERTY]);
@@ -1177,7 +1177,7 @@ foo_set_gtype_prop (Foo* self,
 {
 	GType old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_gtype_prop;
+	old_value = foo_get_gtype_prop (self);
 	if (old_value != value) {
 		self->priv->_gtype_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_GTYPE_PROP_PROPERTY]);
@@ -1199,7 +1199,7 @@ foo_set_gtype_prop2 (Foo* self,
 {
 	GType old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_gtype_prop2;
+	old_value = foo_get_gtype_prop2 (self);
 	if (old_value != value) {
 		self->priv->_gtype_prop2 = value;
 		g_object_notify_by_pspec ((GObject *) self, foo_properties[FOO_GTYPE_PROP2_PROPERTY]);
@@ -1229,7 +1229,7 @@ foo_set_variant_prop (Foo* self,
 {
 	GVariant* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_variant_prop;
+	old_value = foo_get_variant_prop (self);
 	if (old_value != value) {
 		GVariant* _tmp0_;
 		_tmp0_ = _g_variant_ref0 (value);
@@ -1256,7 +1256,7 @@ foo_set_variant_prop2 (Foo* self,
 {
 	GVariant* old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_variant_prop2;
+	old_value = foo_get_variant_prop2 (self);
 	if (old_value != value) {
 		GVariant* _tmp0_;
 		_tmp0_ = _g_variant_ref0 (value);
@@ -1302,7 +1302,7 @@ foo_set_struct_prop (Foo* self,
 {
 	FooStruct old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_struct_prop;
+	foo_get_struct_prop (self, &old_value);
 	if (_foo_struct_equal (value, &old_value) != TRUE) {
 		FooStruct _tmp0_;
 		_tmp0_ = *value;
@@ -1328,7 +1328,7 @@ foo_set_struct_prop2 (Foo* self,
 {
 	FooStruct old_value;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_struct_prop2;
+	foo_get_struct_prop2 (self, &old_value);
 	if (_foo_struct_equal (value, &old_value) != TRUE) {
 		FooStruct _tmp0_;
 		_tmp0_ = *value;
@@ -1384,8 +1384,7 @@ foo_set_strv_prop (Foo* self,
 	gchar** old_value;
 	gint old_value_length;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_strv_prop;
-	old_value_length = self->priv->_strv_prop_length1;
+	old_value = foo_get_strv_prop (self, &old_value_length);
 	if (old_value != value) {
 		gchar** _tmp0_;
 		gint _tmp0__length1;
@@ -1446,8 +1445,7 @@ foo_set_strv_prop2 (Foo* self,
 	gchar** old_value;
 	gint old_value_length;
 	g_return_if_fail (IS_FOO (self));
-	old_value = self->priv->_strv_prop2;
-	old_value_length = self->priv->_strv_prop2_length1;
+	old_value = foo_get_strv_prop2 (self, &old_value_length);
 	if (old_value != value) {
 		gchar** _tmp0_;
 		gint _tmp0__length1;

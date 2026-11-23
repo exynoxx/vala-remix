@@ -224,6 +224,7 @@ struct _ClassWithNamedCreationMethod {
 struct _SimpleGTypeInstanceClass {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	SimpleGTypeInstanceClassPrivate * priv;
 };
 
 struct _SimpleGTypeInstanceClassClass {
@@ -237,6 +238,7 @@ struct _ParamSpecSimpleGTypeInstanceClass {
 
 struct _DerivedGTypeInstanceClass {
 	SimpleGTypeInstanceClass parent_instance;
+	DerivedGTypeInstanceClassPrivate * priv;
 };
 
 struct _DerivedGTypeInstanceClassClass {
@@ -246,6 +248,7 @@ struct _DerivedGTypeInstanceClassClass {
 struct _PublicGTypeInstanceClass {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	PublicGTypeInstanceClassPrivate * priv;
 };
 
 struct _PublicGTypeInstanceClassClass {
@@ -260,6 +263,7 @@ struct _ParamSpecPublicGTypeInstanceClass {
 struct _GTypeInstanceClassWithCreationMethod {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	GTypeInstanceClassWithCreationMethodPrivate * priv;
 };
 
 struct _GTypeInstanceClassWithCreationMethodClass {
@@ -274,6 +278,7 @@ struct _ParamSpecGTypeInstanceClassWithCreationMethod {
 struct _GTypeInstanceClassWithNamedCreationMethod {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	GTypeInstanceClassWithNamedCreationMethodPrivate * priv;
 };
 
 struct _GTypeInstanceClassWithNamedCreationMethodClass {
@@ -287,6 +292,7 @@ struct _ParamSpecGTypeInstanceClassWithNamedCreationMethod {
 
 struct _SimpleGObjectClass {
 	GObject parent_instance;
+	SimpleGObjectClassPrivate * priv;
 };
 
 struct _SimpleGObjectClassClass {
@@ -295,6 +301,7 @@ struct _SimpleGObjectClassClass {
 
 struct _DerivedGObjectClass {
 	SimpleGObjectClass parent_instance;
+	DerivedGObjectClassPrivate * priv;
 };
 
 struct _DerivedGObjectClassClass {
@@ -303,6 +310,7 @@ struct _DerivedGObjectClassClass {
 
 struct _PublicGObjectClass {
 	GObject parent_instance;
+	PublicGObjectClassPrivate * priv;
 };
 
 struct _PublicGObjectClassClass {
@@ -311,6 +319,7 @@ struct _PublicGObjectClassClass {
 
 struct _AbstractGObjectClass {
 	GObject parent_instance;
+	AbstractGObjectClassPrivate * priv;
 };
 
 struct _AbstractGObjectClassClass {
@@ -319,6 +328,7 @@ struct _AbstractGObjectClassClass {
 
 struct _GObjectClassWithCreationMethod {
 	GObject parent_instance;
+	GObjectClassWithCreationMethodPrivate * priv;
 };
 
 struct _GObjectClassWithCreationMethodClass {
@@ -327,6 +337,7 @@ struct _GObjectClassWithCreationMethodClass {
 
 struct _GObjectClassWithNamedCreationMethod {
 	GObject parent_instance;
+	GObjectClassWithNamedCreationMethodPrivate * priv;
 };
 
 struct _GObjectClassWithNamedCreationMethodClass {

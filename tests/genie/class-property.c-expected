@@ -166,7 +166,7 @@ test_set_foo (Test* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_TEST (self));
-	old_value = self->priv->_foo;
+	old_value = test_get_foo (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);

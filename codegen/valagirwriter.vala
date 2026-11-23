@@ -507,7 +507,7 @@ public class Vala.GIRWriter : CodeVisitor {
 				buffer.append_printf("</field>\n");
 			}
 
-			if (!context.abi_stability && GTypeModule.class_has_instance_private (context, cl)) {
+			if (!context.abi_stability) {
 				write_indent ();
 				buffer.append_printf ("<field name=\"priv\" readable=\"0\" private=\"1\">\n");
 				indent++;

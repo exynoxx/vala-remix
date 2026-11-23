@@ -45,6 +45,7 @@ typedef struct _ParamSpecFoo ParamSpecFoo;
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 	const gchar** var3;
 	gint var3_length1;
 	gint _var3_size_;

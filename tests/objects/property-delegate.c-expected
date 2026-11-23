@@ -608,7 +608,7 @@ bar_set_deleg (Bar* self,
 {
 	Manam old_value;
 	g_return_if_fail (IS_BAR (self));
-	old_value = self->priv->_deleg;
+	old_value = bar_get_deleg (self);
 	if (old_value != value) {
 		self->priv->_deleg = value;
 		g_object_notify_by_pspec ((GObject *) self, bar_properties[BAR_DELEG_PROPERTY]);
@@ -660,7 +660,7 @@ bar_real_set_deleg_v (Bar* base,
 	Bar* self;
 	Manam old_value;
 	self = base;
-	old_value = self->priv->_deleg_v;
+	old_value = bar_real_get_deleg_v (base);
 	if (old_value != value) {
 		self->priv->_deleg_v = value;
 		g_object_notify_by_pspec ((GObject *) self, bar_properties[BAR_DELEG_V_PROPERTY]);

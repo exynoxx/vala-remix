@@ -51,6 +51,7 @@ typedef struct _ParamSpecFoo ParamSpecFoo;
 struct _BarFoo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	BarFooPrivate * priv;
 };
 
 struct _BarFooClass {
@@ -65,6 +66,7 @@ struct _BarParamSpecFoo {
 struct _Foo {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
+	FooPrivate * priv;
 };
 
 struct _FooClass {

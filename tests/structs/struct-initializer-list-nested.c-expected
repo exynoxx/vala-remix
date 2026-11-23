@@ -90,7 +90,7 @@ Foo*
 foo_dup (const Foo* self)
 {
 	Foo* dup;
-	dup = g_new (Foo, 1);
+	dup = g_new0 (Foo, 1);
 	memcpy (dup, self, sizeof (Foo));
 	return dup;
 }
@@ -247,7 +247,7 @@ Baz*
 baz_dup (const Baz* self)
 {
 	Baz* dup;
-	dup = g_new (Baz, 1);
+	dup = g_new0 (Baz, 1);
 	memcpy (dup, self, sizeof (Baz));
 	return dup;
 }

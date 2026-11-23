@@ -46,9 +46,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		public Map<string,int> closure_variable_count_map = new HashMap<string,int> (str_hash, str_equal);
 		public Map<LocalVariable,int> closure_variable_clash_map = new HashMap<LocalVariable,int> ();
 		public bool is_in_method_precondition;
-		// coroutine temporaries declared as C locals instead of closure struct fields
-		public bool temps_as_c_locals;
-		public Set<string> c_local_temps = new HashSet<string> (str_hash, str_equal);
 
 		public EmitContext (Symbol? symbol = null) {
 			current_symbol = symbol;
@@ -1995,26 +1992,15 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 					var get_call = new CCodeFunctionCall (new CCodeIdentifier (get_ccode_real_name (get_accessor)));
 					get_call.add_argument (new CCodeIdentifier (is_virtual ? "base" : "self"));
 
-					// read the backing field directly instead of calling the getter
-					TargetValue? old_field = null;
-					if (prop.field != null && !get_accessor.value_type.is_disposable ()) {
-						old_field = get_field_cvalue (prop.field, new GLibValue (this_type, new CCodeIdentifier ("self"), true));
-					}
-
 					if (property_type is ArrayType && get_ccode_array_length (prop)) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
 						ccode.add_declaration (get_ccode_array_length_type (prop), new CCodeVariableDeclarator ("old_value_length"));
-						if (old_field != null) {
-							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_cvalue_ (old_field));
-							ccode.add_assignment (new CCodeIdentifier ("old_value_length"), get_array_length_cvalue (old_field, 1));
-						} else {
-							get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value_length")));
-							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
-						}
+						get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value_length")));
+						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, new CCodeIdentifier ("old_value"), new CCodeIdentifier ("value")));
 					} else if (property_type.compatible (string_type)) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						ccode.add_assignment (new CCodeIdentifier ("old_value"), old_field != null ? get_cvalue_ (old_field) : get_call);
+						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
 						CCodeFunctionCall ccall;
 						if (context.profile == Profile.POSIX) {
 							cfile.add_include ("string.h");
@@ -2027,9 +2013,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, ccall, new CCodeConstant ("0")));
 					} else if (property_type is StructValueType) {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						if (old_field != null) {
-							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_cvalue_ (old_field));
-						} else if (property_type.nullable) {
+						if (property_type.nullable) {
 							ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
 						} else {
 							get_call.add_argument (new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeIdentifier ("old_value")));
@@ -2046,7 +2030,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, ccall, new CCodeConstant ("TRUE")));
 					} else {
 						ccode.add_declaration (get_ccode_name (property_type), new CCodeVariableDeclarator ("old_value"));
-						ccode.add_assignment (new CCodeIdentifier ("old_value"), old_field != null ? get_cvalue_ (old_field) : get_call);
+						ccode.add_assignment (new CCodeIdentifier ("old_value"), get_call);
 						ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.INEQUALITY, new CCodeIdentifier ("old_value"), new CCodeIdentifier ("value")));
 					}
 
@@ -2474,9 +2458,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		foreach (Statement stmt in b.get_statements ()) {
 			push_line (stmt.source_reference);
-			emit_context.temps_as_c_locals = is_in_coroutine () && is_yield_free_simple_statement (stmt);
 			stmt.emit (this);
-			emit_context.temps_as_c_locals = false;
 			pop_line ();
 		}
 
@@ -2535,42 +2517,8 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		stmt.declaration.accept (this);
 	}
 
-	/**
-	 * Whether the temporaries of this statement never live across a
-	 * suspension point, so they need not be kept in the coroutine data.
-	 */
-	static bool is_yield_free_simple_statement (Statement stmt) {
-		Expression? expr = null;
-		if (stmt is ExpressionStatement) {
-			expr = ((ExpressionStatement) stmt).expression;
-		} else if (stmt is DeclarationStatement && ((DeclarationStatement) stmt).declaration is LocalVariable) {
-			expr = ((LocalVariable) ((DeclarationStatement) stmt).declaration).initializer;
-		} else {
-			return false;
-		}
-		if (expr == null) {
-			return true;
-		}
-		var finder = new YieldFinder ();
-		expr.accept (finder);
-		return !finder.found;
-	}
-
-	class YieldFinder : CodeVisitor {
-		public bool found;
-
-		public override void visit_expression (Expression expr) {
-			if (expr is CallableExpression && ((CallableExpression) expr).is_yield_expression) {
-				found = true;
-			}
-			if (!found) {
-				expr.accept_children (this);
-			}
-		}
-	}
-
 	public CCodeExpression get_cexpression (string name) {
-		if (is_in_coroutine () && !emit_context.c_local_temps.contains (name)) {
+		if (is_in_coroutine ()) {
 			return new CCodeMemberAccess.pointer (new CCodeIdentifier ("_data_"), name);
 		} else {
 			return new CCodeIdentifier (name);
@@ -2782,9 +2730,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		/* Additional temp variables */
 
-		// companions of user-declared locals stay in the coroutine data as well
-		var temps_as_c_locals = emit_context.temps_as_c_locals;
-		emit_context.temps_as_c_locals = false;
 		if (declared) {
 			if (local.variable_type is ArrayType) {
 				// create variables to store array dimensions
@@ -2818,7 +2763,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				}
 			}
 		}
-		emit_context.temps_as_c_locals = temps_as_c_locals;
 
 		/* Store the initializer */
 
@@ -2997,10 +2941,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		var_type.value_owned = value_owned;
 		var local = new LocalVariable (var_type, "_tmp%d_".printf (next_temp_var_id));
 		local.init = init;
-		if (emit_context.temps_as_c_locals) {
-			// callers may build C expressions for it before emit_temp_var
-			emit_context.c_local_temps.add (local.name);
-		}
 
 		if (node_reference != null) {
 			local.source_reference = node_reference.source_reference;
@@ -3379,10 +3319,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				creation_call.add_argument (csizeof);
 			} else {
 				cfile.add_include ("glib.h");
-				// no need to zero memory that memcpy overwrites completely
-				unowned Struct? vst = value_type.type_symbol as Struct;
-				bool full_copy = vst == null || !vst.is_disposable ();
-				creation_call = new CCodeFunctionCall (new CCodeIdentifier (full_copy ? "g_new" : "g_new0"));
+				creation_call = new CCodeFunctionCall (new CCodeIdentifier ("g_new0"));
 				creation_call.add_argument (new CCodeIdentifier (get_ccode_name (value_type.type_symbol)));
 				creation_call.add_argument (new CCodeConstant ("1"));
 			}
@@ -4054,13 +3991,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		var init = (!local.name.has_prefix ("*") && local.init);
 		if (is_in_coroutine ()) {
-			if (emit_context.temps_as_c_locals || emit_context.c_local_temps.contains (local.name)) {
-				// not live across a yield, keep it out of the heap-allocated data
-				emit_context.c_local_temps.add (local.name);
-				ccode.add_declaration (get_ccode_name (local.variable_type), new CCodeVariableDeclarator (local.name, null, get_ccode_declarator_suffix (local.variable_type)));
-			} else {
-				closure_struct.add_field (get_ccode_name (local.variable_type), local.name, 0, get_ccode_declarator_suffix (local.variable_type));
-			}
+			closure_struct.add_field (get_ccode_name (local.variable_type), local.name, 0, get_ccode_declarator_suffix (local.variable_type));
 
 			// even though closure struct is zerod, we need to initialize temporary variables
 			// as they might be used multiple times when declared in a loop
@@ -5930,11 +5861,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 					}
 
 					set_cvalue (expr, new CCodeConstant ("%s %s".printf (left, right)));
-				} else if (expr.is_concat_chained) {
-					// unterminated g_strconcat call, finished by the parent expression
-					var ccall = get_concat_call (expr.left, cleft);
-					ccall.add_argument (get_concat_middle_argument (expr.right, cright));
-					set_cvalue (expr, ccall);
 				} else {
 					var temp_value = create_temp_value (expr.value_type, false, expr);
 					CCodeFunctionCall ccall;
@@ -5960,7 +5886,8 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 						ccall.add_argument (cright);
 					} else {
 						// convert to g_strconcat (a, b, NULL)
-						ccall = get_concat_call (expr.left, cleft);
+						ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
+						ccall.add_argument (cleft);
 						ccall.add_argument (cright);
 						ccall.add_argument (new CCodeConstant("NULL"));
 					}
@@ -6091,101 +6018,6 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		cfile.add_function (function);
 
 		return array_contains_func;
-	}
-
-	CCodeFunctionCall get_concat_call (Expression left, CCodeExpression cleft) {
-		if (left is BinaryExpression && ((BinaryExpression) left).is_concat_chained) {
-			return (CCodeFunctionCall) cleft;
-		}
-		var ccall = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
-		ccall.add_argument (cleft);
-		return ccall;
-	}
-
-	// g_strconcat stops at the first NULL argument while chained `+` skips
-	// NULL operands, so pass "" instead of NULL for non-last arguments
-	CCodeExpression get_concat_middle_argument (Expression expr, CCodeExpression cexpr) {
-		if (expr.is_constant () && !expr.value_type.nullable) {
-			return cexpr;
-		}
-		if (!(cexpr is CCodeIdentifier || cexpr is CCodeMemberAccess)) {
-			// evaluate only once
-			var temp_value = store_temp_value (expr.target_value, expr, false);
-			cexpr = get_cvalue_ (temp_value);
-		}
-		return new CCodeConditionalExpression (cexpr, cexpr, new CCodeConstant ("\"\""));
-	}
-
-	// gchar* _vala_string_append (gchar* self, const gchar* s): `self += s` with
-	// g_strconcat's NULL semantics, but growing self in place via g_realloc
-	protected string generate_string_append_function () {
-		string fname = "_vala_string_append";
-		if (!add_wrapper (fname)) {
-			return fname;
-		}
-		cfile.add_include ("string.h");
-
-		var fun = new CCodeFunction (fname, "gchar*");
-		fun.add_parameter (new CCodeParameter ("self", "gchar*"));
-		fun.add_parameter (new CCodeParameter ("s", "const gchar*"));
-		fun.modifiers = CCodeModifiers.STATIC;
-
-		push_function (fun);
-
-		var self = new CCodeIdentifier ("self");
-		var str = new CCodeIdentifier ("s");
-		var len = new CCodeIdentifier ("len");
-		var slen = new CCodeIdentifier ("slen");
-		ccode.add_declaration ("gsize", new CCodeVariableDeclarator ("len"));
-		ccode.add_declaration ("gsize", new CCodeVariableDeclarator ("slen"));
-
-		// if (self == NULL || s == NULL) return self;
-		ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.OR,
-			new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, self, new CCodeConstant ("NULL")),
-			new CCodeBinaryExpression (CCodeBinaryOperator.EQUALITY, str, new CCodeConstant ("NULL"))));
-		ccode.add_return (self);
-		ccode.close ();
-
-		var strlen = new CCodeFunctionCall (new CCodeIdentifier ("strlen"));
-		strlen.add_argument (self);
-		ccode.add_assignment (len, strlen);
-		strlen = new CCodeFunctionCall (new CCodeIdentifier ("strlen"));
-		strlen.add_argument (str);
-		ccode.add_assignment (slen, strlen);
-
-		// s may point into self which g_realloc may move:
-		// if (s >= self && s <= self + len) { gchar* r = g_strconcat (self, s, NULL); g_free (self); return r; }
-		ccode.open_if (new CCodeBinaryExpression (CCodeBinaryOperator.AND,
-			new CCodeBinaryExpression (CCodeBinaryOperator.GREATER_THAN_OR_EQUAL, str, self),
-			new CCodeBinaryExpression (CCodeBinaryOperator.LESS_THAN_OR_EQUAL, str, new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, self, len))));
-		var concat = new CCodeFunctionCall (new CCodeIdentifier ("g_strconcat"));
-		concat.add_argument (self);
-		concat.add_argument (str);
-		concat.add_argument (new CCodeConstant ("NULL"));
-		ccode.add_declaration ("gchar*", new CCodeVariableDeclarator ("r", concat));
-		var free = new CCodeFunctionCall (new CCodeIdentifier ("g_free"));
-		free.add_argument (self);
-		ccode.add_expression (free);
-		ccode.add_return (new CCodeIdentifier ("r"));
-		ccode.close ();
-
-		// self = g_realloc (self, len + slen + 1); memcpy (self + len, s, slen + 1); return self;
-		var realloc = new CCodeFunctionCall (new CCodeIdentifier ("g_realloc"));
-		realloc.add_argument (self);
-		realloc.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, len, new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, slen, new CCodeConstant ("1"))));
-		ccode.add_assignment (self, realloc);
-		var memcpy = new CCodeFunctionCall (new CCodeIdentifier ("memcpy"));
-		memcpy.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, self, len));
-		memcpy.add_argument (str);
-		memcpy.add_argument (new CCodeBinaryExpression (CCodeBinaryOperator.PLUS, slen, new CCodeConstant ("1")));
-		ccode.add_expression (memcpy);
-		ccode.add_return (self);
-
-		pop_function ();
-
-		cfile.add_function_declaration (fun);
-		cfile.add_function (fun);
-		return fname;
 	}
 
 	string generate_cmp_wrapper (CCodeIdentifier cmpid) {
