@@ -915,7 +915,25 @@ public class Vala.CCodeMethodCallModule : CCodeAssignmentModule {
 			return;
 		}
 
-		if (expr.parent_node is ExpressionStatement && !expr.value_type.is_disposable ()) {
+		if (m != null && ccall_expr != null && is_unboxed_nullable_return (m)) {
+			// { value, has_value } struct, expose as unowned pointer into a temporary
+			if (expr.parent_node is ExpressionStatement) {
+				ccode.add_expression (ccall_expr);
+			} else {
+				var name = generate_unboxed_nullable_type (m.return_type, cfile);
+				var temp_name = "_tmp%d_".printf (next_temp_var_id++);
+				if (is_in_coroutine ()) {
+					closure_struct.add_field (name, temp_name);
+				} else {
+					ccode.add_declaration (name, new CCodeVariableDeclarator (temp_name));
+				}
+				var temp = get_variable_cexpression (temp_name);
+				ccode.add_assignment (temp, ccall_expr);
+				expr.value_type = expr.value_type.copy ();
+				expr.value_type.value_owned = false;
+				set_cvalue (expr, new CCodeConditionalExpression (new CCodeMemberAccess (temp, "has_value"), new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, new CCodeMemberAccess (temp, "value")), new CCodeConstant ("NULL")));
+			}
+		} else if (expr.parent_node is ExpressionStatement && !expr.value_type.is_disposable ()) {
 			if (ccall_expr != null && !return_result_via_out_param) {
 				ccode.add_expression (ccall_expr);
 			}

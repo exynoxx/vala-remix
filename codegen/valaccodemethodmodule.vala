@@ -54,6 +54,9 @@ public abstract class Vala.CCodeMethodModule : CCodeStructModule {
 		cfunc.return_type = get_creturn_type (m, get_ccode_name (creturn_type));
 
 		generate_type_declaration (m.return_type, decl_space);
+		if (is_unboxed_nullable_return (m)) {
+			cfunc.return_type = generate_unboxed_nullable_type (m.return_type, decl_space);
+		}
 
 		if (m.return_type.is_real_non_null_struct_type ()) {
 			// structs are returned via out parameter
@@ -831,7 +834,11 @@ public abstract class Vala.CCodeMethodModule : CCodeStructModule {
 			} else {
 				vardecl = new CCodeVariableDeclarator ("result");
 			}
-			ccode.add_declaration (get_creturn_type (m, get_ccode_name (m.return_type)), vardecl);
+			if (is_unboxed_nullable_return (m)) {
+				ccode.add_declaration (generate_unboxed_nullable_type (m.return_type, cfile), vardecl);
+			} else {
+				ccode.add_declaration (get_creturn_type (m, get_ccode_name (m.return_type)), vardecl);
+			}
 		}
 
 		pop_context ();
@@ -1321,7 +1328,7 @@ public abstract class Vala.CCodeMethodModule : CCodeStructModule {
 		} else {
 			ccheck.call = new CCodeIdentifier ("_vala_return_val_if_fail");
 
-			var cdefault = default_value_for_type (ret_type, false, true);
+			var cdefault = default_return_value_for_type (ret_type, true);
 			if (cdefault != null) {
 				ccheck.add_argument (cdefault);
 			} else {

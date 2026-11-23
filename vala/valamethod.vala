@@ -185,6 +185,12 @@ public class Vala.Method : Subroutine, Callable, GenericSymbol {
 
 	public bool coroutine { get; set; }
 
+	/**
+	 * Whether this method is referenced other than as the target of a
+	 * direct call, e.g. as a delegate or signal handler.
+	 */
+	public bool used_as_value { get; set; }
+
 	public bool is_async_callback { get; set; }
 
 	private List<Parameter> parameters = new ArrayList<Parameter> ();

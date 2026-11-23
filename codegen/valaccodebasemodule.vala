@@ -2878,6 +2878,136 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 	}
 
 	/**
+	 * Whether m returns its nullable value-type result unboxed, as a
+	 * { value, has_value } struct by value instead of a heap box.
+	 * Only private/internal, directly called, non-virtual methods qualify,
+	 * so the C ABI of anything visible outside the compilation is unchanged.
+	 * Internal ones are excluded when other compilations may call them
+	 * (fast vapis, internal header/vapi).
+	 */
+	public static bool is_unboxed_nullable_return (Method m) {
+		if (m.external_package || !m.is_internal_symbol ()) {
+			return false;
+		}
+		if (!m.is_private_symbol ()) {
+			var context = CodeContext.get ();
+			if (context.use_fast_vapi || context.internal_header_filename != null) {
+				return false;
+			}
+		}
+		if (m.used_as_value || m is CreationMethod || m.get_attribute_string ("CCode", "cname") != null
+		    || m.is_abstract || m.is_virtual || m.overrides || m.base_method != null || m.base_interface_method != null
+		    || m.coroutine || m.signal_reference != null || m.parent_node is LambdaExpression
+		    || m.body == null || m.external || m.get_postconditions ().size > 0
+		    || get_ccode_type (m) != null || m.get_attribute ("GtkCallback") != null) {
+			return false;
+		}
+		unowned DataType type = m.return_type;
+		if (!(type is ValueType) || !type.nullable || !type.value_owned) {
+			return false;
+		}
+		return type.type_symbol is Enum || (type.type_symbol is Struct && !((Struct) type.type_symbol).is_disposable ());
+	}
+
+	/**
+	 * Returns the name of the { value, has_value } struct for the nullable
+	 * value type, declaring it in decl_space once.
+	 */
+	public string generate_unboxed_nullable_type (DataType type, CCodeFile decl_space) {
+		var value_type = type.copy ();
+		value_type.nullable = false;
+		value_type.value_owned = true;
+		generate_type_declaration (value_type, decl_space);
+		var name = "_ValaNullable_%s".printf (get_ccode_name (value_type));
+		if (decl_space.add_declaration (name)) {
+			return name;
+		}
+		var cstruct = new CCodeStruct ("_%s".printf (name));
+		cstruct.add_field (get_ccode_name (value_type), "value");
+		cstruct.add_field ("gboolean", "has_value");
+		decl_space.add_type_declaration (new CCodeTypeDefinition ("struct _%s".printf (name), new CCodeVariableDeclarator (name)));
+		decl_space.add_type_definition (cstruct);
+		return name;
+	}
+
+	/**
+	 * Returns the { value, has_value } struct a pointer expression of the
+	 * form `t.has_value ? &t.value : NULL` (an unboxed call result) reads.
+	 */
+	public static CCodeExpression? get_unboxed_nullable_source (CCodeExpression cvalue) {
+		unowned CCodeConditionalExpression? cond = cvalue as CCodeConditionalExpression;
+		if (cond != null && cond.condition is CCodeMemberAccess && ((CCodeMemberAccess) cond.condition).member_name == "has_value") {
+			return ((CCodeMemberAccess) cond.condition).inner;
+		}
+		return null;
+	}
+
+	CCodeExpression unboxed_nullable_null (string name) {
+		return new CCodeConstant ("(%s) { 0 }".printf (name));
+	}
+
+	/**
+	 * Default return value (e.g. for failed preconditions or errors),
+	 * taking unboxed nullable returns of the current method into account.
+	 */
+	public CCodeExpression? default_return_value_for_type (DataType return_type, bool on_error = false) {
+		if (current_method != null && !(return_type is VoidType) && return_type.nullable
+		    && return_type.type_symbol == current_method.return_type.type_symbol && is_unboxed_nullable_return (current_method)) {
+			return unboxed_nullable_null (generate_unboxed_nullable_type (current_method.return_type, cfile));
+		}
+		return default_value_for_type (return_type, false, on_error);
+	}
+
+	/**
+	 * An unowned nullable value cast to its non-nullable type is just
+	 * dereferenced, copying it first would leak the copy.
+	 */
+	static bool is_unowned_unboxing_cast_operand (Expression expr) {
+		unowned CastExpression? cast = expr.parent_node as CastExpression;
+		return cast != null && cast.inner == expr && !expr.value_type.value_owned
+		       && cast.type_reference is ValueType && !cast.type_reference.nullable
+		       && expr.value_type is ValueType && expr.value_type.nullable;
+	}
+
+	bool is_unboxed_return_expression (Expression expr) {
+		return expr.parent_node is ReturnStatement && current_method != null && !is_in_coroutine ()
+		       && current_return_type == current_method.return_type && is_unboxed_nullable_return (current_method);
+	}
+
+	/**
+	 * Converts a (possibly NULL) pointer to a nullable value into a
+	 * { value, has_value } struct held in a temporary.
+	 */
+	TargetValue unbox_nullable_return_value (TargetValue value, Expression expr) {
+		var name = generate_unboxed_nullable_type (current_method.return_type, cfile);
+		var temp = "_tmp%d_".printf (next_temp_var_id++);
+		ccode.add_declaration (name, new CCodeVariableDeclarator (temp));
+		var ctemp = new CCodeIdentifier (temp);
+		var cvalue = get_cvalue_ (value);
+		unowned CCodeUnaryExpression? addr = cvalue as CCodeUnaryExpression;
+		var source = get_unboxed_nullable_source (cvalue);
+		if (expr.value_type is NullType) {
+			ccode.add_assignment (ctemp, unboxed_nullable_null (name));
+		} else if (source != null) {
+			ccode.add_assignment (ctemp, source);
+		} else if (addr != null && addr.operator == CCodeUnaryOperator.ADDRESS_OF) {
+			// boxed non-null value
+			ccode.add_assignment (new CCodeMemberAccess (ctemp, "value"), addr.inner);
+			ccode.add_assignment (new CCodeMemberAccess (ctemp, "has_value"), new CCodeConstant ("TRUE"));
+		} else {
+			ccode.open_if (cvalue);
+			ccode.add_assignment (new CCodeMemberAccess (ctemp, "value"), new CCodeUnaryExpression (CCodeUnaryOperator.POINTER_INDIRECTION, cvalue));
+			ccode.add_assignment (new CCodeMemberAccess (ctemp, "has_value"), new CCodeConstant ("TRUE"));
+			ccode.add_else ();
+			ccode.add_assignment (ctemp, unboxed_nullable_null (name));
+			ccode.close ();
+		}
+		var type = current_method.return_type.copy ();
+		type.value_owned = false;
+		return new GLibValue (type, ctemp);
+	}
+
+	/**
 	 * Create a temporary variable and return lvalue access to it
 	 */
 	public TargetValue create_temp_value (DataType type, bool init, CodeNode node_reference, bool? value_owned = null) {
@@ -4080,7 +4210,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		}
 
 		var local_decl = expr.parent_node as LocalVariable;
-		if (!(local_decl != null && is_simple_struct_creation (local_decl, local_decl.initializer))) {
+		if (!(local_decl != null && is_simple_struct_creation (local_decl, local_decl.initializer)) && !is_unboxed_return_expression (expr)) {
 			expr.target_value = store_temp_value (expr.target_value, expr);
 		}
 
@@ -4509,12 +4639,18 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				// FIXME: temporary workaround until the refactoring is complete, not all target_value have a value_type
 				expr.target_value.value_type = expr.value_type;
 				var target_type = expr.target_type;
-				if (target_type != null && target_type.value_owned && get_stack_slot_store_target (expr) != null) {
-					// copied into the stack slot, an unowned box (or a temporary owned one) suffices
+				bool unboxed_return = is_unboxed_return_expression (expr);
+				if (target_type != null && target_type.value_owned && (unboxed_return || get_stack_slot_store_target (expr) != null || is_unowned_unboxing_cast_operand (expr))) {
+					// copied into the stack slot or unboxed return value,
+					// an unowned box (or a temporary owned one) suffices
 					target_type = target_type.copy ();
 					target_type.value_owned = false;
 				}
 				expr.target_value = transform_value (expr.target_value, target_type, expr);
+				if (unboxed_return) {
+					// before temporaries (e.g. a returned box) are freed
+					expr.target_value = unbox_nullable_return_value (expr.target_value, expr);
+				}
 			}
 
 			if (expr.target_value == null) {
@@ -7026,7 +7162,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 			emit_temp_var (ret_temp_var, on_error);
 			ccode.add_return (new CCodeIdentifier (ret_temp_var.name));
 		} else {
-			ccode.add_return (default_value_for_type (return_type, false, on_error));
+			ccode.add_return (default_return_value_for_type (return_type, on_error));
 		}
 	}
 

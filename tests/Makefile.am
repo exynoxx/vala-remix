@@ -1437,6 +1437,7 @@ TESTS = \
 	nullability/var-type.vala \
 	nullable/stack-slot-local.vala \
 	nullable/stack-slot-local-control-flow.vala \
+	nullable/unboxed-return.vala \
 	version/since-constant.test \
 	version/since-field.test \
 	version/since-local-variable.test \

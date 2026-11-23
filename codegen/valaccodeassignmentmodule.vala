@@ -220,6 +220,17 @@ public class Vala.CCodeAssignmentModule : CCodeMemberAccessModule {
 			ccode.add_assignment (lvalue, slot_addr);
 			return;
 		}
+		var source = get_unboxed_nullable_source (cvalue);
+		if (source != null) {
+			// unboxed call result
+			ccode.open_if (new CCodeMemberAccess (source, "has_value"));
+			ccode.add_assignment (slot, new CCodeMemberAccess (source, "value"));
+			ccode.add_assignment (lvalue, slot_addr);
+			ccode.add_else ();
+			ccode.add_assignment (lvalue, new CCodeConstant ("NULL"));
+			ccode.close ();
+			return;
+		}
 		if (!(cvalue is CCodeIdentifier || cvalue is CCodeMemberAccess)) {
 			var temp = (GLibValue) create_temp_value (local.variable_type, false, local, false);
 			ccode.add_assignment (temp.cvalue, cvalue);
