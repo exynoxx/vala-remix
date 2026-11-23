@@ -577,8 +577,11 @@ bar (Foo* f)
 		gint __tmp5__size_;
 		gint* _tmp7_ = NULL;
 		gint* i = NULL;
+		gint _i_slot_;
 		gint* _tmp10_;
 		gint* _tmp11_;
+		gint* _tmp12_;
+		gint* _tmp13_;
 		a = NULL;
 		a_length1 = 0;
 		_a_size_ = a_length1;
@@ -598,10 +601,17 @@ bar (Foo* f)
 		}
 		_tmp10_ = _tmp7_;
 		_tmp7_ = NULL;
-		i = _tmp10_;
-		_tmp11_ = i;
-		_vala_assert (_tmp11_ == NULL, "i == null");
-		_g_free0 (i);
+		_tmp11_ = _tmp10_;
+		if (_tmp11_) {
+			_i_slot_ = *_tmp11_;
+			i = &_i_slot_;
+		} else {
+			i = NULL;
+		}
+		_tmp12_ = i;
+		_g_free0 (_tmp11_);
+		_tmp13_ = i;
+		_vala_assert (_tmp13_ == NULL, "i == null");
 		_g_free0 (_tmp7_);
 		a = (g_free (a), NULL);
 	}
@@ -609,39 +619,39 @@ bar (Foo* f)
 		gint* a = NULL;
 		gint a_length1;
 		gint _a_size_;
-		gint* _tmp12_ = NULL;
-		gint* _tmp13_;
-		gint _tmp13__length1;
-		gint _tmp12__length1;
-		gint __tmp12__size_;
 		gint* _tmp14_ = NULL;
-		gint _tmp14__length1;
-		gint __tmp14__size_;
-		gint* s = NULL;
 		gint* _tmp15_;
 		gint _tmp15__length1;
+		gint _tmp14__length1;
+		gint __tmp14__size_;
+		gint* _tmp16_ = NULL;
+		gint _tmp16__length1;
+		gint __tmp16__size_;
+		gint* s = NULL;
+		gint* _tmp17_;
+		gint _tmp17__length1;
 		gint s_length1;
 		gint _s_size_;
 		a = NULL;
 		a_length1 = 0;
 		_a_size_ = a_length1;
-		_tmp13_ = a;
-		_tmp13__length1 = a_length1;
-		_tmp12_ = _tmp13_;
-		_tmp12__length1 = _tmp13__length1;
-		__tmp12__size_ = _tmp12__length1;
-		_tmp14_ = NULL;
-		_tmp14__length1 = 0;
+		_tmp15_ = a;
+		_tmp15__length1 = a_length1;
+		_tmp14_ = _tmp15_;
+		_tmp14__length1 = _tmp15__length1;
 		__tmp14__size_ = _tmp14__length1;
-		if (_tmp12_ != NULL) {
-			_tmp14_ = _tmp12_ + 1;
-			_tmp14__length1 = 3 - 1;
-			__tmp14__size_ = _tmp14__length1;
+		_tmp16_ = NULL;
+		_tmp16__length1 = 0;
+		__tmp16__size_ = _tmp16__length1;
+		if (_tmp14_ != NULL) {
+			_tmp16_ = _tmp14_ + 1;
+			_tmp16__length1 = 3 - 1;
+			__tmp16__size_ = _tmp16__length1;
 		}
-		_tmp15_ = (_tmp14_ != NULL) ? _vala_array_dup1 (_tmp14_, _tmp14__length1) : _tmp14_;
-		_tmp15__length1 = _tmp14__length1;
-		s = _tmp15_;
-		s_length1 = _tmp15__length1;
+		_tmp17_ = (_tmp16_ != NULL) ? _vala_array_dup1 (_tmp16_, _tmp16__length1) : _tmp16_;
+		_tmp17__length1 = _tmp16__length1;
+		s = _tmp17_;
+		s_length1 = _tmp17__length1;
 		_s_size_ = s_length1;
 		_vala_assert (s == NULL, "s == null");
 		s = (g_free (s), NULL);
@@ -692,9 +702,12 @@ baz (Foo* f)
 		gint __tmp2__size_;
 		gint* _tmp4_ = NULL;
 		gint* i = NULL;
+		gint _i_slot_;
 		gint* _tmp7_;
 		gint* _tmp8_;
-		gint _tmp9_;
+		gint* _tmp9_;
+		gint* _tmp10_;
+		gint _tmp11_;
 		_tmp1_ = foo_seq (f, 10, &_tmp0_);
 		a = _tmp1_;
 		a_length1 = _tmp0_;
@@ -715,223 +728,250 @@ baz (Foo* f)
 		}
 		_tmp7_ = _tmp4_;
 		_tmp4_ = NULL;
-		i = _tmp7_;
-		_tmp8_ = i;
-		_tmp9_ = 3;
-		_vala_assert (_int_equal (_tmp8_, &_tmp9_) == TRUE, "i == 3");
-		_g_free0 (i);
+		_tmp8_ = _tmp7_;
+		if (_tmp8_) {
+			_i_slot_ = *_tmp8_;
+			i = &_i_slot_;
+		} else {
+			i = NULL;
+		}
+		_tmp9_ = i;
+		_g_free0 (_tmp8_);
+		_tmp10_ = i;
+		_tmp11_ = 3;
+		_vala_assert (_int_equal (_tmp10_, &_tmp11_) == TRUE, "i == 3");
 		_g_free0 (_tmp4_);
 		a = (g_free (a), NULL);
 	}
 	{
 		gint* a = NULL;
-		gint _tmp10_ = 0;
-		gint* _tmp11_;
+		gint _tmp12_ = 0;
+		gint* _tmp13_;
 		gint a_length1;
 		gint _a_size_;
-		gint* _tmp12_ = NULL;
-		gint* _tmp13_;
-		gint _tmp13__length1;
-		gint _tmp12__length1;
-		gint __tmp12__size_;
 		gint* _tmp14_ = NULL;
-		gint _tmp14__length1;
-		gint __tmp14__size_;
-		gint* s = NULL;
 		gint* _tmp15_;
 		gint _tmp15__length1;
+		gint _tmp14__length1;
+		gint __tmp14__size_;
+		gint* _tmp16_ = NULL;
+		gint _tmp16__length1;
+		gint __tmp16__size_;
+		gint* s = NULL;
+		gint* _tmp17_;
+		gint _tmp17__length1;
 		gint s_length1;
 		gint _s_size_;
-		gint* _tmp16_;
-		gint _tmp16__length1;
-		gint _tmp17_;
-		_tmp11_ = foo_seq (f, 10, &_tmp10_);
-		a = _tmp11_;
-		a_length1 = _tmp10_;
+		gint* _tmp18_;
+		gint _tmp18__length1;
+		gint _tmp19_;
+		_tmp13_ = foo_seq (f, 10, &_tmp12_);
+		a = _tmp13_;
+		a_length1 = _tmp12_;
 		_a_size_ = a_length1;
-		_tmp13_ = a;
-		_tmp13__length1 = a_length1;
-		_tmp12_ = _tmp13_;
-		_tmp12__length1 = _tmp13__length1;
-		__tmp12__size_ = _tmp12__length1;
-		_tmp14_ = NULL;
-		_tmp14__length1 = 0;
+		_tmp15_ = a;
+		_tmp15__length1 = a_length1;
+		_tmp14_ = _tmp15_;
+		_tmp14__length1 = _tmp15__length1;
 		__tmp14__size_ = _tmp14__length1;
-		if (_tmp12_ != NULL) {
-			_tmp14_ = _tmp12_ + 1;
-			_tmp14__length1 = 3 - 1;
-			__tmp14__size_ = _tmp14__length1;
+		_tmp16_ = NULL;
+		_tmp16__length1 = 0;
+		__tmp16__size_ = _tmp16__length1;
+		if (_tmp14_ != NULL) {
+			_tmp16_ = _tmp14_ + 1;
+			_tmp16__length1 = 3 - 1;
+			__tmp16__size_ = _tmp16__length1;
 		}
-		_tmp15_ = (_tmp14_ != NULL) ? _vala_array_dup2 (_tmp14_, _tmp14__length1) : _tmp14_;
-		_tmp15__length1 = _tmp14__length1;
-		s = _tmp15_;
-		s_length1 = _tmp15__length1;
+		_tmp17_ = (_tmp16_ != NULL) ? _vala_array_dup2 (_tmp16_, _tmp16__length1) : _tmp16_;
+		_tmp17__length1 = _tmp16__length1;
+		s = _tmp17_;
+		s_length1 = _tmp17__length1;
 		_s_size_ = s_length1;
-		_tmp16_ = s;
-		_tmp16__length1 = s_length1;
-		_tmp17_ = _tmp16_[0];
-		_vala_assert (_tmp17_ == 1, "s[0] == 1");
+		_tmp18_ = s;
+		_tmp18__length1 = s_length1;
+		_tmp19_ = _tmp18_[0];
+		_vala_assert (_tmp19_ == 1, "s[0] == 1");
 		s = (g_free (s), NULL);
 		a = (g_free (a), NULL);
 	}
 	{
-		Foo* _tmp18_ = NULL;
-		Bar* _tmp19_ = NULL;
+		Foo* _tmp20_ = NULL;
+		Bar* _tmp21_ = NULL;
 		Bar* b = NULL;
-		Bar* _tmp21_;
-		Bar* _tmp22_;
-		_tmp18_ = f;
-		_tmp19_ = NULL;
-		if (_tmp18_ != NULL) {
-			Bar* _tmp20_;
-			_tmp20_ = _tmp18_->b;
-			_tmp18_->b = NULL;
-			_bar_free0 (_tmp19_);
-			_tmp19_ = _tmp20_;
+		Bar* _tmp23_;
+		Bar* _tmp24_;
+		_tmp20_ = f;
+		_tmp21_ = NULL;
+		if (_tmp20_ != NULL) {
+			Bar* _tmp22_;
+			_tmp22_ = _tmp20_->b;
+			_tmp20_->b = NULL;
+			_bar_free0 (_tmp21_);
+			_tmp21_ = _tmp22_;
 		}
-		_tmp21_ = _tmp19_;
-		_tmp19_ = NULL;
-		b = _tmp21_;
-		_tmp22_ = b;
-		_vala_assert (_tmp22_->k == 17, "b.k == 17");
+		_tmp23_ = _tmp21_;
+		_tmp21_ = NULL;
+		b = _tmp23_;
+		_tmp24_ = b;
+		_vala_assert (_tmp24_->k == 17, "b.k == 17");
 		_bar_free0 (b);
-		_bar_free0 (_tmp19_);
+		_bar_free0 (_tmp21_);
 	}
 	{
-		Foo* _tmp23_ = NULL;
-		Bar* _tmp24_ = NULL;
+		Foo* _tmp25_ = NULL;
+		Bar* _tmp26_ = NULL;
 		Bar* b = NULL;
-		Bar* _tmp26_;
-		Bar* _tmp27_;
-		_tmp23_ = f;
-		_tmp24_ = NULL;
-		if (_tmp23_ != NULL) {
-			Bar* _tmp25_;
-			_tmp25_ = foo_bar (_tmp23_);
-			_bar_free0 (_tmp24_);
-			_tmp24_ = _tmp25_;
+		Bar* _tmp28_;
+		Bar* _tmp29_;
+		_tmp25_ = f;
+		_tmp26_ = NULL;
+		if (_tmp25_ != NULL) {
+			Bar* _tmp27_;
+			_tmp27_ = foo_bar (_tmp25_);
+			_bar_free0 (_tmp26_);
+			_tmp26_ = _tmp27_;
 		}
-		_tmp26_ = _tmp24_;
-		_tmp24_ = NULL;
-		b = _tmp26_;
-		_tmp27_ = b;
-		_vala_assert (_tmp27_->k == 17, "b.k == 17");
+		_tmp28_ = _tmp26_;
+		_tmp26_ = NULL;
+		b = _tmp28_;
+		_tmp29_ = b;
+		_vala_assert (_tmp29_->k == 17, "b.k == 17");
 		_bar_free0 (b);
-		_bar_free0 (_tmp24_);
+		_bar_free0 (_tmp26_);
 	}
 	{
-		Foo* _tmp28_ = NULL;
-		Bar** _tmp29_ = NULL;
-		gint _tmp29__length1;
-		gint __tmp29__size_;
+		Foo* _tmp30_ = NULL;
+		Bar** _tmp31_ = NULL;
+		gint _tmp31__length1;
+		gint __tmp31__size_;
 		Bar** a = NULL;
-		Bar** _tmp32_;
-		gint _tmp32__length1;
-		gint a_length1;
-		gint _a_size_;
-		Bar** _tmp33_ = NULL;
 		Bar** _tmp34_;
 		gint _tmp34__length1;
-		gint _tmp33__length1;
-		gint __tmp33__size_;
-		Bar* _tmp35_ = NULL;
+		gint a_length1;
+		gint _a_size_;
+		Bar** _tmp35_ = NULL;
+		Bar** _tmp36_;
+		gint _tmp36__length1;
+		gint _tmp35__length1;
+		gint __tmp35__size_;
+		Bar* _tmp37_ = NULL;
 		Bar* b = NULL;
-		Bar* _tmp37_;
-		Bar* _tmp38_;
-		_tmp28_ = f;
-		_tmp29_ = NULL;
-		_tmp29__length1 = 0;
-		__tmp29__size_ = _tmp29__length1;
-		if (_tmp28_ != NULL) {
-			gint _tmp30_ = 0;
-			Bar** _tmp31_;
-			_tmp31_ = foo_bars (_tmp28_, 10, &_tmp30_);
-			_tmp29_ = (_vala_array_free (_tmp29_, _tmp29__length1, (GDestroyNotify) bar_free), NULL);
-			_tmp29_ = _tmp31_;
-			_tmp29__length1 = _tmp30_;
-			__tmp29__size_ = _tmp29__length1;
+		Bar* _tmp39_;
+		Bar* _tmp40_;
+		_tmp30_ = f;
+		_tmp31_ = NULL;
+		_tmp31__length1 = 0;
+		__tmp31__size_ = _tmp31__length1;
+		if (_tmp30_ != NULL) {
+			gint _tmp32_ = 0;
+			Bar** _tmp33_;
+			_tmp33_ = foo_bars (_tmp30_, 10, &_tmp32_);
+			_tmp31_ = (_vala_array_free (_tmp31_, _tmp31__length1, (GDestroyNotify) bar_free), NULL);
+			_tmp31_ = _tmp33_;
+			_tmp31__length1 = _tmp32_;
+			__tmp31__size_ = _tmp31__length1;
 		}
-		_tmp32_ = _tmp29_;
-		_tmp32__length1 = _tmp29__length1;
-		_tmp29_ = NULL;
-		_tmp29__length1 = 0;
-		a = _tmp32_;
-		a_length1 = _tmp32__length1;
+		_tmp34_ = _tmp31_;
+		_tmp34__length1 = _tmp31__length1;
+		_tmp31_ = NULL;
+		_tmp31__length1 = 0;
+		a = _tmp34_;
+		a_length1 = _tmp34__length1;
 		_a_size_ = a_length1;
-		_tmp34_ = a;
-		_tmp34__length1 = a_length1;
-		_tmp33_ = _tmp34_;
-		_tmp33__length1 = _tmp34__length1;
-		__tmp33__size_ = _tmp33__length1;
-		_tmp35_ = NULL;
-		if (_tmp33_ != NULL) {
-			Bar* _tmp36_;
-			_tmp36_ = _tmp33_[3];
-			_tmp33_[3] = NULL;
-			_bar_free0 (_tmp35_);
-			_tmp35_ = _tmp36_;
+		_tmp36_ = a;
+		_tmp36__length1 = a_length1;
+		_tmp35_ = _tmp36_;
+		_tmp35__length1 = _tmp36__length1;
+		__tmp35__size_ = _tmp35__length1;
+		_tmp37_ = NULL;
+		if (_tmp35_ != NULL) {
+			Bar* _tmp38_;
+			_tmp38_ = _tmp35_[3];
+			_tmp35_[3] = NULL;
+			_bar_free0 (_tmp37_);
+			_tmp37_ = _tmp38_;
 		}
-		_tmp37_ = _tmp35_;
-		_tmp35_ = NULL;
-		b = _tmp37_;
-		_tmp38_ = b;
-		_vala_assert (_tmp38_->k == 3, "b.k == 3");
+		_tmp39_ = _tmp37_;
+		_tmp37_ = NULL;
+		b = _tmp39_;
+		_tmp40_ = b;
+		_vala_assert (_tmp40_->k == 3, "b.k == 3");
 		_bar_free0 (b);
-		_bar_free0 (_tmp35_);
+		_bar_free0 (_tmp37_);
 		a = (_vala_array_free (a, a_length1, (GDestroyNotify) bar_free), NULL);
-		_tmp29_ = (_vala_array_free (_tmp29_, _tmp29__length1, (GDestroyNotify) bar_free), NULL);
+		_tmp31_ = (_vala_array_free (_tmp31_, _tmp31__length1, (GDestroyNotify) bar_free), NULL);
 	}
 	{
-		Foo* _tmp39_ = NULL;
-		gint* _tmp40_ = NULL;
+		Foo* _tmp41_ = NULL;
+		gint* _tmp42_ = NULL;
 		gint* j = NULL;
-		gint* _tmp44_;
-		gint* _tmp45_;
-		gint _tmp46_;
-		_tmp39_ = f;
-		_tmp40_ = NULL;
-		if (_tmp39_ != NULL) {
-			gint _tmp41_;
-			gint _tmp42_;
-			gint* _tmp43_;
-			_tmp41_ = foo_get_j (_tmp39_);
-			_tmp42_ = _tmp41_;
-			_tmp43_ = __int_dup0 (&_tmp42_);
-			_g_free0 (_tmp40_);
-			_tmp40_ = _tmp43_;
+		gint _j_slot_;
+		gint* _tmp46_;
+		gint* _tmp47_;
+		gint* _tmp48_;
+		gint* _tmp49_;
+		gint _tmp50_;
+		_tmp41_ = f;
+		_tmp42_ = NULL;
+		if (_tmp41_ != NULL) {
+			gint _tmp43_;
+			gint _tmp44_;
+			gint* _tmp45_;
+			_tmp43_ = foo_get_j (_tmp41_);
+			_tmp44_ = _tmp43_;
+			_tmp45_ = __int_dup0 (&_tmp44_);
+			_g_free0 (_tmp42_);
+			_tmp42_ = _tmp45_;
 		}
-		_tmp44_ = _tmp40_;
-		_tmp40_ = NULL;
-		j = _tmp44_;
-		_tmp45_ = j;
-		_tmp46_ = 23;
-		_vala_assert (_int_equal (_tmp45_, &_tmp46_) == TRUE, "j == 23");
-		_g_free0 (j);
-		_g_free0 (_tmp40_);
+		_tmp46_ = _tmp42_;
+		_tmp42_ = NULL;
+		_tmp47_ = _tmp46_;
+		if (_tmp47_) {
+			_j_slot_ = *_tmp47_;
+			j = &_j_slot_;
+		} else {
+			j = NULL;
+		}
+		_tmp48_ = j;
+		_g_free0 (_tmp47_);
+		_tmp49_ = j;
+		_tmp50_ = 23;
+		_vala_assert (_int_equal (_tmp49_, &_tmp50_) == TRUE, "j == 23");
+		_g_free0 (_tmp42_);
 	}
 	{
-		Foo* _tmp47_ = NULL;
-		gint* _tmp48_ = NULL;
+		Foo* _tmp51_ = NULL;
+		gint* _tmp52_ = NULL;
 		gint* i = NULL;
-		gint* _tmp51_;
-		gint _tmp52_;
-		_tmp47_ = f;
-		_tmp48_ = NULL;
-		if (_tmp47_ != NULL) {
-			gint _tmp49_;
-			gint* _tmp50_;
-			_tmp49_ = foo_foo (_tmp47_);
-			_tmp50_ = __int_dup0 (&_tmp49_);
-			_g_free0 (_tmp48_);
-			_tmp48_ = _tmp50_;
+		gint _i_slot_;
+		gint* _tmp55_;
+		gint* _tmp56_;
+		gint* _tmp57_;
+		gint _tmp58_;
+		_tmp51_ = f;
+		_tmp52_ = NULL;
+		if (_tmp51_ != NULL) {
+			gint _tmp53_;
+			gint* _tmp54_;
+			_tmp53_ = foo_foo (_tmp51_);
+			_tmp54_ = __int_dup0 (&_tmp53_);
+			_g_free0 (_tmp52_);
+			_tmp52_ = _tmp54_;
 		}
-		_tmp51_ = _tmp48_;
-		_tmp48_ = NULL;
-		i = _tmp51_;
-		_tmp52_ = 42;
-		_vala_assert (_int_equal (i, &_tmp52_) == TRUE, "i == 42");
-		_g_free0 (i);
-		_g_free0 (_tmp48_);
+		_tmp55_ = _tmp52_;
+		_tmp52_ = NULL;
+		_tmp56_ = _tmp55_;
+		if (_tmp56_) {
+			_i_slot_ = *_tmp56_;
+			i = &_i_slot_;
+		} else {
+			i = NULL;
+		}
+		_tmp57_ = i;
+		_g_free0 (_tmp56_);
+		_tmp58_ = 42;
+		_vala_assert (_int_equal (i, &_tmp58_) == TRUE, "i == 42");
+		_g_free0 (_tmp52_);
 	}
 }
 
@@ -952,8 +992,11 @@ _vala_main (void)
 		Foo* _tmp3_;
 		gint* _tmp4_ = NULL;
 		gint* i = NULL;
+		gint _i_slot_;
 		gint* _tmp6_;
-		gint _tmp7_;
+		gint* _tmp7_;
+		gint* _tmp8_;
+		gint _tmp9_;
 		_tmp3_ = foo_new ();
 		_tmp2_ = _tmp3_;
 		_tmp4_ = NULL;
@@ -965,10 +1008,17 @@ _vala_main (void)
 		}
 		_tmp6_ = _tmp4_;
 		_tmp4_ = NULL;
-		i = _tmp6_;
-		_tmp7_ = 42;
-		_vala_assert (_int_equal (i, &_tmp7_) == TRUE, "i == 42");
-		_g_free0 (i);
+		_tmp7_ = _tmp6_;
+		if (_tmp7_) {
+			_i_slot_ = *_tmp7_;
+			i = &_i_slot_;
+		} else {
+			i = NULL;
+		}
+		_tmp8_ = i;
+		_g_free0 (_tmp7_);
+		_tmp9_ = 42;
+		_vala_assert (_int_equal (i, &_tmp9_) == TRUE, "i == 42");
 		_g_free0 (_tmp4_);
 		_foo_unref0 (_tmp2_);
 	}

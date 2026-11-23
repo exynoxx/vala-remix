@@ -1435,6 +1435,8 @@ TESTS = \
 	nullability/string-concat.test \
 	nullability/with-non-null.test \
 	nullability/var-type.vala \
+	nullable/stack-slot-local.vala \
+	nullable/stack-slot-local-control-flow.vala \
 	version/since-constant.test \
 	version/since-field.test \
 	version/since-local-variable.test \

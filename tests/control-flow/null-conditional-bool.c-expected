@@ -4,7 +4,6 @@
 #include <glib-object.h>
 #include <glib.h>
 #include <gobject/gvaluecollector.h>
-#include <string.h>
 
 #if !defined(VALA_STRICT_C)
 #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ >= 14)
@@ -35,7 +34,6 @@ typedef struct _Foo Foo;
 typedef struct _FooClass FooClass;
 typedef struct _FooPrivate FooPrivate;
 typedef struct _ParamSpecFoo ParamSpecFoo;
-#define _g_free0(var) ((var == NULL) ? NULL : (var = (g_free (var), NULL)))
 #define _foo_unref0(var) ((var == NULL) ? NULL : (var = (foo_unref (var), NULL)))
 
 struct _Foo {
@@ -75,7 +73,6 @@ VALA_EXTERN Foo* foo_construct (GType object_type,
 static void foo_finalize (Foo * obj);
 static GType foo_get_type_once (void);
 static void _vala_main (void);
-static gboolean* _bool_dup (gboolean* self);
 
 Foo*
 foo_construct (GType object_type,
@@ -292,21 +289,6 @@ foo_unref (gpointer instance)
 	}
 }
 
-static gboolean*
-_bool_dup (gboolean* self)
-{
-	gboolean* dup;
-	dup = g_new (gboolean, 1);
-	memcpy (dup, self, sizeof (gboolean));
-	return dup;
-}
-
-static gpointer
-__bool_dup0 (gpointer self)
-{
-	return self ? _bool_dup (self) : NULL;
-}
-
 static void
 _vala_main (void)
 {
@@ -315,69 +297,103 @@ _vala_main (void)
 		Foo* _tmp0_ = NULL;
 		Foo* _tmp1_;
 		gboolean* _tmp2_ = NULL;
-		gboolean* _tmp4_ = NULL;
-		gboolean* _tmp5_;
+		gboolean __tmp2__slot_;
+		gboolean* _tmp3_ = NULL;
+		gboolean __tmp3__slot_;
 		foo = NULL;
 		_tmp1_ = foo;
 		_tmp0_ = _tmp1_;
 		_tmp2_ = NULL;
 		if (_tmp0_ != NULL) {
-			gboolean* _tmp3_;
-			_tmp3_ = __bool_dup0 (&_tmp0_->bar);
-			_g_free0 (_tmp2_);
-			_tmp2_ = _tmp3_;
+			__tmp2__slot_ = _tmp0_->bar;
+			_tmp2_ = &__tmp2__slot_;
 		}
-		_tmp5_ = __bool_dup0 (_tmp2_);
-		_tmp4_ = _tmp5_;
-		if (_tmp4_ == NULL) {
-			gboolean _tmp6_;
-			gboolean* _tmp7_;
-			_tmp6_ = TRUE;
-			_tmp7_ = __bool_dup0 (&_tmp6_);
-			_g_free0 (_tmp4_);
-			_tmp4_ = _tmp7_;
+		if (_tmp2_) {
+			__tmp3__slot_ = *_tmp2_;
+			_tmp3_ = &__tmp3__slot_;
+		} else {
+			_tmp3_ = NULL;
 		}
-		if (*_tmp4_) {
+		if (_tmp3_ == NULL) {
+			gboolean _tmp4_;
+			_tmp4_ = TRUE;
+			__tmp3__slot_ = _tmp4_;
+			_tmp3_ = &__tmp3__slot_;
+		}
+		if (*_tmp3_) {
 		} else {
 			g_assert_not_reached ();
 		}
-		_g_free0 (_tmp4_);
-		_g_free0 (_tmp2_);
 		_foo_unref0 (foo);
 	}
 	{
 		Foo* foo = NULL;
-		Foo* _tmp8_ = NULL;
-		Foo* _tmp9_;
-		gboolean* _tmp10_ = NULL;
-		gboolean* _tmp12_ = NULL;
-		gboolean* _tmp13_;
+		Foo* _tmp5_ = NULL;
+		Foo* _tmp6_;
+		gboolean* _tmp7_ = NULL;
+		gboolean __tmp7__slot_;
+		gboolean* _tmp8_ = NULL;
+		gboolean __tmp8__slot_;
 		foo = NULL;
-		_tmp9_ = foo;
-		_tmp8_ = _tmp9_;
-		_tmp10_ = NULL;
-		if (_tmp8_ != NULL) {
-			gboolean* _tmp11_;
-			_tmp11_ = __bool_dup0 (&_tmp8_->bar);
-			_g_free0 (_tmp10_);
-			_tmp10_ = _tmp11_;
+		_tmp6_ = foo;
+		_tmp5_ = _tmp6_;
+		_tmp7_ = NULL;
+		if (_tmp5_ != NULL) {
+			__tmp7__slot_ = _tmp5_->bar;
+			_tmp7_ = &__tmp7__slot_;
 		}
-		_tmp13_ = __bool_dup0 (_tmp10_);
-		_tmp12_ = _tmp13_;
-		if (_tmp12_ == NULL) {
-			gboolean _tmp14_;
-			gboolean* _tmp15_;
-			_tmp14_ = FALSE;
-			_tmp15_ = __bool_dup0 (&_tmp14_);
-			_g_free0 (_tmp12_);
-			_tmp12_ = _tmp15_;
+		if (_tmp7_) {
+			__tmp8__slot_ = *_tmp7_;
+			_tmp8_ = &__tmp8__slot_;
+		} else {
+			_tmp8_ = NULL;
 		}
-		if (*_tmp12_) {
+		if (_tmp8_ == NULL) {
+			gboolean _tmp9_;
+			_tmp9_ = FALSE;
+			__tmp8__slot_ = _tmp9_;
+			_tmp8_ = &__tmp8__slot_;
+		}
+		if (*_tmp8_) {
 			g_assert_not_reached ();
 		} else {
 		}
-		_g_free0 (_tmp12_);
-		_g_free0 (_tmp10_);
+		_foo_unref0 (foo);
+	}
+	{
+		Foo* foo = NULL;
+		Foo* _tmp10_;
+		Foo* _tmp11_ = NULL;
+		Foo* _tmp12_;
+		gboolean* _tmp13_ = NULL;
+		gboolean __tmp13__slot_;
+		gboolean* _tmp14_ = NULL;
+		gboolean __tmp14__slot_;
+		_tmp10_ = foo_new (TRUE);
+		foo = _tmp10_;
+		_tmp12_ = foo;
+		_tmp11_ = _tmp12_;
+		_tmp13_ = NULL;
+		if (_tmp11_ != NULL) {
+			__tmp13__slot_ = _tmp11_->bar;
+			_tmp13_ = &__tmp13__slot_;
+		}
+		if (_tmp13_) {
+			__tmp14__slot_ = *_tmp13_;
+			_tmp14_ = &__tmp14__slot_;
+		} else {
+			_tmp14_ = NULL;
+		}
+		if (_tmp14_ == NULL) {
+			gboolean _tmp15_;
+			_tmp15_ = FALSE;
+			__tmp14__slot_ = _tmp15_;
+			_tmp14_ = &__tmp14__slot_;
+		}
+		if (*_tmp14_) {
+		} else {
+			g_assert_not_reached ();
+		}
 		_foo_unref0 (foo);
 	}
 	{
@@ -386,72 +402,34 @@ _vala_main (void)
 		Foo* _tmp17_ = NULL;
 		Foo* _tmp18_;
 		gboolean* _tmp19_ = NULL;
-		gboolean* _tmp21_ = NULL;
-		gboolean* _tmp22_;
-		_tmp16_ = foo_new (TRUE);
+		gboolean __tmp19__slot_;
+		gboolean* _tmp20_ = NULL;
+		gboolean __tmp20__slot_;
+		_tmp16_ = foo_new (FALSE);
 		foo = _tmp16_;
 		_tmp18_ = foo;
 		_tmp17_ = _tmp18_;
 		_tmp19_ = NULL;
 		if (_tmp17_ != NULL) {
-			gboolean* _tmp20_;
-			_tmp20_ = __bool_dup0 (&_tmp17_->bar);
-			_g_free0 (_tmp19_);
-			_tmp19_ = _tmp20_;
+			__tmp19__slot_ = _tmp17_->bar;
+			_tmp19_ = &__tmp19__slot_;
 		}
-		_tmp22_ = __bool_dup0 (_tmp19_);
-		_tmp21_ = _tmp22_;
-		if (_tmp21_ == NULL) {
-			gboolean _tmp23_;
-			gboolean* _tmp24_;
-			_tmp23_ = FALSE;
-			_tmp24_ = __bool_dup0 (&_tmp23_);
-			_g_free0 (_tmp21_);
-			_tmp21_ = _tmp24_;
-		}
-		if (*_tmp21_) {
+		if (_tmp19_) {
+			__tmp20__slot_ = *_tmp19_;
+			_tmp20_ = &__tmp20__slot_;
 		} else {
-			g_assert_not_reached ();
+			_tmp20_ = NULL;
 		}
-		_g_free0 (_tmp21_);
-		_g_free0 (_tmp19_);
-		_foo_unref0 (foo);
-	}
-	{
-		Foo* foo = NULL;
-		Foo* _tmp25_;
-		Foo* _tmp26_ = NULL;
-		Foo* _tmp27_;
-		gboolean* _tmp28_ = NULL;
-		gboolean* _tmp30_ = NULL;
-		gboolean* _tmp31_;
-		_tmp25_ = foo_new (FALSE);
-		foo = _tmp25_;
-		_tmp27_ = foo;
-		_tmp26_ = _tmp27_;
-		_tmp28_ = NULL;
-		if (_tmp26_ != NULL) {
-			gboolean* _tmp29_;
-			_tmp29_ = __bool_dup0 (&_tmp26_->bar);
-			_g_free0 (_tmp28_);
-			_tmp28_ = _tmp29_;
+		if (_tmp20_ == NULL) {
+			gboolean _tmp21_;
+			_tmp21_ = TRUE;
+			__tmp20__slot_ = _tmp21_;
+			_tmp20_ = &__tmp20__slot_;
 		}
-		_tmp31_ = __bool_dup0 (_tmp28_);
-		_tmp30_ = _tmp31_;
-		if (_tmp30_ == NULL) {
-			gboolean _tmp32_;
-			gboolean* _tmp33_;
-			_tmp32_ = TRUE;
-			_tmp33_ = __bool_dup0 (&_tmp32_);
-			_g_free0 (_tmp30_);
-			_tmp30_ = _tmp33_;
-		}
-		if (*_tmp30_) {
+		if (*_tmp20_) {
 			g_assert_not_reached ();
 		} else {
 		}
-		_g_free0 (_tmp30_);
-		_g_free0 (_tmp28_);
 		_foo_unref0 (foo);
 	}
 }

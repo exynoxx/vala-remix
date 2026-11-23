@@ -229,12 +229,6 @@ foo_emit_bar2 (Foo* self)
 	_g_free0 (_tmp2_);
 }
 
-static gpointer
-_manam_dup0 (gpointer self)
-{
-	return self ? manam_dup (self) : NULL;
-}
-
 static gboolean
 _manam_equal (const Manam * s1,
               const Manam * s2)
@@ -261,43 +255,41 @@ void
 foo_emit_manam (Foo* self)
 {
 	Manam* m = NULL;
+	Manam _m_slot_;
 	Manam _tmp0_ = {0};
-	Manam* _tmp1_;
-	Manam* _tmp2_ = NULL;
-	Manam* _tmp3_;
+	Manam* _tmp1_ = NULL;
+	Manam* _tmp2_;
 	g_return_if_fail (IS_FOO (self));
 	_tmp0_.i = 23;
 	_tmp0_.j = 42;
-	_tmp1_ = _manam_dup0 (&_tmp0_);
-	m = _tmp1_;
-	g_signal_emit (self, foo_signals[FOO_MANAM_SIGNAL], 0, &_tmp2_);
-	_tmp3_ = _tmp2_;
-	_vala_assert (_manam_equal (_tmp3_, m) == TRUE, "manam () == m");
-	_manam_free0 (_tmp3_);
-	_manam_free0 (m);
+	_m_slot_ = _tmp0_;
+	m = &_m_slot_;
+	g_signal_emit (self, foo_signals[FOO_MANAM_SIGNAL], 0, &_tmp1_);
+	_tmp2_ = _tmp1_;
+	_vala_assert (_manam_equal (_tmp2_, m) == TRUE, "manam () == m");
+	_manam_free0 (_tmp2_);
 }
 
 void
 foo_emit_manam2 (Foo* self)
 {
 	Manam* m = NULL;
+	Manam _m_slot_;
 	Manam _tmp0_ = {0};
-	Manam* _tmp1_;
-	Manam _tmp2_ = {0};
-	Manam* _tmp3_ = NULL;
-	Manam* _tmp4_;
+	Manam _tmp1_ = {0};
+	Manam* _tmp2_ = NULL;
+	Manam* _tmp3_;
 	g_return_if_fail (IS_FOO (self));
 	_tmp0_.i = 23;
 	_tmp0_.j = 42;
-	_tmp1_ = _manam_dup0 (&_tmp0_);
-	m = _tmp1_;
-	_tmp2_.i = 23;
-	_tmp2_.j = 42;
-	g_signal_emit (self, foo_signals[FOO_MANAM2_SIGNAL], 0, &_tmp2_, &_tmp3_);
-	_tmp4_ = _tmp3_;
-	_vala_assert (_manam_equal (_tmp4_, m) == TRUE, "manam2 ({23, 42}) == m");
-	_manam_free0 (_tmp4_);
-	_manam_free0 (m);
+	_m_slot_ = _tmp0_;
+	m = &_m_slot_;
+	_tmp1_.i = 23;
+	_tmp1_.j = 42;
+	g_signal_emit (self, foo_signals[FOO_MANAM2_SIGNAL], 0, &_tmp1_, &_tmp2_);
+	_tmp3_ = _tmp2_;
+	_vala_assert (_manam_equal (_tmp3_, m) == TRUE, "manam2 ({23, 42}) == m");
+	_manam_free0 (_tmp3_);
 }
 
 Foo*
@@ -450,6 +442,12 @@ callback_bar2 (Bar* bar)
 	return result;
 }
 
+static gpointer
+_manam_dup0 (gpointer self)
+{
+	return self ? manam_dup (self) : NULL;
+}
+
 Manam*
 callback_manam (void)
 {
@@ -467,18 +465,17 @@ Manam*
 callback_manam2 (Manam* manam)
 {
 	Manam* m = NULL;
+	Manam _m_slot_;
 	Manam _tmp0_ = {0};
 	Manam* _tmp1_;
-	Manam* _tmp2_;
 	Manam* result;
 	_tmp0_.i = 23;
 	_tmp0_.j = 42;
-	_tmp1_ = _manam_dup0 (&_tmp0_);
-	m = _tmp1_;
+	_m_slot_ = _tmp0_;
+	m = &_m_slot_;
 	_vala_assert (_manam_equal (manam, m) == TRUE, "manam == m");
-	_tmp2_ = _manam_dup0 (manam);
-	result = _tmp2_;
-	_manam_free0 (m);
+	_tmp1_ = _manam_dup0 (manam);
+	result = _tmp1_;
 	return result;
 }
 

@@ -30,6 +30,12 @@ public class Vala.LocalVariable : Variable {
 
 	public bool captured { get; set; }
 
+	/**
+	 * Owned nullable value-type local whose box never escapes, so it is
+	 * backed by a stack slot instead of a heap allocation.
+	 */
+	public bool stack_slot { get; set; }
+
 	public bool init { get; set; }
 
 	/**

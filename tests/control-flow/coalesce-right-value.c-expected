@@ -103,6 +103,7 @@ _vala_main (void)
 {
 	{
 		gint* null_int = NULL;
+		gint _null_int_slot_;
 		gint* _tmp0_ = NULL;
 		gint* _tmp1_;
 		gint* _tmp2_;
@@ -130,10 +131,10 @@ _vala_main (void)
 		i = _tmp7_;
 		_vala_assert (i == 42, "i == 42");
 		_g_free0 (_tmp0_);
-		_g_free0 (null_int);
 	}
 	{
 		Foo* null_foo = NULL;
+		Foo _null_foo_slot_;
 		Foo right_foo = {0};
 		Foo _tmp8_ = {0};
 		Foo* _tmp9_ = NULL;
@@ -167,7 +168,6 @@ _vala_main (void)
 		_tmp17_ = foo;
 		_vala_assert (_tmp17_.i == 42, "foo.i == 42");
 		_foo_free0 (_tmp9_);
-		_foo_free0 (null_foo);
 	}
 }
 

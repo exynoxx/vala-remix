@@ -2493,7 +2493,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 			for (int i = local_vars.size - 1; i >= 0; i--) {
 				var local = local_vars[i];
 				local.active = false;
-				if (!local.unreachable && !local.captured && requires_destroy (local.variable_type)) {
+				if (!local.unreachable && !local.captured && !local.stack_slot && requires_destroy (local.variable_type)) {
 					ccode.add_expression (destroy_local (local));
 				}
 			}
@@ -2764,12 +2764,25 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 				}
 
 				ccode.add_declaration (get_ccode_name (local.variable_type), cvar);
+				if (local.stack_slot) {
+					ccode.add_declaration (get_ccode_name (get_stack_slot_type (local)), new CCodeVariableDeclarator (get_stack_slot_cname (local)));
+				}
 			}
 		}
 
 		/* Emit initializer */
 		if (local.initializer != null) {
 			local.initializer.emit (this);
+
+			if (local.stack_slot) {
+				// copy into the slot before temporaries (e.g. a returned box) are freed
+				if (local.initializer.value_type is NullType) {
+					store_local (local, new GLibValue (local.initializer.value_type, new CCodeConstant ("NULL")), true, local.source_reference);
+				} else if (get_cvalue (local.initializer) != null) {
+					store_local (local, local.initializer.target_value, true, local.source_reference);
+				}
+				local.initializer.target_value = get_local_cvalue (local);
+			}
 
 			visit_end_full_expression (local.initializer);
 		}
@@ -2822,7 +2835,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 
 		/* Store the initializer */
 
-		if (rhs != null) {
+		if (rhs != null && !local.stack_slot) {
 			if (!is_simple_struct_creation (local, local.initializer)) {
 				store_local (local, local.initializer.target_value, true, local.source_reference);
 			}
@@ -2833,6 +2846,35 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		}
 
 		local.active = true;
+	}
+
+	public DataType get_stack_slot_type (LocalVariable local) {
+		var type = local.variable_type.copy ();
+		type.nullable = false;
+		return type;
+	}
+
+	public string get_stack_slot_cname (LocalVariable local) {
+		return "_%s_slot_".printf (get_local_cname (local));
+	}
+
+	/**
+	 * Returns the stack-slot local the value of expr is stored into, if any.
+	 * Such stores copy the value into the slot, so expr need not be boxed.
+	 */
+	public static LocalVariable? get_stack_slot_store_target (Expression expr) {
+		unowned LocalVariable? local = expr.parent_node as LocalVariable;
+		if (local != null && local.initializer == expr && local.stack_slot) {
+			return local;
+		}
+		unowned Assignment? assignment = expr.parent_node as Assignment;
+		if (assignment != null && assignment.right == expr && assignment.operator == AssignmentOperator.SIMPLE) {
+			local = assignment.left.symbol_reference as LocalVariable;
+			if (local != null && local.stack_slot) {
+				return local;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -4128,7 +4170,7 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 		// free in reverse order
 		for (int i = local_vars.size - 1; i >= 0; i--) {
 			var local = local_vars[i];
-			if (!local.unreachable && local.active && !local.captured && requires_destroy (local.variable_type)) {
+			if (!local.unreachable && local.active && !local.captured && !local.stack_slot && requires_destroy (local.variable_type)) {
 				ccode.add_expression (destroy_local (local));
 			}
 		}
@@ -4466,7 +4508,13 @@ public abstract class Vala.CCodeBaseModule : CodeGenerator {
 			if (expr.value_type != null) {
 				// FIXME: temporary workaround until the refactoring is complete, not all target_value have a value_type
 				expr.target_value.value_type = expr.value_type;
-				expr.target_value = transform_value (expr.target_value, expr.target_type, expr);
+				var target_type = expr.target_type;
+				if (target_type != null && target_type.value_owned && get_stack_slot_store_target (expr) != null) {
+					// copied into the stack slot, an unowned box (or a temporary owned one) suffices
+					target_type = target_type.copy ();
+					target_type.value_owned = false;
+				}
+				expr.target_value = transform_value (expr.target_value, target_type, expr);
 			}
 
 			if (expr.target_value == null) {

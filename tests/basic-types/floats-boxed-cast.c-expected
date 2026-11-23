@@ -98,33 +98,53 @@ _vala_main (void)
 	gfloat _tmp1_;
 	gfloat* _tmp2_;
 	gfloat* f = NULL;
+	gfloat _f_slot_;
 	gfloat* _tmp3_;
-	gfloat _tmp4_;
-	gdouble* _tmp5_ = NULL;
-	gdouble _tmp6_;
-	gdouble* _tmp7_;
+	gfloat* _tmp4_;
+	gfloat* _tmp5_;
+	gfloat _tmp6_;
+	gdouble* _tmp7_ = NULL;
+	gdouble _tmp8_;
+	gdouble* _tmp9_;
 	gdouble* d = NULL;
-	gdouble* _tmp8_;
-	gdouble _tmp9_;
+	gdouble _d_slot_;
+	gdouble* _tmp10_;
+	gdouble* _tmp11_;
+	gdouble* _tmp12_;
+	gdouble _tmp13_;
 	_tmp1_ = 23.0f;
 	_tmp2_ = __float_dup0 (&_tmp1_);
 	_tmp0_ = _tmp2_;
 	_tmp3_ = _tmp0_;
 	_tmp0_ = NULL;
-	f = _tmp3_;
-	_tmp4_ = 23.0f;
-	_vala_assert (_float_equal (f, &_tmp4_) == TRUE, "f == 23.0f");
-	_tmp6_ = 42.0;
-	_tmp7_ = __double_dup0 (&_tmp6_);
-	_tmp5_ = _tmp7_;
-	_tmp8_ = _tmp5_;
-	_tmp5_ = NULL;
-	d = _tmp8_;
-	_tmp9_ = 42.0;
-	_vala_assert (_double_equal (d, &_tmp9_) == TRUE, "d == 42.0");
-	_g_free0 (d);
-	_g_free0 (_tmp5_);
-	_g_free0 (f);
+	_tmp4_ = _tmp3_;
+	if (_tmp4_) {
+		_f_slot_ = *_tmp4_;
+		f = &_f_slot_;
+	} else {
+		f = NULL;
+	}
+	_tmp5_ = f;
+	_g_free0 (_tmp4_);
+	_tmp6_ = 23.0f;
+	_vala_assert (_float_equal (f, &_tmp6_) == TRUE, "f == 23.0f");
+	_tmp8_ = 42.0;
+	_tmp9_ = __double_dup0 (&_tmp8_);
+	_tmp7_ = _tmp9_;
+	_tmp10_ = _tmp7_;
+	_tmp7_ = NULL;
+	_tmp11_ = _tmp10_;
+	if (_tmp11_) {
+		_d_slot_ = *_tmp11_;
+		d = &_d_slot_;
+	} else {
+		d = NULL;
+	}
+	_tmp12_ = d;
+	_g_free0 (_tmp11_);
+	_tmp13_ = 42.0;
+	_vala_assert (_double_equal (d, &_tmp13_) == TRUE, "d == 42.0");
+	_g_free0 (_tmp7_);
 	_g_free0 (_tmp0_);
 }
 

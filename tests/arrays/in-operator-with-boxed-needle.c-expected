@@ -2,7 +2,6 @@
  * generated from arrays_in_operator_with_boxed_needle.vala, do not modify */
 
 #include <glib.h>
-#include <string.h>
 
 #if !defined(VALA_STRICT_C)
 #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ >= 14)
@@ -13,7 +12,6 @@
 #endif
 #endif
 
-#define _g_free0(var) ((var == NULL) ? NULL : (var = (g_free (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
 #define _vala_return_val_if_fail(expr, msg, val) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return val; }
@@ -23,7 +21,6 @@ static void _vala_main (void);
 static gboolean _vala_int_array_contains (gint * stack,
                                    gssize stack_length,
                                    const gint needle);
-static gint* _int_dup (gint* self);
 
 static gboolean
 _vala_int_array_contains (gint * stack,
@@ -39,21 +36,6 @@ _vala_int_array_contains (gint * stack,
 	return FALSE;
 }
 
-static gint*
-_int_dup (gint* self)
-{
-	gint* dup;
-	dup = g_new (gint, 1);
-	memcpy (dup, self, sizeof (gint));
-	return dup;
-}
-
-static gpointer
-__int_dup0 (gpointer self)
-{
-	return self ? _int_dup (self) : NULL;
-}
-
 static void
 _vala_main (void)
 {
@@ -62,13 +44,12 @@ _vala_main (void)
 	gint foo_length1;
 	gint _foo_size_;
 	gint* i = NULL;
+	gint _i_slot_;
 	gint* _tmp1_;
 	gint _tmp2_;
 	gint* _tmp3_;
-	gint* _tmp4_;
-	gint _tmp5_;
-	gint* _tmp6_;
-	gint* _tmp7_;
+	gint _tmp4_;
+	gint* _tmp5_;
 	_tmp0_ = g_new0 (gint, 3);
 	_tmp0_[0] = 0;
 	_tmp0_[1] = 23;
@@ -80,18 +61,15 @@ _vala_main (void)
 	_tmp1_ = i;
 	_vala_assert (!((_tmp1_ == NULL) ? FALSE : _vala_int_array_contains (foo, foo_length1, *_tmp1_)), "!(i in foo)");
 	_tmp2_ = 23;
-	_tmp3_ = __int_dup0 (&_tmp2_);
-	_g_free0 (i);
-	i = _tmp3_;
-	_tmp4_ = i;
-	_vala_assert (((_tmp4_ == NULL) ? FALSE : _vala_int_array_contains (foo, foo_length1, *_tmp4_)), "i in foo");
-	_tmp5_ = 4711;
-	_tmp6_ = __int_dup0 (&_tmp5_);
-	_g_free0 (i);
-	i = _tmp6_;
-	_tmp7_ = i;
-	_vala_assert (!((_tmp7_ == NULL) ? FALSE : _vala_int_array_contains (foo, foo_length1, *_tmp7_)), "!(i in foo)");
-	_g_free0 (i);
+	_i_slot_ = _tmp2_;
+	i = &_i_slot_;
+	_tmp3_ = i;
+	_vala_assert (((_tmp3_ == NULL) ? FALSE : _vala_int_array_contains (foo, foo_length1, *_tmp3_)), "i in foo");
+	_tmp4_ = 4711;
+	_i_slot_ = _tmp4_;
+	i = &_i_slot_;
+	_tmp5_ = i;
+	_vala_assert (!((_tmp5_ == NULL) ? FALSE : _vala_int_array_contains (foo, foo_length1, *_tmp5_)), "!(i in foo)");
 	foo = (g_free (foo), NULL);
 }
 

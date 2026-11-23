@@ -39,6 +39,16 @@ public class Vala.CCodeAssignmentModule : CCodeMemberAccessModule {
 			return assignment.left.target_value;
 		}
 
+		unowned LocalVariable? slot_local = assignment.left.symbol_reference as LocalVariable;
+		if (slot_local != null && slot_local.stack_slot && assignment.operator == AssignmentOperator.SIMPLE) {
+			if (assignment.right.value_type is NullType) {
+				store_stack_slot (slot_local, new GLibValue (assignment.right.value_type, new CCodeConstant ("NULL")));
+			} else {
+				store_stack_slot (slot_local, assignment.right.target_value);
+			}
+			return assignment.left.target_value;
+		}
+
 		if (requires_destroy (assignment.left.value_type)) {
 			/* unref old value */
 			ccode.add_expression (destroy_value (assignment.left.target_value));
@@ -190,7 +200,45 @@ public class Vala.CCodeAssignmentModule : CCodeMemberAccessModule {
 		}
 	}
 
+	/**
+	 * Stores a nullable value into a stack-slot local: the value is copied
+	 * into the slot and the local points to it (or is NULL), nothing is freed.
+	 */
+	void store_stack_slot (LocalVariable local, TargetValue value) {
+		var lvalue = get_local_cexpression (local);
+		var slot = get_variable_cexpression (get_stack_slot_cname (local));
+		var slot_addr = new CCodeUnaryExpression (CCodeUnaryOperator.ADDRESS_OF, slot);
+		var cvalue = get_cvalue_ (value);
+		if (value.value_type is NullType) {
+			ccode.add_assignment (lvalue, new CCodeConstant ("NULL"));
+			return;
+		}
+		unowned CCodeUnaryExpression? addr = cvalue as CCodeUnaryExpression;
+		if (addr != null && addr.operator == CCodeUnaryOperator.ADDRESS_OF) {
+			// boxed non-null value
+			ccode.add_assignment (slot, addr.inner);
+			ccode.add_assignment (lvalue, slot_addr);
+			return;
+		}
+		if (!(cvalue is CCodeIdentifier || cvalue is CCodeMemberAccess)) {
+			var temp = (GLibValue) create_temp_value (local.variable_type, false, local, false);
+			ccode.add_assignment (temp.cvalue, cvalue);
+			cvalue = temp.cvalue;
+		}
+		ccode.open_if (cvalue);
+		ccode.add_assignment (slot, new CCodeUnaryExpression (CCodeUnaryOperator.POINTER_INDIRECTION, cvalue));
+		ccode.add_assignment (lvalue, slot_addr);
+		ccode.add_else ();
+		ccode.add_assignment (lvalue, new CCodeConstant ("NULL"));
+		ccode.close ();
+	}
+
 	public override void store_local (LocalVariable local, TargetValue value, bool initializer, SourceReference? source_reference = null) {
+		if (local.stack_slot) {
+			store_stack_slot (local, value);
+			return;
+		}
+
 		if (!initializer && requires_destroy (local.variable_type)) {
 			/* unref old value */
 			ccode.add_expression (destroy_local (local));
