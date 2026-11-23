@@ -1,3 +1,24 @@
+## vala-remix fork
+
+Performance-oriented fork of upstream `main` (branch `vala-remix`). Goal: faster, leaner generated C (CPU first, memory second) through small, targeted codegen changes — no large refactors, no language changes. Full test suite passes. Timings: `-O2`, median of 3, valac 0.56 vs fork.
+
+| Change | Effect | Benchmark |
+|---|---|---|
+| String `switch` compares with `g_strcmp0` + C `switch` instead of `g_quark_from_string` | No global lock, no permanent interning of every input (was an unbounded leak) | 2M distinct strings: 10.68 s / 7.7 GB → 1.22 s / 3 MB |
+| `s.length` hoisted out of `for`/`while` conditions (`i < s.length`, `s` an owned local or `in` param not assigned/captured/address-taken in the loop) | strlen once instead of per iteration; gcc can't hoist past external calls | 200k-char loop: 0.93 s → 0.01 s |
+| valac invoking cc: honours `$CFLAGS`, adds `-O2` unless `--debug`, `-X -O*` or `-O` in `$CFLAGS` | Plain `valac foo.vala` builds were `-O0`; build systems passing flags unaffected | 2.79 s → 0.23 s (loop), 1.63 s → 0.95 s (mixed) |
+| Signal emits from other files / external packages: cached id (`g_signal_lookup` once, `g_signal_emit`) instead of `g_signal_emit_by_name`; dynamic signals unchanged | No name parse + locked lookup per emit | with casts below: 6.67 s → 5.79 s |
+| Plain C casts instead of `G_TYPE_CHECK_INSTANCE_CAST` for provable upcasts, `base.` calls, equality upcasts and `self` in `get_property`/`set_property`/`constructor`/`finalize`; downcasts stay checked | Removes out-of-line type-check calls on hot paths | (see above) |
+| Closures capture and ref `self` only when the lambda uses `this` (explicit, implicit member, `base`, nested); generic classes, interfaces and structs always capture | Saves an atomic ref/unref and 8 bytes per block; avoids ref cycles | 20M closures: 1.99 s → 0.73 s |
+
+In progress (branches not yet merged): unboxed `int64`/`uint64`/`float`/`double` generic type arguments on 64-bit (`GenericArray<double>` without `?`; `G_STATIC_ASSERT` rejects 32-bit; 10M elements: 0.89 s / 394 MB → 0.24 s / 81 MB), stack slots for non-escaping nullable locals, and value-plus-flag returns for internal methods returning `T?`.
+
+Tried and reverted: flattening string `+` chains / in-place `+=`, switch-based enum `to_string`, dropping empty `priv`, setter field reads, `g_new` for struct dup, async temporaries as C locals (gain did not justify the added code or behaviour change). Not attempted: making `foreach` loop variables unowned (risks use-after-free).
+
+Behaviour notes: string-switch labels are evaluated once before matching; hoisted `s.length` for `in` params assumes the caller doesn't mutate the buffer behind Vala's back; cached signal ids go stale if a dynamic (plugin) type is unloaded and re-registered; interface upcasts are unchecked; plain `valac` now optimizes by default (also affects test binaries).
+
+Build from this shallow clone: `autoreconf -fi && ./configure --disable-valadoc && make` (`m4/ax_check_compile_flag.m4` replaces autoconf-archive; `.tarball-version` pins `0.57.0.remix` since there are no tags).
+
 ## What is Vala?
 Vala is a programming language that aims to bring modern programming
 language features to GNOME developers without imposing any additional
