@@ -47,6 +47,11 @@ struct _RunData {
 	GDBusProxy* _tmp4_;
 	gchar* s;
 	gint i;
+	GDBusProxy* _tmp5_;
+	gchar* _tmp9_;
+	gint _tmp10_;
+	const gchar* _tmp11_;
+	GMainLoop* _tmp12_;
 	GError* _inner_error0_;
 };
 
@@ -143,7 +148,6 @@ _dynamic_do_foo0 (GDBusProxy* self,
 static gboolean
 run_co (RunData* _data_)
 {
-	GMainLoop* _tmp12_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -156,10 +160,6 @@ run_co (RunData* _data_)
 	}
 	_state_0:
 	{
-		GDBusProxy* _tmp5_;
-		gchar* _tmp9_;
-		gint _tmp10_;
-		const gchar* _tmp11_;
 		_data_->_state_ = 1;
 		g_bus_get (G_BUS_TYPE_SESSION, NULL, run_ready, _data_);
 		return FALSE;
@@ -182,12 +182,12 @@ run_co (RunData* _data_)
 			_g_object_unref0 (_data_->bus);
 			goto __catch0_g_error;
 		}
-		_tmp5_ = _data_->test;
-		_tmp9_ = NULL;
-		_tmp10_ = _dynamic_do_foo0 (_tmp5_, 42, &_tmp9_, &_data_->_inner_error0_);
+		_data_->_tmp5_ = _data_->test;
+		_data_->_tmp9_ = NULL;
+		_data_->_tmp10_ = _dynamic_do_foo0 (_data_->_tmp5_, 42, &_data_->_tmp9_, &_data_->_inner_error0_);
 		_g_free0 (_data_->s);
-		_data_->s = _tmp9_;
-		_data_->i = _tmp10_;
+		_data_->s = _data_->_tmp9_;
+		_data_->i = _data_->_tmp10_;
 		if (G_UNLIKELY (_data_->_inner_error0_ != NULL)) {
 			_g_free0 (_data_->s);
 			_g_object_unref0 (_data_->test);
@@ -195,8 +195,8 @@ run_co (RunData* _data_)
 			goto __catch0_g_error;
 		}
 		_vala_assert (_data_->i == 23, "i == 23");
-		_tmp11_ = _data_->s;
-		_vala_assert (g_strcmp0 (_tmp11_, "foo") == 0, "s == \"foo\"");
+		_data_->_tmp11_ = _data_->s;
+		_vala_assert (g_strcmp0 (_data_->_tmp11_, "foo") == 0, "s == \"foo\"");
 		_g_free0 (_data_->s);
 		_g_object_unref0 (_data_->test);
 		_g_object_unref0 (_data_->bus);
@@ -213,8 +213,8 @@ run_co (RunData* _data_)
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_tmp12_ = main_loop;
-	g_main_loop_quit (_tmp12_);
+	_data_->_tmp12_ = main_loop;
+	g_main_loop_quit (_data_->_tmp12_);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
 		while (!g_task_get_completed (_data_->_async_result)) {

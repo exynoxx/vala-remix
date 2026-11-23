@@ -58,6 +58,7 @@ struct _RunData {
 	gint i;
 	gint _tmp0_;
 	gint _tmp1_;
+	GMainLoop* _tmp2_;
 	GError* _inner_error0_;
 };
 
@@ -259,7 +260,6 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
-	GMainLoop* _tmp2_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -305,8 +305,8 @@ run_co (RunData* _data_)
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_tmp2_ = loop;
-	g_main_loop_quit (_tmp2_);
+	_data_->_tmp2_ = loop;
+	g_main_loop_quit (_data_->_tmp2_);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
 		while (!g_task_get_completed (_data_->_async_result)) {

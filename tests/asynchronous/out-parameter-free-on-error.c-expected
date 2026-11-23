@@ -70,6 +70,7 @@ struct _FooAsyncData {
 	GTask* _async_result;
 	Manam* i;
 	Manam* o;
+	Manam* _tmp0_;
 	GError* _tmp1_;
 	GError* _inner_error0_;
 };
@@ -80,8 +81,10 @@ struct _RunData {
 	GAsyncResult* _res_;
 	GTask* _async_result;
 	Manam* manam;
+	Manam* _tmp0_;
 	Manam* minim;
 	Manam* _tmp1_;
+	GMainLoop* _tmp2_;
 	GError* _inner_error0_;
 };
 
@@ -245,7 +248,6 @@ foo_finish (GAsyncResult* _res_,
 static gboolean
 foo_async_co (FooAsyncData* _data_)
 {
-	Manam* _tmp0_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -253,9 +255,9 @@ foo_async_co (FooAsyncData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	_tmp0_ = _g_object_ref0 (_data_->i);
+	_data_->_tmp0_ = _g_object_ref0 (_data_->i);
 	_g_object_unref0 (_data_->o);
-	_data_->o = _tmp0_;
+	_data_->o = _data_->_tmp0_;
 	_data_->_tmp1_ = g_error_new_literal (FOO_ERROR, FOO_ERROR_FAIL, "foo");
 	_data_->_inner_error0_ = _data_->_tmp1_;
 	if (_data_->_inner_error0_->domain == FOO_ERROR) {
@@ -324,8 +326,6 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
-	Manam* _tmp0_;
-	GMainLoop* _tmp2_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -335,8 +335,8 @@ run_co (RunData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	_tmp0_ = manam_new ();
-	_data_->manam = _tmp0_;
+	_data_->_tmp0_ = manam_new ();
+	_data_->manam = _data_->_tmp0_;
 	_vala_assert (G_TYPE_CHECK_INSTANCE_CAST (_data_->manam, G_TYPE_OBJECT, GObject)->ref_count == ((guint) 1), "manam.ref_count == 1");
 	{
 		_data_->_tmp1_ = NULL;
@@ -367,8 +367,8 @@ run_co (RunData* _data_)
 		return FALSE;
 	}
 	_vala_assert (G_TYPE_CHECK_INSTANCE_CAST (_data_->manam, G_TYPE_OBJECT, GObject)->ref_count == ((guint) 2), "manam.ref_count == 2");
-	_tmp2_ = loop;
-	g_main_loop_quit (_tmp2_);
+	_data_->_tmp2_ = loop;
+	g_main_loop_quit (_data_->_tmp2_);
 	_g_object_unref0 (_data_->manam);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {

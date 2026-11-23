@@ -213,12 +213,20 @@ struct _RunData {
 	GAsyncResult* _res_;
 	GTask* _async_result;
 	Bar* bar;
+	Bar* _tmp0_;
+	Bar* _tmp1_;
 	Bar* _tmp2_;
 	SubBar* subbar;
+	SubBar* _tmp3_;
+	SubBar* _tmp4_;
 	SubBar* _tmp5_;
 	Baz* baz;
+	Baz* _tmp6_;
+	Baz* _tmp7_;
 	Bar* _tmp8_;
 	SubBaz* subbaz;
+	SubBaz* _tmp9_;
+	SubBaz* _tmp10_;
 	SubBaz* _tmp11_;
 	GError* _inner_error0_;
 };
@@ -1034,14 +1042,6 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
-	Bar* _tmp0_;
-	Bar* _tmp1_;
-	SubBar* _tmp3_;
-	SubBar* _tmp4_;
-	Baz* _tmp6_;
-	Baz* _tmp7_;
-	SubBaz* _tmp9_;
-	SubBaz* _tmp10_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -1057,30 +1057,30 @@ run_co (RunData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	_tmp0_ = bar_new ();
-	_data_->bar = _tmp0_;
-	_tmp1_ = _data_->bar;
-	bar_foo (_tmp1_, NULL);
+	_data_->_tmp0_ = bar_new ();
+	_data_->bar = _data_->_tmp0_;
+	_data_->_tmp1_ = _data_->bar;
+	bar_foo (_data_->_tmp1_, NULL);
 	_data_->_tmp2_ = _data_->bar;
 	_data_->_state_ = 1;
 	bar_foo_async (_data_->_tmp2_, run_ready, _data_);
 	return FALSE;
 	_state_1:
 	bar_foo_finish (_data_->_tmp2_, _data_->_res_, NULL);
-	_tmp3_ = sub_bar_new ();
-	_data_->subbar = _tmp3_;
-	_tmp4_ = _data_->subbar;
-	bar_foo (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_BAR, Bar), NULL);
+	_data_->_tmp3_ = sub_bar_new ();
+	_data_->subbar = _data_->_tmp3_;
+	_data_->_tmp4_ = _data_->subbar;
+	bar_foo (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp4_, TYPE_BAR, Bar), NULL);
 	_data_->_tmp5_ = _data_->subbar;
 	_data_->_state_ = 2;
 	bar_foo_async (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp5_, TYPE_BAR, Bar), run_ready, _data_);
 	return FALSE;
 	_state_2:
 	bar_foo_finish (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp5_, TYPE_BAR, Bar), _data_->_res_, NULL);
-	_tmp6_ = baz_new ();
-	_data_->baz = _tmp6_;
-	_tmp7_ = _data_->baz;
-	afoo_foo (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_AFOO, AFoo), &_data_->_inner_error0_);
+	_data_->_tmp6_ = baz_new ();
+	_data_->baz = _data_->_tmp6_;
+	_data_->_tmp7_ = _data_->baz;
+	afoo_foo (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp7_, TYPE_AFOO, AFoo), &_data_->_inner_error0_);
 	if (G_UNLIKELY (_data_->_inner_error0_ != NULL)) {
 		_g_object_unref0 (_data_->baz);
 		_g_object_unref0 (_data_->subbar);
@@ -1096,10 +1096,10 @@ run_co (RunData* _data_)
 	return FALSE;
 	_state_3:
 	bar_foo_finish (_data_->_tmp8_, _data_->_res_, NULL);
-	_tmp9_ = sub_baz_new ();
-	_data_->subbaz = _tmp9_;
-	_tmp10_ = _data_->subbaz;
-	afoo_foo (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_AFOO, AFoo), &_data_->_inner_error0_);
+	_data_->_tmp9_ = sub_baz_new ();
+	_data_->subbaz = _data_->_tmp9_;
+	_data_->_tmp10_ = _data_->subbaz;
+	afoo_foo (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp10_, TYPE_AFOO, AFoo), &_data_->_inner_error0_);
 	if (G_UNLIKELY (_data_->_inner_error0_ != NULL)) {
 		_g_object_unref0 (_data_->subbaz);
 		_g_object_unref0 (_data_->baz);

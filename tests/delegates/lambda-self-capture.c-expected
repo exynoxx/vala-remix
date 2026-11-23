@@ -133,6 +133,7 @@ typedef struct _Block22Data Block22Data;
 
 struct _Foo {
 	GObject parent_instance;
+	FooPrivate * priv;
 	gint field;
 };
 
@@ -251,6 +252,7 @@ struct _Block16Data {
 
 struct _Bar {
 	Foo parent_instance;
+	BarPrivate * priv;
 };
 
 struct _BarClass {
@@ -266,6 +268,7 @@ struct _Block17Data {
 
 struct _Baz {
 	Foo parent_instance;
+	BazPrivate * priv;
 };
 
 struct _BazClass {

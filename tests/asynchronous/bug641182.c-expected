@@ -74,6 +74,11 @@ struct _TestData {
 	GTask* _async_result;
 	Block1Data* _data1_;
 	Foo* foo;
+	Foo* _tmp0_;
+	Bar _tmp1_;
+	gpointer _tmp1__target;
+	Bar _tmp2_;
+	gpointer _tmp2__target;
 };
 
 static gint Foo_private_offset;
@@ -427,11 +432,6 @@ __vala_lambda0__bar (gpointer self)
 static gboolean
 test_co (TestData* _data_)
 {
-	Foo* _tmp0_;
-	Bar _tmp1_;
-	gpointer _tmp1__target;
-	Bar _tmp2_;
-	gpointer _tmp2__target;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -442,16 +442,16 @@ test_co (TestData* _data_)
 	_data_->_data1_ = g_slice_new0 (Block1Data);
 	_data_->_data1_->_ref_count_ = 1;
 	_data_->_data1_->_async_data_ = _data_;
-	_tmp0_ = foo_new ();
-	_data_->foo = _tmp0_;
+	_data_->_tmp0_ = foo_new ();
+	_data_->foo = _data_->_tmp0_;
 	_data_->_data1_->i = 0;
 	foo_set_bar (_data_->foo, __vala_lambda0__bar, _data_->_data1_);
-	_tmp1_ = NULL;
-	_tmp1__target = NULL;
-	_tmp1_ = foo_get_bar (_data_->foo, &_tmp1__target);
-	_tmp2_ = _tmp1_;
-	_tmp2__target = _tmp1__target;
-	_tmp2_ (_tmp2__target);
+	_data_->_tmp1_ = NULL;
+	_data_->_tmp1__target = NULL;
+	_data_->_tmp1_ = foo_get_bar (_data_->foo, &_data_->_tmp1__target);
+	_data_->_tmp2_ = _data_->_tmp1_;
+	_data_->_tmp2__target = _data_->_tmp1__target;
+	_data_->_tmp2_ (_data_->_tmp2__target);
 	_foo_unref0 (_data_->foo);
 	block1_data_unref (_data_->_data1_);
 	_data_->_data1_ = NULL;

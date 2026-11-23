@@ -50,9 +50,11 @@ struct _FooData {
 	GTask* _async_result;
 	gchar* baz;
 	Block1Data* _data1_;
+	gchar* _tmp0_;
 	Func foobar;
 	gpointer foobar_target;
 	GDestroyNotify foobar_target_destroy_notify;
+	GMainLoop* _tmp1_;
 };
 
 VALA_EXTERN GMainLoop* main_loop;
@@ -153,8 +155,6 @@ _foo_co_gsource_func (gpointer self)
 static gboolean
 foo_co (FooData* _data_)
 {
-	gchar* _tmp0_;
-	GMainLoop* _tmp1_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -171,8 +171,8 @@ foo_co (FooData* _data_)
 	_data_->_data1_->_async_data_ = _data_;
 	_data_->_data1_->func = NULL;
 	_data_->_data1_->func_target = NULL;
-	_tmp0_ = g_strdup ("hello");
-	_data_->_data1_->bar = _tmp0_;
+	_data_->_tmp0_ = g_strdup ("hello");
+	_data_->_data1_->bar = _data_->_tmp0_;
 	_data_->foobar = __vala_lambda0__func;
 	_data_->foobar_target = block1_data_ref (_data_->_data1_);
 	_data_->foobar_target_destroy_notify = block1_data_unref;
@@ -183,8 +183,8 @@ foo_co (FooData* _data_)
 	return FALSE;
 	_state_1:
 	;
-	_tmp1_ = main_loop;
-	g_main_loop_quit (_tmp1_);
+	_data_->_tmp1_ = main_loop;
+	g_main_loop_quit (_data_->_tmp1_);
 	(_data_->foobar_target_destroy_notify == NULL) ? NULL : (_data_->foobar_target_destroy_notify (_data_->foobar_target), NULL);
 	_data_->foobar = NULL;
 	_data_->foobar_target = NULL;

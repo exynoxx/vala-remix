@@ -91,6 +91,7 @@ struct _TestPostMessageData {
 	GTask* _async_result;
 	Test* self;
 	gchar* message;
+	gchar* _tmp0_;
 };
 
 struct _TestListMessagesReadyData {
@@ -364,7 +365,6 @@ _vala_array_add1 (gchar** * array,
 static gboolean
 test_post_message_co (TestPostMessageData* _data_)
 {
-	gchar* _tmp0_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -372,8 +372,8 @@ test_post_message_co (TestPostMessageData* _data_)
 		g_assert_not_reached ();
 	}
 	_state_0:
-	_tmp0_ = g_strdup (_data_->message);
-	_vala_array_add1 (&_data_->self->priv->messages, &_data_->self->priv->messages_length1, &_data_->self->priv->_messages_size_, _tmp0_);
+	_data_->_tmp0_ = g_strdup (_data_->message);
+	_vala_array_add1 (&_data_->self->priv->messages, &_data_->self->priv->messages_length1, &_data_->self->priv->_messages_size_, _data_->_tmp0_);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
 		while (!g_task_get_completed (_data_->_async_result)) {

@@ -92,6 +92,10 @@ struct _RunData {
 	Test* _tmp7_;
 	gchar* _tmp8_;
 	gchar* _tmp9_;
+	gchar* _tmp10_;
+	const gchar* _tmp11_;
+	const gchar* _tmp12_;
+	GMainLoop* _tmp13_;
 	GError* _inner_error0_;
 };
 
@@ -745,10 +749,6 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
-	gchar* _tmp10_;
-	const gchar* _tmp11_;
-	const gchar* _tmp12_;
-	GMainLoop* _tmp13_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -827,16 +827,16 @@ run_co (RunData* _data_)
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_tmp10_ = _data_->_tmp6_;
+	_data_->_tmp10_ = _data_->_tmp6_;
 	_data_->_tmp6_ = NULL;
 	_g_free0 (_data_->u);
-	_data_->u = _tmp10_;
-	_tmp11_ = _data_->t;
-	_vala_assert (g_strcmp0 (_tmp11_, "world") == 0, "t == \"world\"");
-	_tmp12_ = _data_->u;
-	_vala_assert (g_strcmp0 (_tmp12_, "vala") == 0, "u == \"vala\"");
-	_tmp13_ = main_loop;
-	g_main_loop_quit (_tmp13_);
+	_data_->u = _data_->_tmp10_;
+	_data_->_tmp11_ = _data_->t;
+	_vala_assert (g_strcmp0 (_data_->_tmp11_, "world") == 0, "t == \"world\"");
+	_data_->_tmp12_ = _data_->u;
+	_vala_assert (g_strcmp0 (_data_->_tmp12_, "vala") == 0, "u == \"vala\"");
+	_data_->_tmp13_ = main_loop;
+	g_main_loop_quit (_data_->_tmp13_);
 	_g_free0 (_data_->_tmp6_);
 	_g_free0 (_data_->u);
 	_g_free0 (_data_->t);

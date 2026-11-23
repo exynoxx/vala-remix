@@ -257,7 +257,7 @@ base_set_prop (Base* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_BASE (self));
-	old_value = self->priv->_prop;
+	old_value = base_get_prop (self);
 	if (old_value != value) {
 		self->priv->_prop = value;
 		g_object_notify_by_pspec ((GObject *) self, base_properties[BASE_PROP_PROPERTY]);
@@ -281,7 +281,7 @@ base_set_name (Base* self,
 {
 	gchar* old_value;
 	g_return_if_fail (IS_BASE (self));
-	old_value = self->priv->_name;
+	old_value = base_get_name (self);
 	if (g_strcmp0 (value, old_value) != 0) {
 		gchar* _tmp0_;
 		_tmp0_ = g_strdup (value);
@@ -459,7 +459,7 @@ derived_set_dprop (Derived* self,
 {
 	gint old_value;
 	g_return_if_fail (IS_DERIVED (self));
-	old_value = self->priv->_dprop;
+	old_value = derived_get_dprop (self);
 	if (old_value != value) {
 		self->priv->_dprop = value;
 		g_object_notify_by_pspec ((GObject *) self, derived_properties[DERIVED_DPROP_PROPERTY]);

@@ -92,8 +92,12 @@ struct _RunData {
 	gchar* _tmp4_;
 	gchar* _tmp5_;
 	gchar* _tmp6_;
+	gchar* _tmp7_;
 	GCancellable* cancellable;
+	GCancellable* _tmp8_;
+	GCancellable* _tmp9_;
 	GCancellable* _tmp10_;
+	GMainLoop* _tmp11_;
 	GError* _inner_error0_;
 };
 
@@ -865,7 +869,6 @@ run_ready (GObject* source_object,
 static gboolean
 run_co (RunData* _data_)
 {
-	GMainLoop* _tmp11_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -948,7 +951,6 @@ run_co (RunData* _data_)
 		return FALSE;
 	}
 	{
-		gchar* _tmp7_;
 		_data_->_tmp5_ = NULL;
 		_data_->_state_ = 4;
 		test_test_string (_data_->test, "hello", run_ready, _data_);
@@ -963,10 +965,10 @@ run_co (RunData* _data_)
 			_g_free0 (_data_->t);
 			goto __catch2_g_error;
 		}
-		_tmp7_ = _data_->_tmp4_;
+		_data_->_tmp7_ = _data_->_tmp4_;
 		_data_->_tmp4_ = NULL;
 		_g_free0 (_data_->u);
-		_data_->u = _tmp7_;
+		_data_->u = _data_->_tmp7_;
 		g_assert_not_reached ();
 		_g_free0 (_data_->_tmp4_);
 		_g_free0 (_data_->u);
@@ -986,12 +988,10 @@ run_co (RunData* _data_)
 		return FALSE;
 	}
 	{
-		GCancellable* _tmp8_;
-		GCancellable* _tmp9_;
-		_tmp8_ = g_cancellable_new ();
-		_data_->cancellable = _tmp8_;
-		_tmp9_ = _data_->cancellable;
-		g_cancellable_cancel (_tmp9_);
+		_data_->_tmp8_ = g_cancellable_new ();
+		_data_->cancellable = _data_->_tmp8_;
+		_data_->_tmp9_ = _data_->cancellable;
+		g_cancellable_cancel (_data_->_tmp9_);
 		_data_->_tmp10_ = _data_->cancellable;
 		_data_->_state_ = 5;
 		test_test_cancellable (_data_->test, _data_->_tmp10_, run_ready, _data_);
@@ -1018,8 +1018,8 @@ run_co (RunData* _data_)
 		g_object_unref (_data_->_async_result);
 		return FALSE;
 	}
-	_tmp11_ = main_loop;
-	g_main_loop_quit (_tmp11_);
+	_data_->_tmp11_ = main_loop;
+	g_main_loop_quit (_data_->_tmp11_);
 	_g_object_unref0 (_data_->test);
 	g_task_return_pointer (_data_->_async_result, _data_, NULL);
 	if (_data_->_state_ != 0) {
