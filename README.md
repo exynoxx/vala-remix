@@ -1,6 +1,21 @@
-## vala-remix fork
+# vala-remix
 
-Performance fork of upstream Vala: faster, leaner generated C, plus some syntax sugar. All tests pass.
+## Fork changes
+
+### New Syntax
+
+```vala
+int area () => w * h;            // expression-bodied method
+int area => w * h;               // expression-bodied get-only property
+int x { get => _x; set => _x = value; }  // expression-bodied accessors
+if (o is Foo f) f.bar ();        // type test with binding (f usable in the block)
+if (o is not Foo) return;        // negated type test (also: o is not Foo f)
+foreach (var i in 0..n) { }      // half-open range loop, n evaluated once
+```
+
+All are parser desugarings (no runtime cost);
+
+### Performance Optimizations
 
 | Optimization | Gain (`-O2`) |
 |---|---|
@@ -12,10 +27,7 @@ Performance fork of upstream Vala: faster, leaner generated C, plus some syntax 
 | Default `-O2` / `$CFLAGS` when valac runs cc | 1.7–12× |
 | Cached signal ids, unchecked provable upcasts | 1.15× |
 
-Syntax: `int f () => expr;`, `get => e;`, `if (o is Foo f)`, `o is not Foo`, `foreach (var i in a..b)` (parser desugarings, see `tests/parser/remix-syntax.vala`).
-
-Caveats: plain `valac` now builds with `-O2`; 64-bit generic args need a 64-bit target; internal `T?` methods return a struct by value.
-
+plain `valac` now builds with `-O2`; 64-bit generic args need a 64-bit target; internal `T?` methods return a struct by value.
 Build: `autoreconf -fi && ./configure --disable-valadoc && make`.
 
 ## What is Vala?
