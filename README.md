@@ -1,6 +1,6 @@
 ## vala-remix fork
 
-Performance-oriented fork of upstream `main` (branch `vala-remix`). Goal: faster, leaner generated C (CPU first, memory second) through small, targeted codegen changes — no large refactors, no language changes. Full test suite passes. Timings: `-O2`, median of 3, valac 0.56 vs fork.
+Performance-oriented fork of upstream `main` (branch `vala-remix`). Goal: faster, leaner generated C (CPU first, memory second) through small, targeted codegen changes — no large refactors — plus parser-only syntax sugar (below). Full test suite passes. Timings: `-O2`, median of 3, valac 0.56 vs fork.
 
 | Change | Effect | Benchmark |
 |---|---|---|
@@ -10,6 +10,16 @@ Performance-oriented fork of upstream `main` (branch `vala-remix`). Goal: faster
 | Signal emits from other files / external packages: cached id (`g_signal_lookup` once, `g_signal_emit`) instead of `g_signal_emit_by_name`; dynamic signals unchanged | No name parse + locked lookup per emit | with casts below: 6.67 s → 5.79 s |
 | Plain C casts instead of `G_TYPE_CHECK_INSTANCE_CAST` for provable upcasts, `base.` calls, equality upcasts and `self` in `get_property`/`set_property`/`constructor`/`finalize`; downcasts stay checked | Removes out-of-line type-check calls on hot paths | (see above) |
 | Closures capture and ref `self` only when the lambda uses `this` (explicit, implicit member, `base`, nested); generic classes, interfaces and structs always capture | Saves an atomic ref/unref and 8 bytes per block; avoids ref cycles | 20M closures: 1.99 s → 0.73 s |
+
+Syntax additions (parser desugarings: no new AST nodes, codegen or runtime; test `tests/parser/remix-syntax.vala`):
+
+| Syntax | Desugars to | Notes |
+|---|---|---|
+| `int area () => w * h;` · `void f () => g ();` | `{ return w * h; }` · `{ g (); }` | Methods incl. `async`; not constructors |
+| `get => e;` · `set => _x = value;` · `int area => w * h;` | accessor block; last form = get-only property | Getters unowned as usual; `{ owned get => @"..."; }` for computed strings |
+| `if (o is Foo f)` | hidden `Foo? f = null;` before the statement + `(f = o as Foo) != null` | C# scope: `f` lives in the enclosing block (`if (o is not Foo f) return; f.x ();` works), so reusing a name in one block is a redeclaration error; fine in `&&`, `while`, `else if`; rejected in expression lambdas/initializers (no statement to host it); reference types only (`as`) |
+| `o is not Foo` · `o is not Foo f` | `!(o is Foo)` · negated binding | `not` contextual (only before a type name); a type named `not` still parses |
+| `foreach (var i in a..b)` | `{ var end = b; for (var i = a; i < end; i++) body }` | Half-open, `b` evaluated once, explicit element type honoured; new `..` token; no `..=`, step or range values |
 
 In progress (branches not yet merged): unboxed `int64`/`uint64`/`float`/`double` generic type arguments on 64-bit (`GenericArray<double>` without `?`; `G_STATIC_ASSERT` rejects 32-bit; 10M elements: 0.89 s / 394 MB → 0.24 s / 81 MB), stack slots for non-escaping nullable locals, and value-plus-flag returns for internal methods returning `T?`.
 
