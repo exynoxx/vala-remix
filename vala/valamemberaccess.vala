@@ -1116,6 +1116,10 @@ public class Vala.MemberAccess : Expression {
 			tainted_access = is_tainted ();
 		}
 
+		if (symbol_reference is Method && !(parent_node is MethodCall && ((MethodCall) parent_node).call == this)) {
+			((Method) symbol_reference).used_as_value = true;
+		}
+
 		return !error;
 	}
 

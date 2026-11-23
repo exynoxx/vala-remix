@@ -338,8 +338,11 @@ bar (Foo* f)
 		Foo* _tmp0_ = NULL;
 		gint* _tmp1_ = NULL;
 		gint* j = NULL;
+		gint _j_slot_;
 		gint* _tmp3_;
 		gint* _tmp4_;
+		gint* _tmp5_;
+		gint* _tmp6_;
 		_tmp0_ = f;
 		_tmp1_ = NULL;
 		if (_tmp0_ != NULL) {
@@ -350,48 +353,55 @@ bar (Foo* f)
 		}
 		_tmp3_ = _tmp1_;
 		_tmp1_ = NULL;
-		j = _tmp3_;
-		_tmp4_ = j;
-		_vala_assert (_tmp4_ == NULL, "j == null");
-		_g_free0 (j);
+		_tmp4_ = _tmp3_;
+		if (_tmp4_) {
+			_j_slot_ = *_tmp4_;
+			j = &_j_slot_;
+		} else {
+			j = NULL;
+		}
+		_tmp5_ = j;
+		_g_free0 (_tmp4_);
+		_tmp6_ = j;
+		_vala_assert (_tmp6_ == NULL, "j == null");
 		_g_free0 (_tmp1_);
 	}
 	{
 		gint k = 0;
-		Foo* _tmp5_ = NULL;
-		gint* _tmp6_ = NULL;
+		Foo* _tmp7_ = NULL;
 		gint* _tmp8_ = NULL;
-		gint* _tmp9_;
-		gint* _tmp12_;
-		gint* _tmp13_;
+		gint* _tmp10_ = NULL;
+		gint* _tmp11_;
+		gint* _tmp14_;
+		gint* _tmp15_;
 		k = 23;
-		_tmp5_ = f;
-		_tmp6_ = NULL;
-		if (_tmp5_ != NULL) {
-			gint* _tmp7_;
-			_tmp7_ = __int_dup0 (&_tmp5_->i);
-			_g_free0 (_tmp6_);
-			_tmp6_ = _tmp7_;
-		}
-		_tmp9_ = _tmp6_;
-		_tmp6_ = NULL;
-		_tmp8_ = _tmp9_;
-		if (_tmp8_ == NULL) {
-			gint _tmp10_;
-			gint* _tmp11_;
-			_tmp10_ = 0;
-			_tmp11_ = __int_dup0 (&_tmp10_);
-			_g_free0 (_tmp8_);
-			_tmp8_ = _tmp11_;
-		}
-		_tmp12_ = _tmp8_;
+		_tmp7_ = f;
 		_tmp8_ = NULL;
-		_tmp13_ = _tmp12_;
-		k = *_tmp13_;
-		_g_free0 (_tmp13_);
+		if (_tmp7_ != NULL) {
+			gint* _tmp9_;
+			_tmp9_ = __int_dup0 (&_tmp7_->i);
+			_g_free0 (_tmp8_);
+			_tmp8_ = _tmp9_;
+		}
+		_tmp11_ = _tmp8_;
+		_tmp8_ = NULL;
+		_tmp10_ = _tmp11_;
+		if (_tmp10_ == NULL) {
+			gint _tmp12_;
+			gint* _tmp13_;
+			_tmp12_ = 0;
+			_tmp13_ = __int_dup0 (&_tmp12_);
+			_g_free0 (_tmp10_);
+			_tmp10_ = _tmp13_;
+		}
+		_tmp14_ = _tmp10_;
+		_tmp10_ = NULL;
+		_tmp15_ = _tmp14_;
+		k = *_tmp15_;
+		_g_free0 (_tmp15_);
 		_vala_assert (k == 0, "k == 0");
+		_g_free0 (_tmp10_);
 		_g_free0 (_tmp8_);
-		_g_free0 (_tmp6_);
 	}
 }
 
@@ -425,42 +435,48 @@ baz (Foo* f)
 	}
 	{
 		gint* j = NULL;
+		gint _j_slot_;
 		gint _tmp6_;
-		gint* _tmp7_;
+		Foo* _tmp7_ = NULL;
 		Foo* _tmp8_ = NULL;
-		Foo* _tmp9_ = NULL;
-		Foo* _tmp11_ = NULL;
-		gint* _tmp12_ = NULL;
+		Foo* _tmp10_ = NULL;
+		gint* _tmp11_ = NULL;
+		gint* _tmp13_;
 		gint* _tmp14_;
 		gint* _tmp15_;
 		_tmp6_ = 23;
-		_tmp7_ = __int_dup0 (&_tmp6_);
-		j = _tmp7_;
-		_tmp8_ = f;
-		_tmp9_ = NULL;
-		if (_tmp8_ != NULL) {
-			Foo* _tmp10_;
-			_tmp10_ = foo_foo (_tmp8_);
-			_foo_unref0 (_tmp9_);
-			_tmp9_ = _tmp10_;
+		_j_slot_ = _tmp6_;
+		j = &_j_slot_;
+		_tmp7_ = f;
+		_tmp8_ = NULL;
+		if (_tmp7_ != NULL) {
+			Foo* _tmp9_;
+			_tmp9_ = foo_foo (_tmp7_);
+			_foo_unref0 (_tmp8_);
+			_tmp8_ = _tmp9_;
 		}
-		_tmp11_ = _tmp9_;
-		_tmp12_ = NULL;
-		if (_tmp11_ != NULL) {
-			gint* _tmp13_;
-			_tmp13_ = __int_dup0 (&_tmp11_->i);
-			_g_free0 (_tmp12_);
-			_tmp12_ = _tmp13_;
+		_tmp10_ = _tmp8_;
+		_tmp11_ = NULL;
+		if (_tmp10_ != NULL) {
+			gint* _tmp12_;
+			_tmp12_ = __int_dup0 (&_tmp10_->i);
+			_g_free0 (_tmp11_);
+			_tmp11_ = _tmp12_;
 		}
-		_tmp14_ = _tmp12_;
-		_tmp12_ = NULL;
-		_g_free0 (j);
-		j = _tmp14_;
+		_tmp13_ = _tmp11_;
+		_tmp11_ = NULL;
+		_tmp14_ = _tmp13_;
+		if (_tmp14_) {
+			_j_slot_ = *_tmp14_;
+			j = &_j_slot_;
+		} else {
+			j = NULL;
+		}
+		_g_free0 (_tmp14_);
 		_tmp15_ = j;
 		_vala_assert (_tmp15_ == NULL, "j == null");
-		_g_free0 (_tmp12_);
-		_foo_unref0 (_tmp9_);
-		_g_free0 (j);
+		_g_free0 (_tmp11_);
+		_foo_unref0 (_tmp8_);
 	}
 	{
 		gint k = 0;

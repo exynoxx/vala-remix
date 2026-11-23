@@ -24,7 +24,6 @@
 #endif
 
 typedef struct _Bar Bar;
-#define _bar_free0(var) ((var == NULL) ? NULL : (var = (bar_free (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
 #define _vala_return_val_if_fail(expr, msg, val) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return val; }
@@ -94,26 +93,25 @@ faz (gint first_arg,
 	va_end (args);
 }
 
-static gpointer
-_bar_dup0 (gpointer self)
-{
-	return self ? bar_dup (self) : NULL;
-}
-
 void
 fab (gint first_arg,
      ...)
 {
 	va_list args = {0};
 	Bar* bar = NULL;
+	Bar _bar_slot_;
 	Bar* _tmp0_;
 	va_start (args, first_arg);
-	_tmp0_ = _bar_dup0 (va_arg (args, Bar*));
-	bar = _tmp0_;
+	_tmp0_ = va_arg (args, Bar*);
+	if (_tmp0_) {
+		_bar_slot_ = *_tmp0_;
+		bar = &_bar_slot_;
+	} else {
+		bar = NULL;
+	}
 	_vala_assert (first_arg == 65, "first_arg == 65");
 	_vala_assert ((*bar).i == 23, "bar.i == 23");
 	_vala_assert ((*bar).j == 4711, "bar.j == 4711");
-	_bar_free0 (bar);
 	va_end (args);
 }
 

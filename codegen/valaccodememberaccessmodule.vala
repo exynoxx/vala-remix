@@ -382,6 +382,7 @@ public abstract class Vala.CCodeMemberAccessModule : CCodeControlFlowModule {
 			    current_return_type.value_owned &&
 			    local.variable_type.value_owned &&
 			    !local.captured &&
+			    !local.stack_slot &&
 			    !variable_accessible_in_finally (local) &&
 			    !(local.variable_type is ArrayType && ((ArrayType) local.variable_type).inline_allocated)) {
 				/* return expression is local variable taking ownership and

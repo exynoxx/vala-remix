@@ -25,7 +25,6 @@
 
 #define TYPE_FOO (foo_get_type ())
 typedef struct _Foo Foo;
-#define _foo_free0(var) ((var == NULL) ? NULL : (var = (foo_free (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
 #define _vala_return_val_if_fail(expr, msg, val) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return val; }
@@ -83,26 +82,19 @@ baz (Foo* foo)
 	(*foo).bar = 3;
 }
 
-static gpointer
-_foo_dup0 (gpointer self)
-{
-	return self ? foo_dup (self) : NULL;
-}
-
 static void
 _vala_main (void)
 {
 	Foo* foo = NULL;
+	Foo _foo_slot_;
 	Foo _tmp0_ = {0};
-	Foo* _tmp1_;
-	Foo _tmp2_;
+	Foo _tmp1_;
 	memset (&_tmp0_, 0, sizeof (Foo));
-	_tmp1_ = _foo_dup0 (&_tmp0_);
-	foo = _tmp1_;
-	_tmp2_ = *foo;
-	baz (&_tmp2_);
+	_foo_slot_ = _tmp0_;
+	foo = &_foo_slot_;
+	_tmp1_ = *foo;
+	baz (&_tmp1_);
 	_vala_assert ((*foo).bar == 0, "foo.bar == 0");
-	_foo_free0 (foo);
 }
 
 int

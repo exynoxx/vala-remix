@@ -179,6 +179,8 @@ public class Vala.Block : Symbol, Statement {
 			local.active = false;
 		}
 
+		find_stack_slot_locals ();
+
 		foreach (Constant constant in local_constants) {
 			constant.active = false;
 		}
@@ -187,6 +189,59 @@ public class Vala.Block : Symbol, Statement {
 		context.analyzer.insert_block = old_insert_block;
 
 		return !error;
+	}
+
+	/**
+	 * Marks owned nullable locals of plain value types (no heap fields)
+	 * whose box can never escape: not captured, not in a coroutine, and
+	 * never passed as ref/out, transferred with (owned) or address-taken.
+	 * Any other owned use copies the value, so a stack slot suffices.
+	 */
+	void find_stack_slot_locals () {
+		unowned Symbol? sym = parent_symbol;
+		while (sym != null && !(sym is Subroutine)) {
+			sym = sym.parent_symbol;
+		}
+		if (sym == null || (sym is Method && ((Method) sym).coroutine)) {
+			return;
+		}
+
+		var candidates = new ArrayList<LocalVariable> ();
+		foreach (Statement stmt in get_statements ()) {
+			unowned LocalVariable? local = (stmt is DeclarationStatement) ? ((DeclarationStatement) stmt).declaration as LocalVariable : null;
+			if (local == null || local.captured || local.variable_type == null) {
+				continue;
+			}
+			unowned DataType type = local.variable_type;
+			if (!(type is ValueType) || !type.nullable || !type.value_owned) {
+				continue;
+			}
+			if (type.type_symbol is Enum || (type.type_symbol is Struct && !((Struct) type.type_symbol).is_disposable ())) {
+				candidates.add (local);
+			}
+		}
+		if (candidates.size == 0) {
+			return;
+		}
+
+		accept_children (new TraverseVisitor (n => {
+			Expression? inner = null;
+			if (n is UnaryExpression && (((UnaryExpression) n).operator == UnaryOperator.REF || ((UnaryExpression) n).operator == UnaryOperator.OUT)) {
+				inner = ((UnaryExpression) n).inner;
+			} else if (n is AddressofExpression) {
+				inner = ((AddressofExpression) n).inner;
+			} else if (n is ReferenceTransferExpression) {
+				inner = ((ReferenceTransferExpression) n).inner;
+			}
+			if (inner != null && inner.symbol_reference is LocalVariable) {
+				candidates.remove ((LocalVariable) inner.symbol_reference);
+			}
+			return TraverseStatus.CONTINUE;
+		}));
+
+		foreach (var local in candidates) {
+			local.stack_slot = true;
+		}
 	}
 
 	public override void get_error_types (Collection<DataType> collection, SourceReference? source_reference = null) {

@@ -164,65 +164,105 @@ _vala_main (void)
 	gint _tmp1_;
 	gint* _tmp2_;
 	gint* i = NULL;
+	gint _i_slot_;
 	gint* _tmp3_;
-	gint _tmp4_;
-	guint* _tmp5_ = NULL;
-	guint _tmp6_;
-	guint* _tmp7_;
+	gint* _tmp4_;
+	gint* _tmp5_;
+	gint _tmp6_;
+	guint* _tmp7_ = NULL;
+	guint _tmp8_;
+	guint* _tmp9_;
 	guint* u = NULL;
-	guint* _tmp8_;
-	guint _tmp9_;
-	gint64* _tmp10_ = NULL;
-	gint64 _tmp11_;
-	gint64* _tmp12_;
+	guint _u_slot_;
+	guint* _tmp10_;
+	guint* _tmp11_;
+	guint* _tmp12_;
+	guint _tmp13_;
+	gint64* _tmp14_ = NULL;
+	gint64 _tmp15_;
+	gint64* _tmp16_;
 	gint64* i64 = NULL;
-	gint64* _tmp13_;
-	gint64 _tmp14_;
-	guint64* _tmp15_ = NULL;
-	guint64 _tmp16_;
-	guint64* _tmp17_;
+	gint64 _i64_slot_;
+	gint64* _tmp17_;
+	gint64* _tmp18_;
+	gint64* _tmp19_;
+	gint64 _tmp20_;
+	guint64* _tmp21_ = NULL;
+	guint64 _tmp22_;
+	guint64* _tmp23_;
 	guint64* u64 = NULL;
-	guint64* _tmp18_;
-	guint64 _tmp19_;
+	guint64 _u64_slot_;
+	guint64* _tmp24_;
+	guint64* _tmp25_;
+	guint64* _tmp26_;
+	guint64 _tmp27_;
 	_tmp1_ = G_MININT;
 	_tmp2_ = __int_dup0 (&_tmp1_);
 	_tmp0_ = _tmp2_;
 	_tmp3_ = _tmp0_;
 	_tmp0_ = NULL;
-	i = _tmp3_;
-	_tmp4_ = G_MININT;
-	_vala_assert (_int_equal (i, &_tmp4_) == TRUE, "i == int.MIN");
-	_tmp6_ = G_MAXUINT;
-	_tmp7_ = __uint_dup0 (&_tmp6_);
-	_tmp5_ = _tmp7_;
-	_tmp8_ = _tmp5_;
-	_tmp5_ = NULL;
-	u = _tmp8_;
-	_tmp9_ = G_MAXUINT;
-	_vala_assert (_uint_equal (u, &_tmp9_) == TRUE, "u == uint.MAX");
-	_tmp11_ = G_MININT64;
-	_tmp12_ = __int64_dup0 (&_tmp11_);
-	_tmp10_ = _tmp12_;
-	_tmp13_ = _tmp10_;
-	_tmp10_ = NULL;
-	i64 = _tmp13_;
-	_tmp14_ = G_MININT64;
-	_vala_assert (_int64_equal (i64, &_tmp14_) == TRUE, "i64 == int64.MIN");
-	_tmp16_ = G_MAXUINT64;
-	_tmp17_ = __uint64_dup0 (&_tmp16_);
-	_tmp15_ = _tmp17_;
-	_tmp18_ = _tmp15_;
-	_tmp15_ = NULL;
-	u64 = _tmp18_;
-	_tmp19_ = G_MAXUINT64;
-	_vala_assert (_uint64_equal (u64, &_tmp19_) == TRUE, "u64 == uint64.MAX");
-	_g_free0 (u64);
-	_g_free0 (_tmp15_);
-	_g_free0 (i64);
-	_g_free0 (_tmp10_);
-	_g_free0 (u);
-	_g_free0 (_tmp5_);
-	_g_free0 (i);
+	_tmp4_ = _tmp3_;
+	if (_tmp4_) {
+		_i_slot_ = *_tmp4_;
+		i = &_i_slot_;
+	} else {
+		i = NULL;
+	}
+	_tmp5_ = i;
+	_g_free0 (_tmp4_);
+	_tmp6_ = G_MININT;
+	_vala_assert (_int_equal (i, &_tmp6_) == TRUE, "i == int.MIN");
+	_tmp8_ = G_MAXUINT;
+	_tmp9_ = __uint_dup0 (&_tmp8_);
+	_tmp7_ = _tmp9_;
+	_tmp10_ = _tmp7_;
+	_tmp7_ = NULL;
+	_tmp11_ = _tmp10_;
+	if (_tmp11_) {
+		_u_slot_ = *_tmp11_;
+		u = &_u_slot_;
+	} else {
+		u = NULL;
+	}
+	_tmp12_ = u;
+	_g_free0 (_tmp11_);
+	_tmp13_ = G_MAXUINT;
+	_vala_assert (_uint_equal (u, &_tmp13_) == TRUE, "u == uint.MAX");
+	_tmp15_ = G_MININT64;
+	_tmp16_ = __int64_dup0 (&_tmp15_);
+	_tmp14_ = _tmp16_;
+	_tmp17_ = _tmp14_;
+	_tmp14_ = NULL;
+	_tmp18_ = _tmp17_;
+	if (_tmp18_) {
+		_i64_slot_ = *_tmp18_;
+		i64 = &_i64_slot_;
+	} else {
+		i64 = NULL;
+	}
+	_tmp19_ = i64;
+	_g_free0 (_tmp18_);
+	_tmp20_ = G_MININT64;
+	_vala_assert (_int64_equal (i64, &_tmp20_) == TRUE, "i64 == int64.MIN");
+	_tmp22_ = G_MAXUINT64;
+	_tmp23_ = __uint64_dup0 (&_tmp22_);
+	_tmp21_ = _tmp23_;
+	_tmp24_ = _tmp21_;
+	_tmp21_ = NULL;
+	_tmp25_ = _tmp24_;
+	if (_tmp25_) {
+		_u64_slot_ = *_tmp25_;
+		u64 = &_u64_slot_;
+	} else {
+		u64 = NULL;
+	}
+	_tmp26_ = u64;
+	_g_free0 (_tmp25_);
+	_tmp27_ = G_MAXUINT64;
+	_vala_assert (_uint64_equal (u64, &_tmp27_) == TRUE, "u64 == uint64.MAX");
+	_g_free0 (_tmp21_);
+	_g_free0 (_tmp14_);
+	_g_free0 (_tmp7_);
 	_g_free0 (_tmp0_);
 }
 

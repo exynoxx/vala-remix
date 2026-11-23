@@ -44,12 +44,12 @@ typedef enum  {
 VALA_EXTERN GType foo_get_type (void);
 VALA_EXTERN GType bar_get_type (void);
 static void _vala_main (void);
-static Foo* _foo_dup (Foo* self);
 static gboolean _foo_equal (const Foo * s1,
                      const Foo * s2);
-static Bar* _bar_dup (Bar* self);
+static Foo* _foo_dup (Foo* self);
 static gboolean _bar_equal (const Bar * s1,
                      const Bar * s2);
+static Bar* _bar_dup (Bar* self);
 
 static GType
 foo_get_type_once (void)
@@ -93,6 +93,22 @@ bar_get_type (void)
 	return bar_type_id__once;
 }
 
+static gboolean
+_foo_equal (const Foo * s1,
+            const Foo * s2)
+{
+	if (s1 == s2) {
+		return TRUE;
+	}
+	if (s1 == NULL) {
+		return FALSE;
+	}
+	if (s2 == NULL) {
+		return FALSE;
+	}
+	return (*s1) == (*s2);
+}
+
 static Foo*
 _foo_dup (Foo* self)
 {
@@ -109,8 +125,8 @@ __foo_dup0 (gpointer self)
 }
 
 static gboolean
-_foo_equal (const Foo * s1,
-            const Foo * s2)
+_bar_equal (const Bar * s1,
+            const Bar * s2)
 {
 	if (s1 == s2) {
 		return TRUE;
@@ -139,108 +155,108 @@ __bar_dup0 (gpointer self)
 	return self ? _bar_dup (self) : NULL;
 }
 
-static gboolean
-_bar_equal (const Bar * s1,
-            const Bar * s2)
-{
-	if (s1 == s2) {
-		return TRUE;
-	}
-	if (s1 == NULL) {
-		return FALSE;
-	}
-	if (s2 == NULL) {
-		return FALSE;
-	}
-	return (*s1) == (*s2);
-}
-
 static void
 _vala_main (void)
 {
 	{
 		Foo* foo = NULL;
+		Foo _foo_slot_;
 		Foo _tmp0_;
-		Foo* _tmp1_;
-		Foo _tmp2_;
+		Foo _tmp1_;
 		_tmp0_ = FOO_BAR;
-		_tmp1_ = __foo_dup0 (&_tmp0_);
-		foo = _tmp1_;
-		_tmp2_ = 23;
-		_vala_assert (_foo_equal (foo, &_tmp2_) == TRUE, "foo == 23");
-		_g_free0 (foo);
+		_foo_slot_ = _tmp0_;
+		foo = &_foo_slot_;
+		_tmp1_ = 23;
+		_vala_assert (_foo_equal (foo, &_tmp1_) == TRUE, "foo == 23");
 	}
 	{
 		Foo* foo = NULL;
+		Foo _foo_slot_;
+		Foo _tmp2_;
 		Foo _tmp3_;
-		Foo* _tmp4_;
-		Foo _tmp5_;
-		_tmp3_ = FOO;
-		_tmp4_ = __foo_dup0 (&_tmp3_);
-		foo = _tmp4_;
-		_tmp5_ = 23;
-		_vala_assert (_foo_equal (foo, &_tmp5_) == TRUE, "foo == 23");
-		_g_free0 (foo);
+		_tmp2_ = FOO;
+		_foo_slot_ = _tmp2_;
+		foo = &_foo_slot_;
+		_tmp3_ = 23;
+		_vala_assert (_foo_equal (foo, &_tmp3_) == TRUE, "foo == 23");
 	}
 	{
-		Foo* _tmp6_ = NULL;
-		Foo _tmp7_;
-		Foo* _tmp8_;
+		Foo* _tmp4_ = NULL;
+		Foo _tmp5_;
+		Foo* _tmp6_;
 		Foo* foo = NULL;
+		Foo _foo_slot_;
+		Foo* _tmp7_;
+		Foo* _tmp8_;
 		Foo* _tmp9_;
 		Foo _tmp10_;
-		_tmp7_ = FOO;
-		_tmp8_ = __foo_dup0 (&_tmp7_);
-		_tmp6_ = _tmp8_;
-		_tmp9_ = _tmp6_;
-		_tmp6_ = NULL;
-		foo = _tmp9_;
+		_tmp5_ = FOO;
+		_tmp6_ = __foo_dup0 (&_tmp5_);
+		_tmp4_ = _tmp6_;
+		_tmp7_ = _tmp4_;
+		_tmp4_ = NULL;
+		_tmp8_ = _tmp7_;
+		if (_tmp8_) {
+			_foo_slot_ = *_tmp8_;
+			foo = &_foo_slot_;
+		} else {
+			foo = NULL;
+		}
+		_tmp9_ = foo;
+		_g_free0 (_tmp8_);
 		_tmp10_ = 23;
 		_vala_assert (_foo_equal (foo, &_tmp10_) == TRUE, "foo == 23");
-		_g_free0 (foo);
-		_g_free0 (_tmp6_);
+		_g_free0 (_tmp4_);
 	}
 	{
 		Bar* bar = NULL;
+		Bar _bar_slot_;
 		Bar _tmp11_;
-		Bar* _tmp12_;
-		Bar _tmp13_;
+		Bar _tmp12_;
 		_tmp11_ = BAR_FOO;
-		_tmp12_ = __bar_dup0 (&_tmp11_);
-		bar = _tmp12_;
-		_tmp13_ = 42;
-		_vala_assert (_bar_equal (bar, &_tmp13_) == TRUE, "bar == 42");
-		_g_free0 (bar);
+		_bar_slot_ = _tmp11_;
+		bar = &_bar_slot_;
+		_tmp12_ = 42;
+		_vala_assert (_bar_equal (bar, &_tmp12_) == TRUE, "bar == 42");
 	}
 	{
 		Bar* bar = NULL;
+		Bar _bar_slot_;
+		Bar _tmp13_;
 		Bar _tmp14_;
-		Bar* _tmp15_;
-		Bar _tmp16_;
-		_tmp14_ = BAR;
-		_tmp15_ = __bar_dup0 (&_tmp14_);
-		bar = _tmp15_;
-		_tmp16_ = 42;
-		_vala_assert (_bar_equal (bar, &_tmp16_) == TRUE, "bar == 42");
-		_g_free0 (bar);
+		_tmp13_ = BAR;
+		_bar_slot_ = _tmp13_;
+		bar = &_bar_slot_;
+		_tmp14_ = 42;
+		_vala_assert (_bar_equal (bar, &_tmp14_) == TRUE, "bar == 42");
 	}
 	{
-		Bar* _tmp17_ = NULL;
-		Bar _tmp18_;
-		Bar* _tmp19_;
+		Bar* _tmp15_ = NULL;
+		Bar _tmp16_;
+		Bar* _tmp17_;
 		Bar* bar = NULL;
+		Bar _bar_slot_;
+		Bar* _tmp18_;
+		Bar* _tmp19_;
 		Bar* _tmp20_;
 		Bar _tmp21_;
-		_tmp18_ = BAR;
-		_tmp19_ = __bar_dup0 (&_tmp18_);
-		_tmp17_ = _tmp19_;
-		_tmp20_ = _tmp17_;
-		_tmp17_ = NULL;
-		bar = _tmp20_;
+		_tmp16_ = BAR;
+		_tmp17_ = __bar_dup0 (&_tmp16_);
+		_tmp15_ = _tmp17_;
+		_tmp18_ = _tmp15_;
+		_tmp15_ = NULL;
+		_tmp19_ = _tmp18_;
+		if (_tmp19_) {
+			_bar_slot_ = *_tmp19_;
+			bar = &_bar_slot_;
+		} else {
+			bar = NULL;
+		}
+		_tmp20_ = bar;
+		_g_free0 (_tmp19_);
 		_tmp21_ = 42;
 		_vala_assert (_bar_equal (bar, &_tmp21_) == TRUE, "bar == 42");
-		_g_free0 (bar);
-		_g_free0 (_tmp17_);
+		_g_free0 (_tmp15_);
 	}
 }
 

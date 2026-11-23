@@ -33,7 +33,6 @@ typedef int (*SimpleFunc) (void);
 typedef struct _Foo Foo;
 typedef struct _Bar Bar;
 typedef struct _Manam Manam;
-#define _manam_free0(var) ((var == NULL) ? NULL : (var = (manam_free (var), NULL)))
 #define VALA_N_ELEMENTS(arr) (sizeof (arr) / sizeof ((arr)[0]))
 
 struct _Foo {
@@ -1488,12 +1487,6 @@ _vala_bar_array_contains (Bar * stack,
 	return false;
 }
 
-static void*
-_manam_dup0 (void* self)
-{
-	return self ? manam_dup (self) : NULL;
-}
-
 void
 test_struct_array (void)
 {
@@ -1507,10 +1500,10 @@ test_struct_array (void)
 	Bar _tmp3_;
 	Bar _tmp4_;
 	Manam* manam = NULL;
+	Manam _manam_slot_;
 	Manam _tmp5_ = {0};
-	Manam* _tmp6_;
 	Manam* manam_copy = NULL;
-	Manam* _tmp7_;
+	Manam _manam_copy_slot_;
 	_tmp0_ = FOO_ARRAY_CONST[0];
 	assert (_tmp0_.bar == 42);
 	_tmp1_.bar = 4711;
@@ -1523,12 +1516,14 @@ test_struct_array (void)
 	bar[7] = _tmp3_;
 	_tmp4_ = b;
 	assert (_vala_bar_array_contains (bar, bar_length1, &_tmp4_));
-	_tmp6_ = _manam_dup0 (&_tmp5_);
-	manam = _tmp6_;
-	_tmp7_ = _manam_dup0 (manam);
-	manam_copy = _tmp7_;
-	_manam_free0 (manam_copy);
-	_manam_free0 (manam);
+	_manam_slot_ = _tmp5_;
+	manam = &_manam_slot_;
+	if (manam) {
+		_manam_copy_slot_ = *manam;
+		manam_copy = &_manam_copy_slot_;
+	} else {
+		manam_copy = NULL;
+	}
 	bar = (free (bar), NULL);
 }
 

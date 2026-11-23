@@ -26,11 +26,12 @@
 
 #define TYPE_FOO (foo_get_type ())
 typedef struct _Foo Foo;
+typedef struct __ValaNullable_Foo _ValaNullable_Foo;
 #define _foo_free0(var) ((var == NULL) ? NULL : (var = (foo_free (var), NULL)))
-#define _g_free0(var) ((var == NULL) ? NULL : (var = (g_free (var), NULL)))
 
 #define TYPE_BAR (bar_get_type ())
 typedef struct _Bar Bar;
+#define _g_free0(var) (var = (g_free (var), NULL))
 #define _bar_free0(var) ((var == NULL) ? NULL : (var = (bar_free (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
@@ -39,6 +40,11 @@ typedef struct _Bar Bar;
 
 struct _Foo {
 	gint i;
+};
+
+struct __ValaNullable_Foo {
+	Foo value;
+	gboolean has_value;
 };
 
 struct _Bar {
@@ -53,7 +59,7 @@ Bar* bar = NULL;
 VALA_EXTERN GType foo_get_type (void);
 VALA_EXTERN Foo* foo_dup (const Foo* self);
 VALA_EXTERN void foo_free (Foo* self);
-VALA_EXTERN Foo* foo_heap_owned (void);
+VALA_EXTERN _ValaNullable_Foo foo_heap_owned (void);
 VALA_EXTERN Foo* foo_heap_unowned (void);
 VALA_EXTERN void test_without_destroy (void);
 VALA_EXTERN GType bar_get_type (void);
@@ -109,20 +115,25 @@ _foo_dup0 (gpointer self)
 	return self ? foo_dup (self) : NULL;
 }
 
-Foo*
+_ValaNullable_Foo
 foo_heap_owned (void)
 {
 	Foo _tmp0_ = {0};
 	Foo* _tmp1_;
 	Foo* _tmp2_;
-	Foo* _tmp3_;
-	Foo* result;
+	_ValaNullable_Foo _tmp3_;
+	_ValaNullable_Foo result;
 	_tmp0_.i = 23;
 	_tmp1_ = _foo_dup0 (&_tmp0_);
 	_foo_free0 (foo);
 	foo = _tmp1_;
 	_tmp2_ = foo;
-	_tmp3_ = _foo_dup0 (_tmp2_);
+	if (_tmp2_) {
+		_tmp3_.value = *_tmp2_;
+		_tmp3_.has_value = TRUE;
+	} else {
+		_tmp3_ = (_ValaNullable_Foo) { 0 };
+	}
 	result = _tmp3_;
 	return result;
 }
@@ -148,62 +159,51 @@ test_without_destroy (void)
 {
 	{
 		Foo f = {0};
-		Foo* _tmp0_;
-		Foo* _tmp1_;
-		Foo _tmp2_;
-		Foo _tmp3_;
+		_ValaNullable_Foo _tmp0_;
+		Foo _tmp1_;
 		_tmp0_ = foo_heap_owned ();
-		_tmp1_ = _tmp0_;
-		_tmp2_ = *_tmp1_;
-		_foo_free0 (_tmp1_);
-		f = _tmp2_;
+		f = *(_tmp0_.has_value ? (&_tmp0_.value) : NULL);
+		_tmp1_ = f;
+		_vala_assert (_tmp1_.i == 23, "f.i == 23");
+	}
+	{
+		Foo f = {0};
+		_ValaNullable_Foo _tmp2_;
+		Foo _tmp3_;
+		_tmp2_ = foo_heap_owned ();
+		f = (Foo) (*(_tmp2_.has_value ? (&_tmp2_.value) : NULL));
 		_tmp3_ = f;
 		_vala_assert (_tmp3_.i == 23, "f.i == 23");
 	}
 	{
 		Foo f = {0};
-		Foo* _tmp4_;
+		_ValaNullable_Foo _tmp4_;
 		Foo _tmp5_;
-		Foo _tmp6_;
 		_tmp4_ = foo_heap_owned ();
-		_tmp5_ = (Foo) (*_tmp4_);
-		_g_free0 (_tmp4_);
-		f = _tmp5_;
-		_tmp6_ = f;
-		_vala_assert (_tmp6_.i == 23, "f.i == 23");
+		f = (Foo) (*(_tmp4_.has_value ? (&_tmp4_.value) : NULL));
+		_tmp5_ = f;
+		_vala_assert (_tmp5_.i == 23, "f.i == 23");
 	}
 	{
 		Foo f = {0};
-		Foo* _tmp7_;
-		Foo _tmp8_;
-		Foo _tmp9_;
-		_tmp7_ = foo_heap_owned ();
-		_tmp8_ = (Foo) (*_tmp7_);
-		_g_free0 (_tmp7_);
-		f = _tmp8_;
-		_tmp9_ = f;
-		_vala_assert (_tmp9_.i == 23, "f.i == 23");
-	}
-	{
-		Foo f = {0};
-		Foo _tmp10_;
+		Foo _tmp6_;
 		f = *foo_heap_unowned ();
-		_tmp10_ = f;
-		_vala_assert (_tmp10_.i == 42, "f.i == 42");
+		_tmp6_ = f;
+		_vala_assert (_tmp6_.i == 42, "f.i == 42");
 	}
 	{
 		Foo f = {0};
-		Foo _tmp11_;
+		Foo _tmp7_;
 		f = (Foo) (*foo_heap_unowned ());
-		_tmp11_ = f;
-		_vala_assert (_tmp11_.i == 42, "f.i == 42");
+		_tmp7_ = f;
+		_vala_assert (_tmp7_.i == 42, "f.i == 42");
 	}
 	{
 		Foo f = {0};
-		Foo _tmp12_;
+		Foo _tmp8_;
 		f = (Foo) (*foo_heap_unowned ());
-		_tmp12_ = f;
-		_vala_assert (_tmp12_.i == 42, "f.i == 42");
+		_tmp8_ = f;
+		_vala_assert (_tmp8_.i == 42, "f.i == 42");
 	}
 }
 

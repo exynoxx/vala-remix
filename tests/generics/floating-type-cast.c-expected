@@ -25,7 +25,6 @@
 #endif
 #endif
 
-#define _g_free0(var) ((var == NULL) ? NULL : (var = (g_free (var), NULL)))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
 #define _vala_return_val_if_fail(expr, msg, val) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return val; }
@@ -106,12 +105,6 @@ _float_dup (gfloat* self)
 	return dup;
 }
 
-static gpointer
-__float_dup0 (gpointer self)
-{
-	return self ? _float_dup (self) : NULL;
-}
-
 static gdouble*
 _double_dup (gdouble* self)
 {
@@ -121,45 +114,35 @@ _double_dup (gdouble* self)
 	return dup;
 }
 
-static gpointer
-__double_dup0 (gpointer self)
-{
-	return self ? _double_dup (self) : NULL;
-}
-
 static void
 _vala_main (void)
 {
 	gfloat* _tmp0_ = NULL;
+	gfloat __tmp0__slot_;
 	gfloat _tmp1_;
-	gfloat* _tmp2_;
-	gdouble* _tmp3_ = NULL;
-	gdouble _tmp4_;
-	gdouble* _tmp5_;
-	gfloat* _tmp6_ = NULL;
-	gfloat _tmp7_;
-	gfloat* _tmp8_;
-	gdouble* _tmp9_ = NULL;
-	gdouble _tmp10_;
-	gdouble* _tmp11_;
+	gdouble* _tmp2_ = NULL;
+	gdouble __tmp2__slot_;
+	gdouble _tmp3_;
+	gfloat* _tmp4_ = NULL;
+	gfloat __tmp4__slot_;
+	gfloat _tmp5_;
+	gdouble* _tmp6_ = NULL;
+	gdouble __tmp6__slot_;
+	gdouble _tmp7_;
 	_tmp1_ = 23.0f;
-	_tmp2_ = __float_dup0 (&_tmp1_);
-	_tmp0_ = _tmp2_;
-	_tmp4_ = 42.0;
-	_tmp5_ = __double_dup0 (&_tmp4_);
-	_tmp3_ = _tmp5_;
-	foo (G_TYPE_FLOAT, (GBoxedCopyFunc) _float_dup, (GDestroyNotify) g_free, G_TYPE_DOUBLE, (GBoxedCopyFunc) _double_dup, (GDestroyNotify) g_free, _tmp0_, _tmp3_);
-	_tmp7_ = 23.0f;
-	_tmp8_ = __float_dup0 (&_tmp7_);
-	_tmp6_ = _tmp8_;
-	_tmp10_ = 42.0;
-	_tmp11_ = __double_dup0 (&_tmp10_);
-	_tmp9_ = _tmp11_;
-	foo (G_TYPE_FLOAT, (GBoxedCopyFunc) _float_dup, (GDestroyNotify) g_free, G_TYPE_DOUBLE, (GBoxedCopyFunc) _double_dup, (GDestroyNotify) g_free, _tmp6_, _tmp9_);
-	_g_free0 (_tmp9_);
-	_g_free0 (_tmp6_);
-	_g_free0 (_tmp3_);
-	_g_free0 (_tmp0_);
+	__tmp0__slot_ = _tmp1_;
+	_tmp0_ = &__tmp0__slot_;
+	_tmp3_ = 42.0;
+	__tmp2__slot_ = _tmp3_;
+	_tmp2_ = &__tmp2__slot_;
+	foo (G_TYPE_FLOAT, (GBoxedCopyFunc) _float_dup, (GDestroyNotify) g_free, G_TYPE_DOUBLE, (GBoxedCopyFunc) _double_dup, (GDestroyNotify) g_free, _tmp0_, _tmp2_);
+	_tmp5_ = 23.0f;
+	__tmp4__slot_ = _tmp5_;
+	_tmp4_ = &__tmp4__slot_;
+	_tmp7_ = 42.0;
+	__tmp6__slot_ = _tmp7_;
+	_tmp6_ = &__tmp6__slot_;
+	foo (G_TYPE_FLOAT, (GBoxedCopyFunc) _float_dup, (GDestroyNotify) g_free, G_TYPE_DOUBLE, (GBoxedCopyFunc) _double_dup, (GDestroyNotify) g_free, _tmp4_, _tmp6_);
 }
 
 int
