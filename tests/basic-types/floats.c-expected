@@ -26,18 +26,16 @@
 #endif
 #endif
 
-#define _g_free0(var) ((var == NULL) ? NULL : (var = (g_free (var), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
 #define _vala_return_val_if_fail(expr, msg, val) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return val; }
 #define _vala_warn_if_fail(expr, msg) if G_LIKELY (expr) ; else g_warn_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 
 VALA_EXTERN void test_double (void);
-static gdouble* _double_dup (gdouble* self);
 static gboolean _double_equal (const gdouble * s1,
                         const gdouble * s2);
 VALA_EXTERN void test_float (void);
-static gfloat* _float_dup (gfloat* self);
 static gboolean _float_equal (const gfloat * s1,
                        const gfloat * s2);
 static void _vala_main (void);
@@ -119,21 +117,6 @@ double_try_parse (const gchar* str,
 	}
 }
 
-static gdouble*
-_double_dup (gdouble* self)
-{
-	gdouble* dup;
-	dup = g_new0 (gdouble, 1);
-	memcpy (dup, self, sizeof (gdouble));
-	return dup;
-}
-
-static gpointer
-__double_dup0 (gpointer self)
-{
-	return self ? _double_dup (self) : NULL;
-}
-
 static gboolean
 _double_equal (const gdouble * s1,
                const gdouble * s2)
@@ -161,9 +144,9 @@ test_double (void)
 	gdouble _tmp1_ = 0.0;
 	const gchar* _tmp2_ = NULL;
 	gdouble* d2 = NULL;
+	gdouble _d2_slot_;
 	gdouble _tmp3_;
-	gdouble* _tmp4_;
-	gdouble _tmp5_;
+	gdouble _tmp4_;
 	d = 42.;
 	_vala_assert (d == 42., "d == 42d");
 	d = 23.;
@@ -211,11 +194,10 @@ test_double (void)
 	_vala_assert (d == DBL_MAX, "d == double.MAX");
 	_vala_assert (d > DBL_MIN, "d > double.MIN");
 	_tmp3_ = (gdouble) 10;
-	_tmp4_ = __double_dup0 (&_tmp3_);
-	d2 = _tmp4_;
-	_tmp5_ = (gdouble) 10;
-	_vala_assert (_double_equal (d2, &_tmp5_) == TRUE, "d2 == 10");
-	_g_free0 (d2);
+	_d2_slot_ = _tmp3_;
+	d2 = &_d2_slot_;
+	_tmp4_ = (gdouble) 10;
+	_vala_assert (_double_equal (d2, &_tmp4_) == TRUE, "d2 == 10");
 	_g_free0 (s);
 }
 
@@ -275,21 +257,6 @@ float_try_parse (const gchar* str,
 	}
 }
 
-static gfloat*
-_float_dup (gfloat* self)
-{
-	gfloat* dup;
-	dup = g_new0 (gfloat, 1);
-	memcpy (dup, self, sizeof (gfloat));
-	return dup;
-}
-
-static gpointer
-__float_dup0 (gpointer self)
-{
-	return self ? _float_dup (self) : NULL;
-}
-
 static gboolean
 _float_equal (const gfloat * s1,
               const gfloat * s2)
@@ -317,9 +284,9 @@ test_float (void)
 	gfloat _tmp1_ = 0.0F;
 	const gchar* _tmp2_ = NULL;
 	gfloat* f2 = NULL;
+	gfloat _f2_slot_;
 	gfloat _tmp3_;
-	gfloat* _tmp4_;
-	gfloat _tmp5_;
+	gfloat _tmp4_;
 	f = 42.f;
 	_vala_assert (f == 42.f, "f == 42f");
 	f = 23.f;
@@ -363,11 +330,10 @@ test_float (void)
 	_vala_assert (f == FLT_MAX, "f == float.MAX");
 	_vala_assert (f > FLT_MIN, "f > float.MIN");
 	_tmp3_ = 10.f;
-	_tmp4_ = __float_dup0 (&_tmp3_);
-	f2 = _tmp4_;
-	_tmp5_ = 10.f;
-	_vala_assert (_float_equal (f2, &_tmp5_) == TRUE, "f2 == 10f");
-	_g_free0 (f2);
+	_f2_slot_ = _tmp3_;
+	f2 = &_f2_slot_;
+	_tmp4_ = 10.f;
+	_vala_assert (_float_equal (f2, &_tmp4_) == TRUE, "f2 == 10f");
 	_g_free0 (s);
 }
 

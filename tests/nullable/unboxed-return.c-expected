@@ -117,7 +117,12 @@ struct _AsyncUserData {
 	gint result;
 	gint* v;
 	_ValaNullable_gint _tmp0_;
+	gint* _tmp1_;
 	gint* _tmp2_;
+	gint* _tmp3_;
+	gint* _tmp4_;
+	gint _tmp5_;
+	gint* _tmp6_;
 	gint* _tmp7_;
 	gint* _tmp8_;
 	gint _tmp9_;
@@ -228,7 +233,7 @@ Point*
 point_dup (const Point* self)
 {
 	Point* dup;
-	dup = g_new (Point, 1);
+	dup = g_new0 (Point, 1);
 	memcpy (dup, self, sizeof (Point));
 	return dup;
 }
@@ -321,7 +326,7 @@ static Color*
 _color_dup (Color* self)
 {
 	Color* dup;
-	dup = g_new (Color, 1);
+	dup = g_new0 (Color, 1);
 	memcpy (dup, self, sizeof (Color));
 	return dup;
 }
@@ -448,7 +453,7 @@ static gint*
 _int_dup (gint* self)
 {
 	gint* dup;
-	dup = g_new (gint, 1);
+	dup = g_new0 (gint, 1);
 	memcpy (dup, self, sizeof (gint));
 	return dup;
 }
@@ -818,9 +823,6 @@ _async_user_co_gsource_func (gpointer self)
 static gboolean
 async_user_co (AsyncUserData* _data_)
 {
-	gint* _tmp1_;
-	gint* _tmp3_;
-	gint* _tmp4_;
 	switch (_data_->_state_) {
 		case 0:
 		goto _state_0;
@@ -831,23 +833,21 @@ async_user_co (AsyncUserData* _data_)
 	}
 	_state_0:
 	_data_->_tmp0_ = maybe (_data_->i);
-	_tmp1_ = __int_dup0 (_data_->_tmp0_.has_value ? (&_data_->_tmp0_.value) : NULL);
-	_data_->v = _tmp1_;
+	_data_->_tmp1_ = __int_dup0 (_data_->_tmp0_.has_value ? (&_data_->_tmp0_.value) : NULL);
+	_data_->v = _data_->_tmp1_;
 	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, _async_user_co_gsource_func, _data_, NULL);
 	_data_->_state_ = 1;
 	return FALSE;
 	_state_1:
 	;
-	_tmp3_ = _data_->v;
-	_tmp4_ = __int_dup0 (_tmp3_);
-	_data_->_tmp2_ = _tmp4_;
+	_data_->_tmp3_ = _data_->v;
+	_data_->_tmp4_ = __int_dup0 (_data_->_tmp3_);
+	_data_->_tmp2_ = _data_->_tmp4_;
 	if (_data_->_tmp2_ == NULL) {
-		gint _tmp5_;
-		gint* _tmp6_;
-		_tmp5_ = -1;
-		_tmp6_ = __int_dup0 (&_tmp5_);
+		_data_->_tmp5_ = -1;
+		_data_->_tmp6_ = __int_dup0 (&_data_->_tmp5_);
 		_g_free0 (_data_->_tmp2_);
-		_data_->_tmp2_ = _tmp6_;
+		_data_->_tmp2_ = _data_->_tmp6_;
 	}
 	_data_->_tmp7_ = _data_->_tmp2_;
 	_data_->_tmp2_ = NULL;
