@@ -1,0 +1,7 @@
+Invalid Code
+
+delegate bool Pred (Object o);
+
+void main () {
+	Pred p = o => o is Object x && x != null;
+}

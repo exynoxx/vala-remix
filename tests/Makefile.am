@@ -1000,6 +1000,8 @@ TESTS = \
 	parser/array-creation-invalid.test \
 	parser/array-length.vala \
 	parser/assignment.vala \
+	parser/remix-syntax.vala \
+	parser/is-binding-lambda.test \
 	parser/attribute-duplicate.test \
 	parser/attribute-missing-literal.test \
 	parser/attribute-wrong-number.test \
