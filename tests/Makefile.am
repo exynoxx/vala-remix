@@ -824,6 +824,7 @@ TESTS = \
 	generics/constructor-chain-up.vala \
 	generics/delegate-return-type-missing.test \
 	generics/floating-type-cast.vala \
+	generics/type-argument-unboxed-64bit.vala \
 	generics/foreach-iterator-nullable.vala \
 	generics/gvariant-serialization.test \
 	generics/inference-argument-may-fail.vala \
