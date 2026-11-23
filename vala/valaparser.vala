@@ -43,6 +43,10 @@ public class Vala.Parser : CodeVisitor {
 
 	static List<TypeParameter> _empty_type_parameter_list;
 	static int next_local_func_id = 0;
+	static int next_range_id = 0;
+	// hidden locals declared by `expr is T name', flushed before the enclosing statement;
+	// null where no statement encloses the expression (members, expression lambdas)
+	ArrayList<Statement>? pattern_decls = null;
 
 	PartialInfo[] partials;
 
@@ -1437,13 +1441,72 @@ public class Vala.Parser : CodeVisitor {
 		var begin = get_location ();
 		var left = parse_shift_expression ();
 		if (accept (TokenType.IS)) {
+			bool negate = false;
+			if (current () == TokenType.IDENTIFIER && get_current_string () == "not") {
+				// contextual: `is not T' only when a type follows, so a type named `not' still works
+				var not_begin = get_location ();
+				next ();
+				negate = current () == TokenType.IDENTIFIER;
+				if (!negate) {
+					rollback (not_begin);
+				}
+			}
 			var type = parse_type (true, false);
-			left = new TypeCheck (left, type, get_src (begin));
+			if (current () == TokenType.IDENTIFIER) {
+				left = parse_pattern_binding (left, type, begin);
+			} else {
+				left = new TypeCheck (left, type, get_src (begin));
+			}
+			if (negate) {
+				left = new UnaryExpression (UnaryOperator.LOGICAL_NEGATION, left, get_src (begin));
+			}
 		} else if (accept (TokenType.AS)) {
 			var type = parse_type (true, false);
 			left = new CastExpression.silent (left, type, get_src (begin));
 		}
 		return left;
+	}
+
+	// `expr is T name' => hidden `T? name = null;' before the statement, and `(name = expr as T) != null'
+	Expression parse_pattern_binding (Expression expr, DataType type, SourceLocation begin) throws ParseError {
+		var id = parse_identifier ();
+		var src = get_src (begin);
+		if (pattern_decls == null) {
+			throw new ParseError.SYNTAX ("`is' with a variable binding is only allowed inside a statement block");
+		}
+		var var_type = type.copy ();
+		var_type.nullable = true;
+		var local = new LocalVariable (var_type, id, new NullLiteral (src), src);
+		pattern_decls.add (new DeclarationStatement (local, src));
+		var assign = new Assignment (new MemberAccess.simple (id, src), new CastExpression.silent (expr, type, src), AssignmentOperator.SIMPLE, src);
+		return new BinaryExpression (BinaryOperator.INEQUALITY, assign, new NullLiteral (src), src);
+	}
+
+	// body after `=>': return the expression, or evaluate it for void
+	Block parse_expression_body (bool is_void) throws ParseError {
+		var begin = get_location ();
+		var outer_decls = pattern_decls;
+		pattern_decls = new ArrayList<Statement> ();
+		var expr = parse_expression ();
+		var src = get_src (begin);
+		expect (TokenType.SEMICOLON);
+		var block = new Block (src);
+		foreach (var decl in pattern_decls) {
+			block.add_statement (decl);
+		}
+		pattern_decls = outer_decls;
+		if (is_void) {
+			block.add_statement (new ExpressionStatement (expr, src));
+		} else {
+			block.add_statement (new ReturnStatement (expr, src));
+		}
+		return block;
+	}
+
+	void flush_pattern_decls (Block block, int index) {
+		foreach (var decl in pattern_decls) {
+			block.insert_statement (index++, decl);
+		}
 	}
 
 	Expression parse_relational_expression () throws ParseError {
@@ -1613,7 +1676,10 @@ public class Vala.Parser : CodeVisitor {
 			var block = parse_block ();
 			lambda = new LambdaExpression.with_statement_body (block, get_src (begin));
 		} else {
+			var outer_decls = pattern_decls;
+			pattern_decls = null;
 			var expr = parse_expression ();
+			pattern_decls = outer_decls;
 			lambda = new LambdaExpression (expr, get_src (begin));
 		}
 		foreach (var param in params) {
@@ -1758,8 +1824,11 @@ public class Vala.Parser : CodeVisitor {
 	}
 
 	void parse_statements (Block block) throws ParseError {
+		var outer_decls = pattern_decls;
 		while (current () != TokenType.CLOSE_BRACE
 		       && current () != TokenType.EOF) {
+			pattern_decls = new ArrayList<Statement> ();
+			int stmt_index = block.get_statements ().size;
 			try {
 				Statement stmt = null;
 				bool is_decl = false;
@@ -1794,6 +1863,7 @@ public class Vala.Parser : CodeVisitor {
 				case TokenType.DEFAULT:
 					if (block is SwitchSection) {
 						// begin a new switch case
+						pattern_decls = outer_decls;
 						return;
 					} else {
 						stmt = parse_statement (current ());
@@ -1834,6 +1904,7 @@ public class Vala.Parser : CodeVisitor {
 				if (!is_decl) {
 					block.add_statement (stmt);
 				}
+				flush_pattern_decls (block, stmt_index);
 			} catch (ParseError e) {
 				report_parse_error (e);
 				if (recover () != RecoveryState.STATEMENT_BEGIN) {
@@ -1843,6 +1914,7 @@ public class Vala.Parser : CodeVisitor {
 				}
 			}
 		}
+		pattern_decls = outer_decls;
 	}
 
 	bool is_expression () throws ParseError {
@@ -1970,10 +2042,15 @@ public class Vala.Parser : CodeVisitor {
 
 		var block = new Block (get_src (get_location ()));
 
+		var outer_decls = pattern_decls;
+		pattern_decls = new ArrayList<Statement> ();
 		try {
 			var stmt = parse_embedded_statement_without_block (statement_name, accept_empty_body);
 			block.add_statement (stmt);
+			flush_pattern_decls (block, 0);
+			pattern_decls = outer_decls;
 		} catch (ParseError e) {
+			pattern_decls = outer_decls;
 			if (context.keep_going) {
 				report_parse_error (e);
 			} else {
@@ -2399,10 +2476,30 @@ public class Vala.Parser : CodeVisitor {
 		string id = parse_identifier ();
 		expect (TokenType.IN);
 		var collection = parse_expression ();
+		if (accept (TokenType.DOT_DOT)) {
+			return parse_foreach_range (begin, type, id, collection);
+		}
 		expect (TokenType.CLOSE_PARENS);
 		var src = get_src (begin);
 		var body = parse_embedded_statement ("foreach");
 		return new ForeachStatement (type, id, collection, body, src);
+	}
+
+	// `foreach (T i in a..b) body' => `{ var end = b; for (T i = a; i < end; i++) body }', b evaluated once
+	Statement parse_foreach_range (SourceLocation begin, DataType type, string id, Expression start) throws ParseError {
+		var end_expr = parse_expression ();
+		expect (TokenType.CLOSE_PARENS);
+		var src = get_src (begin);
+		var body = parse_embedded_statement ("foreach");
+		var end_name = "_range_end%d_".printf (next_range_id++);
+		var block = new Block (src);
+		block.add_statement (new DeclarationStatement (new LocalVariable (null, end_name, end_expr, src), src));
+		block.add_statement (new DeclarationStatement (new LocalVariable ((type is VarType) ? null : type, id, start, src), src));
+		var cond = new BinaryExpression (BinaryOperator.LESS_THAN, new MemberAccess.simple (id, src), new MemberAccess.simple (end_name, src), src);
+		var loop = new ForStatement (cond, body, src);
+		loop.add_iterator (new PostfixExpression (new MemberAccess.simple (id, src), true, src));
+		block.add_statement (loop);
+		return block;
 	}
 
 	Statement parse_break_statement () throws ParseError {
@@ -2816,6 +2913,7 @@ public class Vala.Parser : CodeVisitor {
 					}
 				case TokenType.OPEN_BRACE:
 				case TokenType.THROWS:
+				case TokenType.LAMBDA:
 					rollback (begin);
 					if (!(parent is TypeSymbol)) {
 						throw new ParseError.SYNTAX ("unexpected `property' declaration");
@@ -3301,7 +3399,10 @@ public class Vala.Parser : CodeVisitor {
 			method.add_postcondition (parse_expression ());
 			expect (TokenType.CLOSE_PARENS);
 		}
-		if (!accept (TokenType.SEMICOLON)) {
+		if (accept (TokenType.LAMBDA)) {
+			method.body = parse_expression_body (method.return_type is VoidType);
+			method.external = false;
+		} else if (!accept (TokenType.SEMICOLON)) {
 			method.body = parse_block ();
 			method.external = false;
 		}
@@ -3352,6 +3453,16 @@ public class Vala.Parser : CodeVisitor {
 			} while (accept (TokenType.COMMA));
 			Report.error (prop.source_reference, "properties throwing errors are not supported yet");
 		}
+		if (accept (TokenType.LAMBDA)) {
+			// `T name => expr;' is a read-only property with an (unowned, like `get') expression-bodied getter
+			var getter_begin = get_location ();
+			var value_type = type.copy ();
+			value_type.value_owned = false;
+			prop.get_accessor = new PropertyAccessor (true, false, false, value_type, parse_expression_body (false), get_src (getter_begin), comment);
+			prop.external = false;
+			parent.add_property (prop);
+			return;
+		}
 		expect (TokenType.OPEN_BRACE);
 		while (current () != TokenType.CLOSE_BRACE) {
 			if (accept (TokenType.DEFAULT)) {
@@ -3384,7 +3495,10 @@ public class Vala.Parser : CodeVisitor {
 					}
 
 					Block block = null;
-					if (!accept (TokenType.SEMICOLON)) {
+					if (accept (TokenType.LAMBDA)) {
+						block = parse_expression_body (false);
+						prop.external = false;
+					} else if (!accept (TokenType.SEMICOLON)) {
 						block = parse_block ();
 						prop.external = false;
 					}
@@ -3406,7 +3520,10 @@ public class Vala.Parser : CodeVisitor {
 						throw new ParseError.SYNTAX ("property set accessor already defined");
 					}
 					Block block = null;
-					if (!accept (TokenType.SEMICOLON)) {
+					if (accept (TokenType.LAMBDA)) {
+						block = parse_expression_body (true);
+						prop.external = false;
+					} else if (!accept (TokenType.SEMICOLON)) {
 						block = parse_block ();
 						prop.external = false;
 					}

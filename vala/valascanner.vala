@@ -1000,6 +1000,10 @@ public class Vala.Scanner {
 						current += 2;
 					}
 				}
+				if (type == TokenType.DOT && current < end && current[0] == '.') {
+					type = TokenType.DOT_DOT;
+					current++;
+				}
 				break;
 			case ':':
 				type = TokenType.COLON;
