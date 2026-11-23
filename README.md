@@ -1,5 +1,3 @@
-# vala-remix
-
 ## Fork changes
 
 ### New Syntax
